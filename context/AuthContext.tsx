@@ -1,0 +1,64 @@
+import React, { createContext, useState, useContext, ReactNode, useMemo } from 'react';
+import {
+  User, LexiconTerm, Vendor, DroobiVideo, Session, OnDemandSession, Manual,
+  FlashcardDeck, Flashcard, LearningPathway, OneWaterMinute, EcosystemEntity, AuthContextType, UserProgress
+} from '../types';
+import {
+  users, initialTerms, vendors, droobiVideos, droobiSessions, onDemandSessions,
+  manuals, flashcardDecks, flashcards, learningPathways, oneWaterMinute, ecosystemEntities,
+  userProgress
+} from '../data';
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(users[0] || null);
+
+  const login = (userId: string) => {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      setCurrentUser(user);
+    }
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+  };
+  
+  const getUserById = (userId: string): User | undefined => {
+    return users.find(u => u.id === userId);
+  }
+
+  const value = useMemo(() => ({
+    currentUser,
+    login,
+    logout,
+    getUserById,
+    terms: initialTerms,
+    vendors,
+    droobiVideos,
+    droobiSessions,
+    onDemandSessions,
+    manuals,
+    flashcardDecks,
+    flashcards,
+    learningPathways,
+    oneWaterMinute,
+    ecosystemEntities,
+    userProgress
+  }), [currentUser]);
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
