@@ -37,6 +37,31 @@ export const explainTermSimply = async (term: string, technicalDefinition: strin
   }
 };
 
+export const generateRealWorldExample = async (term: string, definition: string): Promise<string> => {
+  try {
+    const genAI = getAI();
+    const prompt = `You are an expert in the water utility industry. 
+    Provide a concise, practical, real-world example of the following term in action at a utility. 
+    Frame it as a mini-scenario or story. Keep it to one paragraph.
+
+    Term: "${term}"
+    Definition: "${definition}"
+
+    Real-World Example:`;
+
+    const response = await genAI.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+    });
+    
+    return response.text;
+  } catch (error) {
+    console.error("Error generating real-world example:", error);
+    return "I'm having trouble generating an example right now. Please try again later.";
+  }
+};
+
+
 export const getAICoachResponse = async (cardFront: string, cardBack: string, question: string): Promise<string> => {
   try {
     const genAI = getAI();

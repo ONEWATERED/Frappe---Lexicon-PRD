@@ -29,11 +29,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return users.find(u => u.id === userId);
   }
 
+  const getAllUsers = (): User[] => {
+    return users;
+  }
+
   const value = useMemo(() => ({
     currentUser,
     login,
     logout,
     getUserById,
+    getAllUsers,
     terms: initialTerms,
     vendors,
     droobiVideos,
@@ -51,7 +56,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <AuthContext.Provider value={value}>
       {children}
-    </AuthContext.Provider>
+    </Auth.Provider>
   );
 };
 

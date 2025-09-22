@@ -66,14 +66,19 @@ export type LexiconTerm = {
   comments?: TermComment[];
   isPremium?: boolean;
   documents?: TermDocument[];
+  viewCount: number;
+  relatedTermIds?: string[];
+  relatedDroobiVideoIds?: string[];
+  relatedDeckIds?: string[];
 };
 
 export type TermComment = {
-  id: string;
+  id:string;
   user: User;
   text: string;
   timestamp: string;
   replies: TermComment[];
+  insightfulCount: number;
 };
 
 export type SeriesInfo = {
@@ -193,6 +198,7 @@ export interface AuthContextType {
   login: (userId: string) => void;
   logout: () => void;
   getUserById: (userId: string) => User | undefined;
+  getAllUsers: () => User[];
   terms: LexiconTerm[];
   vendors: Vendor[];
   droobiVideos: DroobiVideo[];
