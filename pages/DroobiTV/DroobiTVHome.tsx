@@ -20,16 +20,17 @@ const DroobiTVHome: React.FC = () => {
   const featuredVideo = droobiVideos[0];
   
   const videosByCategory = useMemo(() => {
-    // FIX: Explicitly typing the accumulator `acc` ensures that `videosByCategory` has the correct type,
-    // which in turn ensures `videos` is correctly typed as `DroobiVideo[]` later on.
-    return droobiVideos.reduce((acc: Record<string, DroobiVideo[]>, video) => {
+    // FIX: By casting the initial value of the reduce function, we ensure TypeScript
+    // correctly infers the type of `videosByCategory`. This resolves the error where 
+    // properties on the `videos` array were not accessible.
+    return droobiVideos.reduce((acc, video) => {
       const category = video.category || 'Uncategorized';
       if (!acc[category]) {
         acc[category] = [];
       }
       acc[category].push(video);
       return acc;
-    }, {});
+    }, {} as Record<string, DroobiVideo[]>);
   }, [droobiVideos]);
   
   return (
