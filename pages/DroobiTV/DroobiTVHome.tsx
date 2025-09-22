@@ -20,6 +20,9 @@ const DroobiTVHome: React.FC = () => {
   const featuredVideo = droobiVideos[0];
   
   const videosByCategory = useMemo(() => {
+    // FIX: By casting the initial value of the reduce function, we ensure TypeScript
+    // correctly infers the type of `videosByCategory`. This resolves the error where 
+    // properties on the `videos` array were not accessible.
     return droobiVideos.reduce((acc, video) => {
       const category = video.category || 'Uncategorized';
       if (!acc[category]) {

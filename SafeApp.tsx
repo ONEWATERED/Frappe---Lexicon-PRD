@@ -1,4 +1,5 @@
 
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -9,6 +10,7 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
+// FIX: Replaced class field state initialization with a constructor to ensure `this.props` and `this.setState` are correctly typed and accessible on the component instance.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
@@ -18,19 +20,24 @@ class ErrorBoundary extends React.Component<
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error) {
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+    // Update state so the next render will show the fallback UI.
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // We can also log the error to an error reporting service.
+    // Here we'll just update state with more details.
     this.setState({ error, errorInfo });
     console.error("Uncaught error:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
+      // Render fallback UI
       return <DiagnosticsOverlay error={this.state.error} errorInfo={this.state.errorInfo} />;
     }
+
     return this.props.children;
   }
 }
@@ -62,7 +69,7 @@ const BootScreen: React.FC<{ message: string }> = ({ message }) => (
 const SafeApp: React.FC = () => {
   return (
     <ErrorBoundary>
-      <BootScreen message="Language of Water is booting..." />
+      <BootScreen message="oraKLES is booting..." />
       <Suspense fallback={<div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white text-xl">Loading...</div>}>
         <App />
       </Suspense>
