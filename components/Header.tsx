@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -42,7 +43,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center text-white">
               <WaterDropIcon className="h-8 w-8 text-blue-400" />
-              <span className="ml-2 text-xl font-bold">Language of Water</span>
+              <span className="ml-2 text-xl font-bold">oraKLES</span>
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
