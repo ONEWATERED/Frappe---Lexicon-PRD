@@ -83,6 +83,25 @@ export const MicrophoneIcon: React.FC<IconProps> = ({ className }) => (
     </svg>
 );
 
+export const ChatBubbleLeftRightIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193l-3.722.372c-1.034.103-1.933-.393-2.385-1.257l-.375-.833a.375.375 0 0 0-.75 0l-.375.833c-.452.864-1.35 1.36-2.385 1.257l-3.722-.372a2.122 2.122 0 0 1-1.98-2.193v-4.286c0-.97.616-1.813 1.5-2.097m6.036-1.442A2.25 2.25 0 0 1 12 6.096c0 .41.059.814.168 1.203a.75.75 0 0 1-.569.852l-.24.06c-.35.088-.702.158-1.06.214a.75.75 0 0 1-.603-.911A7.42 7.42 0 0 1 12 4.5c1.657 0 3.18.57 4.385 1.564a.75.75 0 0 1-.603.911l-1.06-.214a.75.75 0 0 1-.569-.852 2.25 2.25 0 0 1-.168-1.203Z" />
+    </svg>
+);
+
+export const PaperClipIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.122 2.122l7.81-7.81" />
+    </svg>
+);
+
+export const DocumentTextIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+    </svg>
+);
+
+
 const iconMap: Record<IconName, React.FC<IconProps>> = {
     AcademicCapIcon,
     StarIcon,

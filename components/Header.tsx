@@ -22,20 +22,7 @@ const NavItem: React.FC<{ to: string; children: React.ReactNode }> = ({ to, chil
 
 export const Header: React.FC = () => {
   const { currentUser, logout } = useAuth();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [query, setQuery] = useState(searchParams.get('q') || '');
-
-  useEffect(() => {
-    setQuery(searchParams.get('q') || '');
-  }, [searchParams]);
-
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSearchParams(query ? { q: query } : {});
-    navigate(`/?q=${query}`);
-  };
-
+  
   return (
     <header className="sticky top-0 z-50 glass-card">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,16 +43,6 @@ export const Header: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center">
-             <form onSubmit={handleSearch} className="mr-4">
-                <input
-                    type="search"
-                    name="q"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search lexicon..."
-                    className="bg-slate-700 text-white placeholder-slate-400 px-3 py-1.5 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-            </form>
             {currentUser && (
               <div className="relative">
                 <Link to={`/profile/${currentUser.id}`}>
