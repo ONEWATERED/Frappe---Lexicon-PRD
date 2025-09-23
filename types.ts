@@ -98,6 +98,7 @@ export type DroobiVideo = {
   durationMinutes: number;
   airDate: string;
   series_info?: SeriesInfo | null;
+  vendorId?: string;
 };
 
 export type Speaker = {
@@ -225,6 +226,10 @@ export type EcosystemEntity = {
   isClaimed: boolean;
   isFeatured?: boolean;
   claimedByUserId?: string;
+  sponsorships?: {
+    feature: string;
+    description: string;
+  }[];
   // Vendor-specific micro-site properties (optional)
   featuredVideoUrl?: string;
   longDescription?: string;
@@ -380,6 +385,7 @@ export type BlogPost = {
   content: string; // Will contain markdown-like content
   claps: number;
   comments: BlogPostComment[];
+  vendorId?: string;
 };
 
 

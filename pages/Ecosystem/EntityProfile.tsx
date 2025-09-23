@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { VendorResource, VendorContact, JobPosting, VisitorLog, User, Manual, EcosystemEntity } from '../../types';
+import { VendorResource, VendorContact, JobPosting, VisitorLog, User, Manual, EcosystemEntity, BlogPost, DroobiVideo, FlashcardDeck } from '../../types';
 import { 
-    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, DocumentTextIcon, StarIcon, CheckBadgeIcon 
+    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, CheckBadgeIcon, SparklesIcon, CalendarDaysIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, ClockIcon 
 } from '../../components/icons/Icons';
 import VideoPlayer from '../../components/VideoPlayer';
 
 
 const ContactCard: React.FC<{ contact: VendorContact }> = ({ contact }) => (
     <div className="flex items-center gap-4">
-        <div className="relative">
+        <div className="relative flex-shrink-0">
             <img src={contact.avatarUrl} alt={contact.name} className="w-16 h-16 rounded-full" />
             <span className={`absolute bottom-0 right-0 block h-4 w-4 rounded-full border-2 border-slate-800 ${contact.status === 'online' ? 'bg-green-400' : 'bg-slate-500'}`}></span>
         </div>
@@ -18,6 +18,16 @@ const ContactCard: React.FC<{ contact: VendorContact }> = ({ contact }) => (
             <p className="font-bold text-white">{contact.name}</p>
             <p className="text-sm text-slate-400">{contact.title}</p>
             <a href={`mailto:${contact.email}`} className="text-xs text-blue-400 hover:underline">{contact.email}</a>
+            <div className="mt-2 flex flex-col sm:flex-row gap-2">
+                {contact.status === 'online' && (
+                    <button className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold px-2 py-1 rounded-md text-xs transition-colors flex items-center justify-center gap-1">
+                        <ChatBubbleLeftRightIcon className="w-3 h-3" /> Chat Now
+                    </button>
+                )}
+                <a href="#" className="w-full bg-slate-600 hover:bg-slate-500 text-white font-semibold px-2 py-1 rounded-md text-xs transition-colors flex items-center justify-center gap-1">
+                    <CalendarDaysIcon className="w-3 h-3" /> Schedule
+                </a>
+            </div>
         </div>
     </div>
 );
@@ -61,6 +71,78 @@ const ManualCard: React.FC<{ manual: Manual }> = ({ manual }) => (
         </div>
     </Link>
 );
+
+
+const BlogCard: React.FC<{ post: BlogPost }> = ({ post }) => (
+    <Link to={`/insights/${post.id}`} className="block group glass-card rounded-xl overflow-hidden h-full flex flex-col">
+        <div className="aspect-video bg-slate-800 overflow-hidden">
+            <img src={post.heroImageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        </div>
+        <div className="p-4 flex flex-col flex-grow">
+            <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors duration-300 flex-grow">{post.title}</h3>
+            <div className="mt-2 flex items-center gap-1 text-slate-400 text-xs">
+                <ClockIcon className="w-3 h-3" />
+                <span>{post.readTimeMinutes} min read</span>
+            </div>
+        </div>
+    </Link>
+);
+
+const VideoCard: React.FC<{ video: DroobiVideo }> = ({ video }) => (
+    <Link to={`/video/${video.id}`} className="block group glass-card rounded-xl overflow-hidden h-full flex flex-col">
+        <div className="aspect-video bg-slate-800 overflow-hidden relative">
+            <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+             <div className="absolute inset-0 bg-black/30"></div>
+        </div>
+        <div className="p-4 flex flex-col flex-grow">
+            <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors duration-300 flex-grow">{video.title}</h3>
+            <div className="mt-2 flex items-center gap-1 text-slate-400 text-xs">
+                <ClockIcon className="w-3 h-3" />
+                <span>{video.durationMinutes} min</span>
+            </div>
+        </div>
+    </Link>
+);
+
+const AcademyContributorBadge: React.FC<{ sponsoredDecks: FlashcardDeck[] }> = ({ sponsoredDecks }) => {
+    if (sponsoredDecks.length === 0) return null;
+    return (
+        <div className="glass-card p-6">
+            <div className="flex items-center gap-3">
+                <AcademicCapIcon className="w-8 h-8 text-amber-400" />
+                <h3 className="text-lg font-bold text-white">Academy Contributor</h3>
+            </div>
+            <p className="text-sm text-slate-400 mt-3">This partner contributes valuable knowledge to the oraKLES Academy by sponsoring the following decks:</p>
+            <ul className="mt-2 space-y-2">
+                {sponsoredDecks.map(deck => (
+                    <li key={deck.id}>
+                        <Link to={`/academy/deck/${deck.id}`} className="text-sm text-blue-400 hover:underline font-semibold">
+                            {deck.title}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+const SponsorshipShowcase: React.FC<{ sponsorships: EcosystemEntity['sponsorships'] }> = ({ sponsorships }) => {
+    if (!sponsorships || sponsorships.length === 0) return null;
+    return (
+        <div className="glass-card p-6">
+            <div className="flex items-center gap-3">
+                <SparklesIcon className="w-8 h-8 text-purple-400" />
+                <h3 className="text-lg font-bold text-white">Platform Sponsor</h3>
+            </div>
+            {sponsorships.map(spon => (
+                <div key={spon.feature} className="mt-3">
+                    <p className="font-semibold text-purple-300">{spon.feature}</p>
+                    <p className="text-sm text-slate-400">{spon.description}</p>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 
 const AnalyticsDashboard: React.FC<{ logs: VisitorLog[], getUserById: (id: string) => User | undefined }> = ({ logs, getUserById }) => (
@@ -108,7 +190,6 @@ const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity })
                   &larr; Back to Partners Directory
                 </Link>
               </div>
-            {/* Header with logo and name */}
             <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
                 <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
                     <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
@@ -116,10 +197,7 @@ const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity })
                 <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
                 <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
             </div>
-
-            {/* Claim CTA and blurred background */}
             <div className="relative mt-8">
-                {/* The overlay */}
                 <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md z-10 flex flex-col items-center justify-center text-center p-8 rounded-2xl">
                     <h2 className="text-3xl font-bold text-white">This Profile is Unclaimed</h2>
                     <p className="mt-2 text-slate-300 max-w-md">Are you an official representative of {entity.name}? Claim this profile to unlock your micro-site, add contacts, post jobs, and engage with the oraKLES community.</p>
@@ -131,8 +209,6 @@ const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity })
                         Claim This Profile
                     </button>
                 </div>
-                
-                {/* The blurred content */}
                 <div className="opacity-20 pointer-events-none">
                     <div className="space-y-8 glass-card p-8 rounded-2xl">
                         <div>
@@ -146,13 +222,6 @@ const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity })
                                 <div className="bg-slate-800 h-24 rounded-lg"></div>
                             </div>
                         </div>
-                        <div>
-                            <h3 className="text-2xl font-bold text-white">Resource Library</h3>
-                            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="bg-slate-800 h-32 rounded-lg"></div>
-                                <div className="bg-slate-800 h-32 rounded-lg"></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -163,14 +232,18 @@ const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity })
 
 const EntityProfile: React.FC = () => {
     const { entityId, vendorId } = useParams<{ entityId?: string, vendorId?: string }>();
-    const { ecosystemEntities, currentUser, getUserById, manuals } = useAuth();
+    const { ecosystemEntities, currentUser, getUserById, manuals, blogPosts, droobiVideos, flashcardDecks } = useAuth();
     const id = entityId || vendorId;
     
     const [activeTab, setActiveTab] = useState('about');
     const [resourceFilter, setResourceFilter] = useState('All');
     
     const entity = ecosystemEntities.find(e => e.id === id);
+
     const vendorManuals = useMemo(() => manuals.filter(m => m.vendorId === id), [manuals, id]);
+    const vendorBlogPosts = useMemo(() => blogPosts.filter(p => p.vendorId === id), [blogPosts, id]);
+    const vendorVideos = useMemo(() => droobiVideos.filter(v => v.vendorId === id), [droobiVideos, id]);
+    const sponsoredDecks = useMemo(() => flashcardDecks.filter(d => d.sponsorship?.sponsor_id === id), [flashcardDecks, id]);
 
     if (!entity) {
         return (
@@ -186,7 +259,6 @@ const EntityProfile: React.FC = () => {
     }
 
     const isVendorMicroSite = entity.type === 'Vendor' && entity.featuredVideoUrl;
-    // Fallback for claimed non-vendors or vendors without a full micro-site
     if (!isVendorMicroSite) {
         return (
            <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -211,7 +283,7 @@ const EntityProfile: React.FC = () => {
              </div>
            </div>
        );
-   }
+    }
     
     const showAnalytics = entity.isClaimed && currentUser?.id === entity.claimedByUserId;
     const resourceCategories = useMemo(() => ['All', ...new Set(entity.resources?.map(r => r.category) || [])], [entity.resources]);
@@ -219,7 +291,6 @@ const EntityProfile: React.FC = () => {
         if (resourceFilter === 'All') return entity.resources || [];
         return entity.resources?.filter(r => r.category === resourceFilter) || [];
     }, [entity.resources, resourceFilter]);
-
 
     const TabButton: React.FC<{ tabId: string, label: string }> = ({ tabId, label }) => (
         <button
@@ -232,11 +303,10 @@ const EntityProfile: React.FC = () => {
 
     return (
         <div className="min-h-screen">
-            {/* Hero Section */}
-            <div className="relative h-96 w-full">
+            <div className="relative h-[60vh] md:h-96 w-full">
                 <VideoPlayer src={entity.featuredVideoUrl!} />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 md:p-12 max-w-7xl mx-auto w-full">
+                <div className="absolute bottom-0 left-0 p-4 md:p-12 max-w-7xl mx-auto w-full">
                     <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 border-4 border-slate-700">
                       <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
                     </div>
@@ -246,10 +316,11 @@ const EntityProfile: React.FC = () => {
             </div>
 
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8">
-                {/* Main Content */}
                 <main className="lg:col-span-8 xl:col-span-9">
                     <div className="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-4">
-                        <TabButton tabId="about" label="About & Services" />
+                        <TabButton tabId="about" label="About" />
+                        <TabButton tabId="insights" label="Insights" />
+                        <TabButton tabId="videos" label="Videos" />
                         <TabButton tabId="resources" label="Resources" />
                         <TabButton tabId="manuals" label="O&M Manuals" />
                         <TabButton tabId="careers" label="Careers" />
@@ -263,7 +334,7 @@ const EntityProfile: React.FC = () => {
                                     <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
                                     <p className="mt-2 text-slate-300 whitespace-pre-line">{entity.longDescription}</p>
                                 </div>
-                                <div>
+                                {entity.services && <div>
                                     <h3 className="text-2xl font-bold text-white">Services</h3>
                                     <div className="mt-4 space-y-4">
                                         {entity.services?.map(service => (
@@ -273,8 +344,8 @@ const EntityProfile: React.FC = () => {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                                <div>
+                                </div>}
+                                {entity.futureOfferings && <div>
                                     <h3 className="text-2xl font-bold text-white">Coming Soon</h3>
                                      <div className="mt-4 space-y-4">
                                         {entity.futureOfferings?.map(offering => (
@@ -284,6 +355,22 @@ const EntityProfile: React.FC = () => {
                                             </div>
                                         ))}
                                     </div>
+                                </div>}
+                            </div>
+                        )}
+                        {activeTab === 'insights' && (
+                             <div>
+                                <h3 className="text-2xl font-bold text-white mb-4">Insights from {entity.name}</h3>
+                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {vendorBlogPosts.map(post => <BlogCard key={post.id} post={post}/>)}
+                                </div>
+                            </div>
+                        )}
+                         {activeTab === 'videos' && (
+                             <div>
+                                <h3 className="text-2xl font-bold text-white mb-4">Videos from {entity.name}</h3>
+                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {vendorVideos.map(video => <VideoCard key={video.id} video={video}/>)}
                                 </div>
                             </div>
                         )}
@@ -319,12 +406,10 @@ const EntityProfile: React.FC = () => {
                         {activeTab === 'analytics' && showAnalytics && <AnalyticsDashboard logs={entity.visitorLogs || []} getUserById={getUserById}/>}
                     </div>
                 </main>
-
-                {/* Sidebar */}
                 <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
                      <div className="glass-card p-6">
                         <h3 className="text-lg font-bold text-white mb-4">Key Contacts</h3>
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                             {entity.contacts?.map(contact => <ContactCard key={contact.id} contact={contact}/>)}
                         </div>
                     </div>
@@ -335,6 +420,8 @@ const EntityProfile: React.FC = () => {
                              <a href={`http://${entity.domain}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:underline"><GlobeAltIcon className="w-4 h-4"/>{entity.domain}</a>
                         </div>
                     </div>
+                    <SponsorshipShowcase sponsorships={entity.sponsorships} />
+                    <AcademyContributorBadge sponsoredDecks={sponsoredDecks} />
                 </aside>
             </div>
         </div>

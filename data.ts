@@ -260,6 +260,12 @@ export const ecosystemEntities: EcosystemEntity[] = [
         futureOfferings: [
             { title: 'Xy-AI Predictive Analytics Suite', description: 'A next-gen platform using AI to predict asset failure and optimize operational efficiency across entire water networks.'}
         ],
+        sponsorships: [
+            {
+                feature: 'AI Co-pilot: Hardeep',
+                description: 'Proudly sponsoring the development and hosting of the Hardeep Knowledge Avatar to democratize water utility expertise.'
+            }
+        ],
         resources: [
           { id: 'vr001', title: 'Flygt Concertor Pumping System', description: 'The world\'s first wastewater pumping system with integrated intelligence.', fileUrl: '#', type: 'Brochure', category: 'Pumping Systems', views: 1204, downloads: 312 },
           { id: 'vr002', title: 'Case Study: Digital Twin for City of South Bend', description: 'How real-time modeling reduced CSOs by 70%.', fileUrl: '#', type: 'Case Study', category: 'Digital Solutions', views: 855, downloads: 150 },
@@ -295,11 +301,10 @@ export const ecosystemEntities: EcosystemEntity[] = [
 export const vendors: Vendor[] = ecosystemEntities.filter(e => e.type === 'Vendor') as Vendor[];
 
 export const droobiVideos: DroobiVideo[] = [
-    { id: 'vid001', title: 'The Digital Twin Revolution in Water Management', description: 'Explore how utilities are building virtual replicas of their water networks to optimize operations, predict failures, and plan for the future.', thumbnailUrl: 'https://picsum.photos/seed/aurora/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Technology', durationMinutes: 42, airDate: '2024-05-10' },
+    { id: 'vid001', title: 'The Digital Twin Revolution in Water Management', description: 'Explore how utilities are building virtual replicas of their water networks to optimize operations, predict failures, and plan for the future.', thumbnailUrl: 'https://picsum.photos/seed/aurora/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Technology', durationMinutes: 42, airDate: '2024-05-10', vendorId: 'v001' },
     { id: 'vid002', title: 'Navigating the New Lead and Copper Rule Revisions', description: 'Experts break down the latest EPA regulations and what they mean for utilities and consumers.', thumbnailUrl: 'https://picsum.photos/seed/pipes/400/225', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Regulation', durationMinutes: 58, airDate: '2024-04-22' },
     { id: 'vid003', title: 'AI-Powered Leak Detection', description: 'A case study on how artificial intelligence is saving millions of gallons by pinpointing leaks with unprecedented accuracy.', thumbnailUrl: 'https://picsum.photos/seed/ai-water/400/225', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Technology', durationMinutes: 34, airDate: '2024-03-15' },
-    // Fix: Corrected property 'name' to 'title' to match the DroobiVideo type.
-    { id: 'vid004', title: 'Asset Management Masterclass: Prioritizing Capital Improvements', description: 'Learn how to make data-driven decisions for infrastructure renewal and replacement projects.', thumbnailUrl: 'https://picsum.photos/seed/asset-mgmt/400/225', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Asset Management', durationMinutes: 72, airDate: '2024-02-28' },
+    { id: 'vid004', title: 'Asset Management Masterclass: Prioritizing Capital Improvements', description: 'Learn how to make data-driven decisions for infrastructure renewal and replacement projects.', thumbnailUrl: 'https://picsum.photos/seed/asset-mgmt/400/225', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Asset Management', durationMinutes: 72, airDate: '2024-02-28', vendorId: 'v001' },
 ];
 
 
@@ -358,7 +363,7 @@ const lexiconDecks: FlashcardDeck[] = Object.entries(termsByCategory).map(([cate
 
 // 3. Existing + new data
 const existingDecks: FlashcardDeck[] = [
-    { id: 'd001', title: 'Asset Management Fundamentals', description: 'Key concepts in water asset management.', thumbnail_url: 'https://picsum.photos/seed/d001/400/225', category_id: 'asset_mgmt', cardCount: 25 },
+    { id: 'd001', title: 'Asset Management Fundamentals', description: 'Key concepts in water asset management.', thumbnail_url: 'https://picsum.photos/seed/d001/400/225', category_id: 'asset_mgmt', cardCount: 25, sponsorship: { sponsor_id: 'v001' } },
     { id: 'd002', title: 'Key Regulatory Frameworks', description: 'Understanding the SDWA, CWA, and other key regulations.', thumbnail_url: 'https://picsum.photos/seed/d002/400/225', category_id: 'regulations', sponsorship: { sponsor_id: 'c001' }, cardCount: 18 },
     { id: 'd003', title: 'Intro to Water Modeling', description: 'Learn the basics of hydraulic and water quality modeling.', thumbnail_url: 'https://picsum.photos/seed/d003/400/225', category_id: 'modeling', sponsorship: { sponsor_id: 'v003' }, cardCount: 32 },
 ];
@@ -585,6 +590,7 @@ For example, a major metropolitan utility recently implemented a digital twin fo
     comments: [
       { user: users[0], text: 'This is a fantastic overview. The predictive aspect is a game-changer for capital planning.', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() }
     ],
+    vendorId: 'v001',
   },
   {
     id: 'post-2',

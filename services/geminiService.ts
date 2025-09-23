@@ -122,28 +122,3 @@ export const getHardeepVoiceResponse = async (userQuery: string): Promise<string
     return "I'm sorry, I'm having trouble connecting right now. Could you please repeat that?";
   }
 };
-
-// FIX: Added missing getDroobiResponse function for the Droobi AI assistant.
-export const getDroobiResponse = async (userQuery: string): Promise<string> => {
-  try {
-    const genAI = getAI();
-    const prompt = `You are DROOBI, a friendly and helpful AI assistant for oraKLES, a knowledge platform for the water utility industry.
-    Your persona is curious, knowledgeable, and slightly playful. Use emojis where appropriate.
-    Your answers should be helpful and directly related to the platform's content (lexicon, videos, manuals, partners, etc.) or general water industry topics.
-    Keep your responses concise and conversational. Format responses with markdown for lists or emphasis if needed.
-
-    User's query: "${userQuery}"
-    
-    DROOBI's response:`;
-
-    const response = await genAI.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-    });
-
-    return response.text;
-  } catch (error) {
-    console.error("Error getting DROOBI response:", error);
-    return "I'm sorry, I'm having a little trouble connecting. Please try again in a moment? 😅";
-  }
-};
