@@ -9,7 +9,7 @@ interface ErrorBoundaryState {
 }
 
 // FIX: Refactored the ErrorBoundary to use a class property for state initialization.
-// This resolves errors where 'this.state' was not found.
+// This is a more modern approach and avoids potential issues with `this` in the constructor.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState

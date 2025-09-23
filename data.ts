@@ -98,6 +98,8 @@ const term_comments: TermComment[] = [
     }
 ];
 
+const videoUrlForAllTerms = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+
 export const initialTerms: LexiconTerm[] = [
   {
     id: 't001',
@@ -105,6 +107,8 @@ export const initialTerms: LexiconTerm[] = [
     category: 'asset_mgmt',
     plainLanguageDefinition: 'Water that has been produced and is "lost" before it reaches the customer. This can be due to leaks, theft, or metering inaccuracies.',
     technicalDefinition: 'The difference between the volume of water put into a water distribution system and the volume that is billed to customers. It is usually expressed as a percentage of the total water produced.',
+    videoUrl: videoUrlForAllTerms,
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
     linkedVendorIds: ['v001', 'v002'],
     comments: term_comments,
     documents: [term_documents[0]],
@@ -118,6 +122,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'modeling',
     plainLanguageDefinition: 'A virtual model of a physical water system that is updated with real-time data. It helps operators understand and predict how the system will behave.',
     technicalDefinition: 'A dynamic, virtual representation of a physical asset, process, or system, which is continuously updated with data from its physical counterpart to enable simulation, analysis, and optimization.',
+    videoUrl: videoUrlForAllTerms,
     linkedVendorIds: ['v003', 'v008'],
     comments: [],
     viewCount: 980,
@@ -131,6 +136,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'operations',
     plainLanguageDefinition: 'A computer system that allows a water utility to monitor and control its equipment and processes remotely, like a central nervous system for the water network.',
     technicalDefinition: 'Supervisory Control and Data Acquisition (SCADA) is a system of software and hardware elements that allows industrial organizations to control industrial processes locally or at remote locations, monitor, gather, and process real-time data.',
+    videoUrl: videoUrlForAllTerms,
     linkedVendorIds: ['v005'],
     viewCount: 750,
     relatedTermIds: ['t002']
@@ -141,6 +147,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'water_distribution',
     plainLanguageDefinition: 'Smart water meters that can automatically send readings back to the utility, helping to detect leaks and provide customers with detailed usage information.',
     technicalDefinition: 'An integrated system of smart meters, communications networks, and data management systems that enables two-way communication between utilities and customers. It enables real-time monitoring and automated billing.',
+    videoUrl: videoUrlForAllTerms,
     linkedVendorIds: ['v001', 'v002', 'v004'],
     documents: [term_documents[1]],
     viewCount: 1100,
@@ -153,6 +160,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'wastewater_treatment',
     plainLanguageDefinition: 'An advanced wastewater treatment process that combines traditional biological treatment with membrane filtration, resulting in very high-quality treated water.',
     technicalDefinition: 'A process that combines a membrane process like microfiltration or ultrafiltration with a suspended growth bioreactor. It is now widely used for municipal and industrial wastewater treatment.',
+    videoUrl: videoUrlForAllTerms,
     linkedVendorIds: ['v006'],
     viewCount: 620,
     relatedTermIds: ['t006', 't009']
@@ -163,6 +171,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'wastewater_treatment',
     plainLanguageDefinition: 'The most common method for treating sewage. It uses a mixture of microorganisms (the "activated sludge") and oxygen to break down organic pollutants in the wastewater, cleaning it before it\'s discharged.',
     technicalDefinition: 'A biological wastewater treatment process in which a mixture of wastewater and microorganisms is agitated and aerated. The biological solids are then separated from the treated water and returned to the aeration process as needed.',
+    videoUrl: videoUrlForAllTerms,
     linkedVendorIds: ['v001', 'v006'],
     viewCount: 450,
     relatedTermIds: ['t005', 't007', 't010']
@@ -173,6 +182,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'wastewater_treatment',
     plainLanguageDefinition: 'A process where bacteria break down organic waste (like sewage sludge) in an environment without oxygen. This process produces biogas (which can be used for energy) and reduces the amount of sludge to be disposed of.',
     technicalDefinition: 'A sequence of processes by which microorganisms break down biodegradable material in the absence of oxygen. The process is used for industrial or domestic purposes to manage waste or to produce fuels.',
+    videoUrl: videoUrlForAllTerms,
     linkedVendorIds: ['v001', 'v008'],
     viewCount: 380,
     relatedTermIds: ['t006', 't010'],
@@ -183,6 +193,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'utility_management',
     plainLanguageDefinition: 'The process of managing a utility\'s physical assets (like pipes, pumps, and plants) in a way that minimizes the total cost of owning and operating them, while delivering the desired level of service.',
     technicalDefinition: 'A systematic process of deploying, operating, maintaining, upgrading, and disposing of assets cost-effectively. It balances cost, risk, and performance to make informed decisions about infrastructure investment.',
+    videoUrl: videoUrlForAllTerms,
     isPremium: true,
     viewCount: 2200,
     relatedTermIds: ['t001'],
@@ -195,6 +206,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'wastewater_treatment',
     plainLanguageDefinition: 'A wastewater treatment process designed to remove nitrogen and phosphorus from the water. This helps protect rivers and lakes from algae blooms caused by too many nutrients.',
     technicalDefinition: 'A process used for nitrogen and phosphorus removal from wastewater before it is discharged into surface or ground water. It involves configuring aerobic, anoxic, and anaerobic zones to encourage specific microbial activity.',
+    videoUrl: videoUrlForAllTerms,
     isPremium: true,
     viewCount: 510,
     relatedTermIds: ['t005', 't006'],
@@ -205,6 +217,7 @@ export const initialTerms: LexiconTerm[] = [
     category: 'wastewater_treatment',
     plainLanguageDefinition: 'The nutrient-rich organic materials resulting from the treatment of sewage sludge. When treated and processed, they can be recycled as a fertilizer to improve and maintain productive soils.',
     technicalDefinition: 'Treated sewage sludge that meets U.S. Environmental Protection Agency (EPA) pollutant and pathogen requirements for land application and surface disposal. It is a source of essential plant nutrients and organic matter.',
+    videoUrl: videoUrlForAllTerms,
     viewCount: 300,
     relatedTermIds: ['t006', 't007'],
   },

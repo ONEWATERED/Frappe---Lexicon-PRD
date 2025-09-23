@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { explainTermSimply, generateRealWorldExample } from '../../services/geminiService';
 import { TermComment, TermDocument, LexiconTerm } from '../../types';
-import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon } from '../../components/icons/Icons';
+import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon, SpeakerWaveIcon, SpeakerXMarkIcon } from '../../components/icons/Icons';
+import VideoPlayer from '../../components/VideoPlayer';
 
 function getTimeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -87,6 +88,8 @@ const TermDetail: React.FC = () => {
   const [isLoadingExplanation, setIsLoadingExplanation] = useState(false);
   const [realWorldExample, setRealWorldExample] = useState('');
   const [isLoadingExample, setIsLoadingExample] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [comments, setComments] = useState<TermComment[]>(term?.comments || []);
   const [newCommentText, setNewCommentText] = useState('');
@@ -95,6 +98,30 @@ const TermDetail: React.FC = () => {
   useEffect(() => {
     setComments(term?.comments || []);
   }, [term]);
+
+  useEffect(() => {
+      if (term?.audioUrl) {
+          audioRef.current = new Audio(term.audioUrl);
+          audioRef.current.onended = () => setIsPlaying(false);
+      }
+      return () => {
+          if (audioRef.current) {
+              audioRef.current.pause();
+              audioRef.current = null;
+          }
+      };
+  }, [term?.audioUrl]);
+
+  const togglePlay = () => {
+      if (!audioRef.current) return;
+      if (isPlaying) {
+          audioRef.current.pause();
+      } else {
+          audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+  };
+
 
   const sortedComments = useMemo(() => {
     const commentsCopy = JSON.parse(JSON.stringify(comments)) as TermComment[];
@@ -185,7 +212,24 @@ const TermDetail: React.FC = () => {
       <div className="grid lg:grid-cols-3 gap-12">
       <main className="lg:col-span-2">
         <span className="text-sm font-semibold uppercase text-blue-400">{term.category.replace('_', ' ')}</span>
-        <h1 className="text-4xl font-extrabold text-white tracking-tight mt-2">{term.term}</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-4xl font-extrabold text-white tracking-tight mt-2">{term.term}</h1>
+          {term.audioUrl && (
+            <button
+              onClick={togglePlay}
+              className="mt-2 p-3 bg-slate-700 rounded-full hover:bg-blue-500 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
+              aria-label={isPlaying ? "Pause audio definition" : "Play audio definition"}
+            >
+              {isPlaying ? <SpeakerXMarkIcon className="w-6 h-6 text-white" /> : <SpeakerWaveIcon className="w-6 h-6 text-white" />}
+            </button>
+          )}
+        </div>
+        
+        {term.videoUrl && (
+          <div className="mt-8">
+            <VideoPlayer src={term.videoUrl} />
+          </div>
+        )}
         
         <div className="mt-8 space-y-8">
           <div>

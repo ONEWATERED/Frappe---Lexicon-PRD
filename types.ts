@@ -62,6 +62,8 @@ export type LexiconTerm = {
   category: LexiconCategory;
   plainLanguageDefinition: string;
   technicalDefinition: string;
+  videoUrl?: string;
+  audioUrl?: string;
   linkedVendorIds?: string[];
   comments?: TermComment[];
   isPremium?: boolean;
