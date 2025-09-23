@@ -217,7 +217,7 @@ const TermDetail: React.FC = () => {
       <main className="lg:col-span-2">
         <span className="text-sm font-semibold uppercase text-blue-400">{term.category.replace('_', ' ')}</span>
         <div className="flex items-center gap-4">
-          <h1 className="text-4xl font-extrabold text-white tracking-tight mt-2">{term.term}</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">{term.term}</h1>
           {term.audioUrl && (
             <button
               onClick={togglePlay}

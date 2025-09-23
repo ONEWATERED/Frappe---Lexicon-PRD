@@ -19,7 +19,7 @@ const useRecentlyViewed = () => {
 
 
 const TermCard: React.FC<{ term: LexiconTerm }> = ({ term }) => (
-    <div className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700 hover:border-blue-400 transition-all duration-300 h-full flex flex-col group">
+    <div className="bg-slate-800 p-4 sm:p-6 rounded-lg shadow-lg border border-slate-700 hover:border-blue-400 transition-all duration-300 h-full flex flex-col group">
       <div className="flex justify-between items-start">
         <span className="text-xs font-semibold uppercase text-blue-400">{lexiconCategoryNames[term.category]}</span>
         {term.isPremium && (
@@ -29,7 +29,7 @@ const TermCard: React.FC<{ term: LexiconTerm }> = ({ term }) => (
           </div>
         )}
       </div>
-      <h3 className="text-xl font-bold text-slate-100 mt-2">{term.term}</h3>
+      <h3 className="text-lg sm:text-xl font-bold text-slate-100 mt-2">{term.term}</h3>
       <p className="text-slate-400 mt-2 text-sm flex-grow">{term.plainLanguageDefinition}</p>
       
       <div className="mt-4">
@@ -64,9 +64,9 @@ const TrendingCarousel: React.FC = () => {
     return (
         <div className="mt-12">
             <h2 className="text-2xl font-bold text-white mb-4">Trending & Popular Terms</h2>
-            <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4">
+            <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 -mx-4 px-4">
                 {trendingTerms.map(term => (
-                    <div key={term.id} className="w-80 flex-shrink-0">
+                    <div key={term.id} className="w-72 sm:w-80 flex-shrink-0">
                         <TermCard term={term} />
                     </div>
                 ))}

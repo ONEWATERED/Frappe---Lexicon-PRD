@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -31,7 +30,7 @@ const UserProfile: React.FC = () => {
       <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
         <img src={user.avatarUrl} alt={user.name} className="h-40 w-40 rounded-full border-4 border-slate-700 shadow-lg"/>
         <div className="text-center md:text-left">
-          <h1 className="text-4xl font-extrabold text-white">{user.name}</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white">{user.name}</h1>
           <p className="text-lg text-slate-400">{user.email}</p>
           <div className="mt-4 flex items-center justify-center md:justify-start gap-3 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
             <TierIcon icon={currentTier.icon} className="h-6 w-6 text-blue-400"/>

@@ -1,11 +1,13 @@
 
+
+
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DroobiVideo } from '../../types';
 
 const VideoCard: React.FC<{ video: DroobiVideo }> = ({ video }) => (
-  <Link to={`/video/${video.id}`} className="flex-shrink-0 w-80 group">
+  <Link to={`/video/${video.id}`} className="flex-shrink-0 w-72 sm:w-80 group">
     <div className="aspect-video bg-slate-800 rounded-lg overflow-hidden">
       <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
     </div>
@@ -22,8 +24,8 @@ const DroobiTVHome: React.FC = () => {
   
   const videosByCategory = useMemo(() => {
     // FIX: Explicitly typing the initial value for `reduce` ensures that the accumulator's
-    // type is correctly inferred, preventing downstream errors with `videos.map`.
-    return droobiVideos.reduce((acc: Record<string, DroobiVideo[]>, video) => {
+    // type is correctly inferred as `Record<string, DroobiVideo[]>`, preventing `videos.map` from failing due to an `unknown` type.
+    return droobiVideos.reduce((acc, video) => {
       const category = video.category || 'Uncategorized';
       if (!acc[category]) {
         acc[category] = [];
@@ -53,7 +55,7 @@ const DroobiTVHome: React.FC = () => {
         {Object.entries(videosByCategory).map(([category, videos]) => (
           <div key={category}>
             <h2 className="text-2xl font-bold text-white mb-4">{category}</h2>
-            <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4">
+            <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 -mx-4 px-4">
               {videos.map(video => <VideoCard key={video.id} video={video} />)}
             </div>
           </div>

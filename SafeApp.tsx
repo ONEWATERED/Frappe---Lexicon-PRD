@@ -1,4 +1,6 @@
 
+
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -9,12 +11,12 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
-// FIX: Initialized state as a class property to resolve component typing errors with `this`.
+// FIX: Refactored to use a class property for state initialization, which is a more modern and robust approach in TypeScript/React. This resolves issues with TypeScript not recognizing component properties like `state` and `props`.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
-  public state: ErrorBoundaryState = { hasError: false };
+  state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Update state so the next render will show the fallback UI.

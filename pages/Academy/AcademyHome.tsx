@@ -1,5 +1,7 @@
 
 
+
+
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -42,8 +44,8 @@ const AcademyHome: React.FC = () => {
 
   const decksByCategory = useMemo(() => {
     // FIX: Explicitly typing the initial value for `reduce` ensures that the accumulator's
-    // type is correctly inferred, preventing downstream errors when mapping over the results.
-    return flashcardDecks.reduce((acc: Record<string, FlashcardDeck[]>, deck) => {
+    // type is correctly inferred as `Record<string, FlashcardDeck[]>`, preventing `decks.map` from failing due to an `unknown` type.
+    return flashcardDecks.reduce((acc, deck) => {
         const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
         if (!acc[categoryName]) {
             acc[categoryName] = [];
