@@ -18,6 +18,9 @@ import AIAgentsPage from './pages/AIAgents/AIAgentsPage';
 import CommunityHome from './pages/Community/CommunityHome';
 import ResearchHubHome from './pages/Research/ResearchHubHome';
 import ResearcherProfilePage from './pages/Research/ResearcherProfilePage';
+import BlogHome from './pages/Insights/BlogHome';
+import BlogPostDetail from './pages/Insights/BlogPostDetail';
+import CreateBlogPost from './pages/Insights/CreateBlogPost';
 
 
 const MainLayout: React.FC = () => (
@@ -47,6 +50,9 @@ const App: React.FC = () => {
             <Route path="/academy" element={<AcademyHome />} />
             <Route path="/academy/pathway/:pathwayId" element={<ComingSoon title="Learning Pathway" />} />
             <Route path="/community" element={<CommunityHome />} />
+            <Route path="/insights" element={<BlogHome />} />
+            <Route path="/insights/new" element={<CreateBlogPost />} />
+            <Route path="/insights/:postId" element={<BlogPostDetail />} />
             <Route path="/research" element={<ResearchHubHome />} />
             <Route path="/research/researcher/:researcherId" element={<ResearcherProfilePage />} />
             <Route path="/ecosystem" element={<EcosystemHome />} />

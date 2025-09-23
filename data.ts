@@ -22,6 +22,8 @@ import {
   ResearcherProfile,
   ResearchOpportunity,
   TopicSuggestion,
+  BlogAuthor,
+  BlogPost,
 } from './types';
 
 export const users: User[] = [
@@ -553,4 +555,63 @@ export const topicSuggestions: TopicSuggestion[] = [
         comments: [],
         tags: ['pfas', 'regulations', 'treatment-tech']
     }
+];
+
+// --- INSIGHTS (BLOG) DATA ---
+
+export const blogAuthors: BlogAuthor[] = [
+  // From existing users
+  { id: 'user-123', name: 'Alex Johnson', avatarUrl: 'https://i.pravatar.cc/150?u=user-123', title: 'Senior Specialist, AquaTech', isGuest: false },
+  { id: 'user-456', name: 'Maria Garcia', avatarUrl: 'https://i.pravatar.cc/150?u=user-456', title: 'Principal Expert, Hydro-Solutions', isGuest: false },
+  // Guest author
+  { id: 'guest-001', name: 'Dr. Eleanor Vance', avatarUrl: 'https://i.pravatar.cc/150?u=guest-001', title: 'Lead Researcher, Global Water Institute', isGuest: true },
+];
+
+export const blogPosts: BlogPost[] = [
+  {
+    id: 'post-1',
+    title: 'The Unseen Network: How Digital Twins Are Preventing Tomorrow\'s Water Main Breaks',
+    subtitle: 'Beyond simple monitoring, digital twins are creating a predictive and resilient future for water infrastructure. Here\'s how.',
+    authorId: 'user-456', // Maria Garcia
+    publishDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    readTimeMinutes: 7,
+    heroImageUrl: 'https://picsum.photos/seed/digital-twin-blog/1200/600',
+    content: `The term "Digital Twin" has been circulating for years, but its practical application in the water sector is only now beginning to mature into a truly transformative technology...
+
+A digital twin is more than just a 3D model; it's a living, breathing virtual replica of a physical water system. Fed by a constant stream of data from SCADA systems, IoT sensors, and GIS, it simulates the network's behavior in real-time. This allows utilities to move from a reactive to a predictive maintenance strategy. Instead of waiting for a pipe to burst, operators can identify stress points and potential failures weeks or even months in advance.
+
+For example, a major metropolitan utility recently implemented a digital twin for its aging downtown water grid. Within six months, they were able to preemptively replace three critical mains that the model identified as being under high stress, preventing what would have been catastrophic and costly failures. The ROI wasn't just in avoided repair costs, but in maintained public trust and uninterrupted service.`,
+    claps: 128,
+    comments: [
+      { user: users[0], text: 'This is a fantastic overview. The predictive aspect is a game-changer for capital planning.', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() }
+    ],
+  },
+  {
+    id: 'post-2',
+    title: 'From Waste to Wattage: The Surprising Economics of Energy Recovery in Wastewater',
+    subtitle: 'Modern wastewater treatment plants are no longer just cost centers; they are becoming resource recovery facilities that can generate power and revenue.',
+    authorId: 'guest-001', // Dr. Eleanor Vance
+    publishDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+    readTimeMinutes: 5,
+    heroImageUrl: 'https://picsum.photos/seed/wastewater-energy/1200/600',
+    content: `For decades, wastewater treatment was viewed as an energy-intensive necessity. The goal was simple: treat the water and discharge it safely. But a paradigm shift is underway. With advancements in technologies like anaerobic digestion and thermal hydrolysis, utilities are now unlocking the immense energy potential stored in biosolids.
+
+By capturing the biogas produced during digestion, a treatment plant can power its own operations, often with a surplus to sell back to the grid. This not only dramatically reduces operational costs but also creates a new revenue stream, turning a financial liability into an asset. Furthermore, the resulting Class A biosolids can be sold as high-quality fertilizer, closing the loop on a circular economy.`,
+    claps: 95,
+    comments: [],
+  },
+  {
+    id: 'post-3',
+    title: 'Demystifying AI in Water: It\'s Not About Robots, It\'s About Data',
+    subtitle: 'Forget the sci-fi hype. Artificial intelligence in the water sector is all about making smarter, faster decisions with the data you already have.',
+    authorId: 'user-123', // Alex Johnson
+    publishDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+    readTimeMinutes: 6,
+    heroImageUrl: 'https://picsum.photos/seed/ai-data-blog/1200/600',
+    content: `When people hear "AI," they often think of complex, sentient machines. In the context of a water utility, the reality is far more practical and powerful. AI, specifically machine learning, is about finding patterns in vast datasets that are invisible to the human eye.
+
+Think about your SCADA system, which generates millions of data points every day on pressure, flow, and pump status. A machine learning model can analyze this historical data to learn what "normal" looks like. When a subtle deviation occurs—a pressure drop that's too small for an alarm but is inconsistent with the time of day and demand—the AI can flag it as a potential leak long before it becomes a major break. It's not magic; it's advanced pattern recognition that empowers your operators to be more proactive and efficient.`,
+    claps: 210,
+    comments: [],
+  },
 ];

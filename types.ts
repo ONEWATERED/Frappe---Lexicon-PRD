@@ -354,6 +354,34 @@ export type TopicSuggestion = {
   tags: string[];
 };
 
+// --- INSIGHTS (BLOG) TYPES ---
+export type BlogAuthor = {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  title: string;
+  isGuest: boolean;
+};
+
+export type BlogPostComment = {
+  user: User;
+  text: string;
+  timestamp: string;
+};
+
+export type BlogPost = {
+  id: string;
+  title: string;
+  subtitle: string;
+  authorId: string;
+  publishDate: string;
+  readTimeMinutes: number;
+  heroImageUrl: string;
+  content: string; // Will contain markdown-like content
+  claps: number;
+  comments: BlogPostComment[];
+};
+
 
 export interface AuthContextType {
   currentUser: User | null;
@@ -378,4 +406,6 @@ export interface AuthContextType {
   researcherProfiles: ResearcherProfile[];
   researchOpportunities: ResearchOpportunity[];
   topicSuggestions: TopicSuggestion[];
+  blogAuthors: BlogAuthor[];
+  blogPosts: BlogPost[];
 }

@@ -46,6 +46,7 @@ export const Header: React.FC = () => {
                 <NavItem to="/academy">Academy</NavItem>
                 <NavItem to="/research">Research</NavItem>
                 <NavItem to="/community">Community</NavItem>
+                <NavItem to="/insights">Insights</NavItem>
                 <NavItem to="/manuals">Manuals</NavItem>
                 <NavItem to="/ecosystem">Partners</NavItem>
                 <NavItem to="/ai-agents">AI Co-pilots</NavItem>
@@ -88,6 +89,7 @@ export const Header: React.FC = () => {
             <NavItem to="/academy" isMobile>Academy</NavItem>
             <NavItem to="/research" isMobile>Research</NavItem>
             <NavItem to="/community" isMobile>Community</NavItem>
+            <NavItem to="/insights" isMobile>Insights</NavItem>
             <NavItem to="/manuals" isMobile>Manuals</NavItem>
             <NavItem to="/ecosystem" isMobile>Partners</NavItem>
             <NavItem to="/ai-agents" isMobile>AI Co-pilots</NavItem>
