@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { HandThumbUpIcon, ShareIcon, ClockIcon, ChatBubbleOvalLeftEllipsisIcon } from '../../components/icons/Icons';
@@ -42,7 +42,8 @@ const BlogPostDetail: React.FC = () => {
     const post = useMemo(() => blogPosts.find(p => p.id === postId), [blogPosts, postId]);
     const author = useMemo(() => post ? blogAuthors.find(a => a.id === post.authorId) : undefined, [blogAuthors, post]);
     
-    useState(() => {
+    // FIX: Replaced incorrect `useState` with `useEffect` to set component state based on props. `useState` with two arguments is invalid.
+    useEffect(() => {
         if(post) setClaps(post.claps)
     }, [post])
 

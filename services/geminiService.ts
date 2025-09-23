@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 
 let ai: GoogleGenAI | null = null;
@@ -118,5 +119,25 @@ export const getHardeepVoiceResponse = async (userQuery: string): Promise<string
   } catch (error) {
     console.error("Error getting Hardeep voice response:", error);
     return "I'm sorry, I'm having trouble connecting right now. Could you please repeat that?";
+  }
+};
+
+export const getDroobiResponse = async (message: string): Promise<string> => {
+  try {
+    const genAI = getAI();
+    const { text } = await genAI.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: message,
+      config: {
+        systemInstruction: `You are DROOBI, a friendly, helpful, and fun AI assistant for oraKLES, a water industry educational platform. 
+        Your personality is encouraging and you love to use water-related puns (e.g., "Water you waiting for?", "That's fintastic!").
+        Keep your answers concise, helpful, and easy to understand for professionals in the water sector.
+        Start your first response with a friendly greeting and introduce yourself.`
+      },
+    });
+    return text;
+  } catch (error) {
+    console.error("Error getting Droobi response:", error);
+    return "I'm a bit backed up right now, like a clogged pipe! Please try again in a moment.";
   }
 };

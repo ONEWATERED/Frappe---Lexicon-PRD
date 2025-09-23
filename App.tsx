@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { HashRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -21,6 +22,7 @@ import ResearcherProfilePage from './pages/Research/ResearcherProfilePage';
 import BlogHome from './pages/Insights/BlogHome';
 import BlogPostDetail from './pages/Insights/BlogPostDetail';
 import CreateBlogPost from './pages/Insights/CreateBlogPost';
+import Droobi from './components/Droobi';
 
 
 const MainLayout: React.FC = () => (
@@ -29,6 +31,7 @@ const MainLayout: React.FC = () => (
     <main>
       <Outlet />
     </main>
+    <Droobi />
   </div>
 );
 
