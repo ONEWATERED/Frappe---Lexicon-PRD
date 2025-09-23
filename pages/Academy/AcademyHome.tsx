@@ -1,7 +1,5 @@
 
 
-
-
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -43,8 +41,7 @@ const AcademyHome: React.FC = () => {
   const oneWaterMinuteDeck = flashcardDecks.find(d => d.id === oneWaterMinute.deckId);
 
   const decksByCategory = useMemo(() => {
-    // FIX: Explicitly typing the initial value for `reduce` ensures that the accumulator's
-    // type is correctly inferred as `Record<string, FlashcardDeck[]>`, preventing `decks.map` from failing due to an `unknown` type.
+    // FIX: Explicitly typing the initial value of `reduce` ensures that the resulting object's type is correctly inferred as `Record<string, FlashcardDeck[]>`, preventing `decks.map` from failing due to an `unknown` type on the `decks` variable.
     return flashcardDecks.reduce((acc, deck) => {
         const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
         if (!acc[categoryName]) {

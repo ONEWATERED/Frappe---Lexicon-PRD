@@ -16,7 +16,9 @@ import {
   OneWaterMinute,
   IconName,
   UserProgress,
-  lexiconCategoryNames
+  lexiconCategoryNames,
+  CommunityPost,
+  CommunityEvent,
 } from './types';
 
 export const users: User[] = [
@@ -335,3 +337,67 @@ export const oneWaterMinute: OneWaterMinute = {
   description: 'The principal federal law in the United States intended to ensure safe drinking water for the public.',
   deckId: 'd002'
 };
+
+
+// --- NEW COMMUNITY DATA ---
+export const communityPosts: CommunityPost[] = [
+    {
+        id: 'post-001',
+        author: users[1], // Maria
+        timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        type: 'question',
+        channel: 'asset_mgmt',
+        content: "We're starting to build out our first predictive maintenance model for our pump stations. For those who have gone through this, what were your biggest 'gotchas' or unexpected challenges? Any advice is welcome!",
+        likes: 22,
+        comments: [{ user: users[0], text: "Great question! Make sure your sensor data is clean. We spent the first 3 months just on data cleansing and validation."}],
+        tags: ['predictive-maintenance', 'pumps', 'data-quality']
+    },
+    {
+        id: 'post-002',
+        author: users[0], // Alex
+        timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        type: 'discussion',
+        channel: 'ai_blockchain',
+        content: "Just read a fascinating whitepaper on using blockchain for water rights trading. Seems a bit futuristic, but the transparency aspect is compelling. What are your thoughts on practical applications in the next 5-10 years?",
+        likes: 15,
+        comments: [],
+        tags: ['blockchain', 'water-rights', 'innovation']
+    }
+];
+
+export const communityEvents: CommunityEvent[] = [
+    {
+        id: 'evt-001',
+        title: 'AWWA ACE24 Annual Conference',
+        description: 'The premier event for water professionals. Join us in Anaheim for networking, learning, and discovery.',
+        type: 'Conference',
+        submittedBy: users[0],
+        timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        eventDate: '2024-06-10T09:00:00Z',
+        location: 'Anaheim, CA',
+        url: 'https://www.awwa.org/ace',
+        attendeeIds: ['user-123', 'user-456']
+    },
+    {
+        id: 'evt-002',
+        title: 'Webinar: The Future of Digital Twins in Water',
+        description: 'Join experts from Innovyze and Xylem for a panel discussion on the impact of Digital Twin technology on utility operations.',
+        type: 'Webinar',
+        submittedBy: users[1],
+        timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        eventDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+        location: 'Virtual',
+        attendeeIds: ['user-123']
+    },
+    {
+        id: 'evt-003',
+        title: 'SF Bay Area Water Professionals Meetup',
+        description: 'Casual networking event for anyone in the Bay Area water industry. First round is on us!',
+        type: 'Meetup',
+        submittedBy: users[0],
+        timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        eventDate: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString(),
+        location: 'Oakland, CA',
+        attendeeIds: []
+    }
+];

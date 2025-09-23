@@ -1,8 +1,10 @@
 
+
 import React, { useState } from 'react';
 // FIX: Added MicrophoneIcon to imports to resolve usage error.
 import { PhoneIcon, ChatBubbleLeftRightIcon, CpuChipIcon, SparklesIcon, MicrophoneIcon } from '../../components/icons/Icons';
 import AICoachModal from '../../components/AICoachModal'; // Re-using for simplicity
+import VoiceChatModal from '../../components/VoiceChatModal';
 import { Flashcard } from '../../types';
 
 // Mock flashcard for the modal props
@@ -27,6 +29,7 @@ const droobiCard: Flashcard = {
 
 const AIAgentsPage: React.FC = () => {
     const [isHardeepModalOpen, setIsHardeepModalOpen] = useState(false);
+    const [isVoiceChatOpen, setIsVoiceChatOpen] = useState(false);
     const [isDroobiModalOpen, setIsDroobiModalOpen] = useState(false);
 
     return (
@@ -50,7 +53,7 @@ const AIAgentsPage: React.FC = () => {
                             Ask me anything about water utility management, digital transformation, and sustainable infrastructure. I am an AI trained on Hardeep's knowledge base, here to provide instant answers and insights.
                         </p>
                         <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                            <button onClick={() => alert('Voice chat coming soon!')} className="flex items-center justify-center gap-3 w-48 px-6 py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-colors">
+                            <button onClick={() => setIsVoiceChatOpen(true)} className="flex items-center justify-center gap-3 w-48 px-6 py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-colors">
                                 <PhoneIcon className="w-5 h-5" />
                                 Talk to Hardeep
                             </button>
@@ -92,7 +95,7 @@ const AIAgentsPage: React.FC = () => {
             </div>
             
             {isHardeepModalOpen && <AICoachModal card={hardeepCard} onClose={() => setIsHardeepModalOpen(false)} />}
-            {/* A more advanced Droobi modal would have a setup screen */}
+            <VoiceChatModal isOpen={isVoiceChatOpen} onClose={() => setIsVoiceChatOpen(false)} />
         </>
     );
 };

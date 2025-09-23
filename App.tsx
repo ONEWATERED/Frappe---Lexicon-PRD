@@ -15,6 +15,7 @@ import EcosystemHome from './pages/Ecosystem/EcosystemHome';
 import EntityProfile from './pages/Ecosystem/EntityProfile';
 import ComingSoon from './pages/ComingSoon';
 import AIAgentsPage from './pages/AIAgents/AIAgentsPage';
+import CommunityHome from './pages/Community/CommunityHome';
 
 
 const MainLayout: React.FC = () => (
@@ -43,6 +44,7 @@ const App: React.FC = () => {
             <Route path="/manual/:manualId" element={<ComingSoon title="Manual Viewer" />} />
             <Route path="/academy" element={<AcademyHome />} />
             <Route path="/academy/pathway/:pathwayId" element={<ComingSoon title="Learning Pathway" />} />
+            <Route path="/community" element={<CommunityHome />} />
             <Route path="/ecosystem" element={<EcosystemHome />} />
             <Route path="/ecosystem/:entityId" element={<EntityProfile />} />
             <Route path="/ai-agents" element={<AIAgentsPage />} />

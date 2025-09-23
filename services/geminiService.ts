@@ -25,12 +25,13 @@ export const explainTermSimply = async (term: string, technicalDefinition: strin
 
     Simple Explanation:`;
 
-    const response = await genAI.models.generateContent({
+    // FIX: Access the .text property directly from the response object.
+    const { text } = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
-    return response.text;
+    return text;
   } catch (error) {
     console.error("Error generating simple explanation:", error);
     return "I'm having trouble simplifying this right now. Please try again later.";
@@ -49,12 +50,13 @@ export const generateRealWorldExample = async (term: string, definition: string)
 
     Real-World Example:`;
 
-    const response = await genAI.models.generateContent({
+    // FIX: Access the .text property directly from the response object.
+    const { text } = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
     
-    return response.text;
+    return text;
   } catch (error) {
     console.error("Error generating real-world example:", error);
     return "I'm having trouble generating an example right now. Please try again later.";
@@ -78,14 +80,43 @@ export const getAICoachResponse = async (cardFront: string, cardBack: string, qu
     Your task is to answer their question concisely and accurately, relating it back to the flashcard's topic. 
     If the question is unrelated, gently guide them back to the topic. Be encouraging and helpful.`;
 
-    const response = await genAI.models.generateContent({
+    // FIX: Access the .text property directly from the response object.
+    const { text } = await genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
     });
 
-    return response.text;
+    return text;
   } catch (error) {
     console.error("Error getting AI Coach response:", error);
     return "I'm sorry, I can't answer that right now. Let's focus on the card's topic. Do you have another question about it?";
+  }
+};
+
+export const getHardeepVoiceResponse = async (userQuery: string): Promise<string> => {
+  try {
+    const genAI = getAI();
+    const prompt = `You are Hardeep, a "Knowledge Avatar" and an expert in the water utility industry. 
+    You are speaking to a user via a voice interface.
+    Your knowledge base covers utility management, digital transformation, and sustainable infrastructure.
+    
+    Answer the user's query concisely and conversationally, as if you were in a real phone call.
+    Keep your responses to 2-4 sentences to be suitable for a voice-first experience.
+    Do not use markdown or formatting. Just provide the plain text for your verbal response.
+    
+    User's query: "${userQuery}"
+    
+    Hardeep's response:`;
+
+    // FIX: Access the .text property directly from the response object.
+    const { text } = await genAI.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+    });
+
+    return text;
+  } catch (error) {
+    console.error("Error getting Hardeep voice response:", error);
+    return "I'm sorry, I'm having trouble connecting right now. Could you please repeat that?";
   }
 };

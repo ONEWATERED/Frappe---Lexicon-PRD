@@ -195,6 +195,36 @@ export interface OneWaterMinute {
   deckId: string;
 }
 
+// --- NEW COMMUNITY TYPES ---
+export type CommunityPostType = 'discussion' | 'question' | 'poll';
+export type CommunityEventType = 'Webinar' | 'Conference' | 'Meetup' | 'Workshop';
+
+export type CommunityPost = {
+  id: string;
+  author: User;
+  timestamp: string;
+  type: CommunityPostType;
+  channel: LexiconCategory;
+  content: string;
+  likes: number;
+  comments: { user: User; text: string }[];
+  tags: string[];
+};
+
+export type CommunityEvent = {
+  id: string;
+  title: string;
+  description: string;
+  type: CommunityEventType;
+  submittedBy: User;
+  timestamp: string; // when it was posted
+  eventDate: string; // when it takes place
+  location: string;
+  url?: string;
+  attendeeIds: string[];
+};
+
+
 export interface AuthContextType {
   currentUser: User | null;
   login: (userId: string) => void;
@@ -213,4 +243,6 @@ export interface AuthContextType {
   oneWaterMinute: OneWaterMinute;
   ecosystemEntities: EcosystemEntity[];
   userProgress: UserProgress;
+  communityPosts: CommunityPost[];
+  communityEvents: CommunityEvent[];
 }
