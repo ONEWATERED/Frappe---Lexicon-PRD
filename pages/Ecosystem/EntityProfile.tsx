@@ -1,72 +1,274 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { StarIcon } from '../../components/icons/Icons';
+import { VendorResource, VendorContact, JobPosting, VisitorLog, User, Manual } from '../../types';
+import { 
+    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, DocumentTextIcon, StarIcon 
+} from '../../components/icons/Icons';
+import VideoPlayer from '../../components/VideoPlayer';
 
-const EntityProfile: React.FC = () => {
-  const { entityId, vendorId } = useParams<{ entityId?: string, vendorId?: string }>();
-  const { ecosystemEntities } = useAuth();
-  
-  const id = entityId || vendorId;
-  const entity = ecosystemEntities.find(e => e.id === id);
 
-  if (!entity) {
-    return (
-      <div className="text-center py-20 text-white">
-        <h1 className="text-2xl">Entity not found.</h1>
-        <Link to="/ecosystem" className="text-blue-400 hover:underline mt-4 inline-block">Back to Partners Directory</Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mb-8">
-        <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
-          &larr; Back to Partners Directory
-        </Link>
-      </div>
-
-      <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 flex flex-col md:flex-row items-center gap-8">
-        <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 flex-shrink-0">
-          <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
+const ContactCard: React.FC<{ contact: VendorContact }> = ({ contact }) => (
+    <div className="flex items-center gap-4">
+        <div className="relative">
+            <img src={contact.avatarUrl} alt={contact.name} className="w-16 h-16 rounded-full" />
+            <span className={`absolute bottom-0 right-0 block h-4 w-4 rounded-full border-2 border-slate-800 ${contact.status === 'online' ? 'bg-green-400' : 'bg-slate-500'}`}></span>
         </div>
         <div>
-          <h1 className="text-3xl font-extrabold text-white">{entity.name}</h1>
-          <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
+            <p className="font-bold text-white">{contact.name}</p>
+            <p className="text-sm text-slate-400">{contact.title}</p>
+            <a href={`mailto:${contact.email}`} className="text-xs text-blue-400 hover:underline">{contact.email}</a>
         </div>
-      </div>
-
-      <div className="mt-12">
-        {!entity.isClaimed && (
-          <div className="glass-card max-w-2xl mx-auto p-8 rounded-2xl border border-blue-400/50 text-center">
-            <StarIcon className="w-12 h-12 text-blue-400 mx-auto" />
-            <h2 className="text-2xl font-bold text-white mt-4">Is This Your Organization?</h2>
-            <p className="text-slate-400 mt-2">
-              Claim this profile for free to manage your information, connect with the community, and unlock powerful features.
-            </p>
-            <ul className="text-left space-y-2 mt-6 text-slate-300 max-w-md mx-auto">
-              <li className="flex items-start"><span className="text-green-400 mr-2 mt-1">&#10003;</span> Showcase key contacts, technical documents, and performance metrics.</li>
-              <li className="flex items-start"><span className="text-green-400 mr-2 mt-1">&#10003;</span> Generate qualified leads from industry professionals actively seeking solutions.</li>
-              <li className="flex items-start"><span className="text-green-400 mr-2 mt-1">&#10003;</span> Host live expert sessions on Droobi TV to showcase your thought leadership.</li>
-            </ul>
-            <button className="mt-8 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity">
-              Claim This Profile
-            </button>
-            <p className="text-xs text-slate-500 mt-3">Claiming requires verification using an official company email address.</p>
-          </div>
-        )}
-
-        {entity.isClaimed && (
-          <div className="text-center p-12 bg-slate-800 rounded-lg">
-             <h2 className="text-2xl font-bold text-white">Profile Content</h2>
-             <p className="text-slate-400 mt-2">This is where claimed profiles would display their detailed information, documents, and contacts.</p>
-          </div>
-        )}
-      </div>
-
     </div>
-  );
+);
+
+const ResourceCard: React.FC<{ resource: VendorResource }> = ({ resource }) => (
+    <div className="glass-card p-4 flex flex-col">
+        <p className="text-xs font-semibold text-purple-400">{resource.type}</p>
+        <h4 className="font-semibold text-slate-100 mt-1">{resource.title}</h4>
+        <p className="text-sm text-slate-400 mt-2 flex-grow">{resource.description}</p>
+        <div className="mt-4 pt-3 border-t border-slate-700 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-4 text-slate-400">
+                <span className="flex items-center gap-1"><EyeIcon className="w-4 h-4"/>{resource.views}</span>
+                <span className="flex items-center gap-1"><ArrowDownTrayIcon className="w-4 h-4"/>{resource.downloads}</span>
+            </div>
+            <a href={resource.fileUrl} download className="font-semibold text-blue-400 hover:text-blue-300">Download</a>
+        </div>
+    </div>
+);
+
+const JobPostingCard: React.FC<{ job: JobPosting }> = ({ job }) => (
+    <div className="glass-card p-6">
+        <div className="flex justify-between items-start">
+            <div>
+                <h4 className="font-bold text-slate-100 text-lg">{job.title}</h4>
+                <p className="text-sm text-slate-400">{job.location}</p>
+            </div>
+            <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-full">{job.type}</span>
+        </div>
+        <p className="text-sm text-slate-300 mt-3">{job.description}</p>
+        <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-4 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors">Apply Now</a>
+    </div>
+);
+
+const ManualCard: React.FC<{ manual: Manual }> = ({ manual }) => (
+    <Link to={`/manual/${manual.id}`} className="glass-card p-4 flex gap-4 items-center group">
+        <img src={manual.coverImageUrl} alt={manual.title} className="w-20 h-28 object-cover rounded-md flex-shrink-0" />
+        <div>
+            <p className="text-xs font-semibold uppercase text-blue-400">{manual.assetType}</p>
+            <h4 className="font-semibold text-slate-100 group-hover:text-blue-400 transition-colors">{manual.title}</h4>
+            <p className="text-xs text-slate-500 font-mono mt-1">Model: {manual.modelNumber}</p>
+        </div>
+    </Link>
+);
+
+
+const AnalyticsDashboard: React.FC<{ logs: VisitorLog[], getUserById: (id: string) => User | undefined }> = ({ logs, getUserById }) => (
+    <div className="space-y-6">
+        <h3 className="text-2xl font-bold text-white">Visitor Analytics</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="glass-card p-4"><p className="text-slate-400 text-sm">Total Visitors</p><p className="text-2xl font-bold text-white">{logs.length}</p></div>
+            <div className="glass-card p-4"><p className="text-slate-400 text-sm">Total Page Visits</p><p className="text-2xl font-bold text-white">{logs.reduce((sum, l) => sum + l.totalVisits, 0)}</p></div>
+            <div className="glass-card p-4"><p className="text-slate-400 text-sm">Total Downloads</p><p className="text-2xl font-bold text-white">{logs.reduce((sum, l) => sum + l.downloads, 0)}</p></div>
+        </div>
+        <div>
+            <h4 className="font-semibold text-slate-200 mb-2">Recent Visitors</h4>
+            <div className="glass-card p-4">
+                <div className="space-y-3">
+                    {logs.map(log => {
+                        const user = getUserById(log.userId);
+                        if (!user) return null;
+                        return (
+                            <div key={log.userId} className="flex items-center justify-between p-2 bg-slate-800/50 rounded-md">
+                                <div className="flex items-center gap-3">
+                                    <img src={user.avatarUrl} alt={user.name} className="w-10 h-10 rounded-full"/>
+                                    <div>
+                                        <Link to={`/profile/${user.id}`} className="font-semibold text-slate-200 hover:underline">{user.name}</Link>
+                                        <p className="text-xs text-slate-400">{user.email}</p>
+                                    </div>
+                                </div>
+                                <div className="text-right text-xs text-slate-400">
+                                    <p>Last visit: {new Date(log.lastVisit).toLocaleDateString()}</p>
+                                    <p>{log.totalVisits} visits, {log.downloads} downloads</p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+
+const EntityProfile: React.FC = () => {
+    const { entityId, vendorId } = useParams<{ entityId?: string, vendorId?: string }>();
+    const { ecosystemEntities, currentUser, getUserById, manuals } = useAuth();
+    const id = entityId || vendorId;
+    
+    const [activeTab, setActiveTab] = useState('about');
+    const [resourceFilter, setResourceFilter] = useState('All');
+    
+    const entity = ecosystemEntities.find(e => e.id === id);
+    const vendorManuals = useMemo(() => manuals.filter(m => m.vendorId === id), [manuals, id]);
+
+    if (!entity) {
+        return (
+          <div className="text-center py-20 text-white">
+            <h1 className="text-2xl">Entity not found.</h1>
+            <Link to="/ecosystem" className="text-blue-400 hover:underline mt-4 inline-block">Back to Partners Directory</Link>
+          </div>
+        );
+    }
+
+    const isVendorMicroSite = entity.type === 'Vendor' && entity.featuredVideoUrl;
+    if (!isVendorMicroSite) {
+        // Fallback for non-vendor or non-microsite entities
+         return (
+            <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+              <div className="mb-8">
+                <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
+                  &larr; Back to Partners Directory
+                </Link>
+              </div>
+              <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
+                <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
+                  <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
+                </div>
+                <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
+                <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
+                <p className="mt-4 text-slate-400">This profile is not yet a full micro-site. Check back later for more details.</p>
+              </div>
+            </div>
+        );
+    }
+    
+    const showAnalytics = entity.isClaimed && currentUser?.id === entity.claimedByUserId;
+    const resourceCategories = useMemo(() => ['All', ...new Set(entity.resources?.map(r => r.category) || [])], [entity.resources]);
+    const filteredResources = useMemo(() => {
+        if (resourceFilter === 'All') return entity.resources || [];
+        return entity.resources?.filter(r => r.category === resourceFilter) || [];
+    }, [entity.resources, resourceFilter]);
+
+
+    const TabButton: React.FC<{ tabId: string, label: string }> = ({ tabId, label }) => (
+        <button
+            onClick={() => setActiveTab(tabId)}
+            className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${activeTab === tabId ? 'bg-blue-500 text-white' : 'text-slate-300 hover:bg-slate-700'}`}
+        >
+            {label}
+        </button>
+    );
+
+    return (
+        <div className="min-h-screen">
+            {/* Hero Section */}
+            <div className="relative h-96 w-full">
+                <VideoPlayer src={entity.featuredVideoUrl!} />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-8 md:p-12 max-w-7xl mx-auto w-full">
+                    <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 border-4 border-slate-700">
+                      <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-4">{entity.name}</h1>
+                    <p className="text-lg text-slate-300 mt-1 max-w-3xl">{entity.tagline}</p>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8">
+                {/* Main Content */}
+                <main className="lg:col-span-8 xl:col-span-9">
+                    <div className="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-4">
+                        <TabButton tabId="about" label="About & Services" />
+                        <TabButton tabId="resources" label="Resources" />
+                        <TabButton tabId="manuals" label="O&M Manuals" />
+                        <TabButton tabId="careers" label="Careers" />
+                        {showAnalytics && <TabButton tabId="analytics" label="Analytics" />}
+                    </div>
+
+                    <div className="mt-4">
+                        {activeTab === 'about' && (
+                            <div className="space-y-8">
+                                <div>
+                                    <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
+                                    <p className="mt-2 text-slate-300 whitespace-pre-line">{entity.longDescription}</p>
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-white">Services</h3>
+                                    <div className="mt-4 space-y-4">
+                                        {entity.services?.map(service => (
+                                            <div key={service.title} className="glass-card p-4">
+                                                <h4 className="font-semibold text-slate-100">{service.title}</h4>
+                                                <p className="text-sm text-slate-400">{service.description}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-white">Coming Soon</h3>
+                                     <div className="mt-4 space-y-4">
+                                        {entity.futureOfferings?.map(offering => (
+                                            <div key={offering.title} className="glass-card p-4">
+                                                <h4 className="font-semibold text-slate-100">{offering.title}</h4>
+                                                <p className="text-sm text-slate-400">{offering.description}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {activeTab === 'resources' && (
+                             <div>
+                                <h3 className="text-2xl font-bold text-white mb-4">Resource Library</h3>
+                                <div className="flex flex-wrap gap-2 mb-6">
+                                    {resourceCategories.map(cat => (
+                                        <button key={cat} onClick={() => setResourceFilter(cat)} className={`px-3 py-1 text-sm rounded-full ${resourceFilter === cat ? 'bg-purple-500 text-white font-semibold' : 'bg-slate-700 text-slate-300'}`}>{cat}</button>
+                                    ))}
+                                </div>
+                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {filteredResources.map(res => <ResourceCard key={res.id} resource={res}/>)}
+                                </div>
+                            </div>
+                        )}
+                         {activeTab === 'manuals' && (
+                            <div>
+                                <h3 className="text-2xl font-bold text-white mb-4">O&M Manuals</h3>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {vendorManuals.map(man => <ManualCard key={man.id} manual={man}/>)}
+                                </div>
+                            </div>
+                         )}
+                         {activeTab === 'careers' && (
+                             <div>
+                                <h3 className="text-2xl font-bold text-white mb-4">Current Openings</h3>
+                                <div className="space-y-4">
+                                    {entity.jobPostings?.map(job => <JobPostingCard key={job.id} job={job}/>)}
+                                </div>
+                            </div>
+                         )}
+                        {activeTab === 'analytics' && showAnalytics && <AnalyticsDashboard logs={entity.visitorLogs || []} getUserById={getUserById}/>}
+                    </div>
+                </main>
+
+                {/* Sidebar */}
+                <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
+                     <div className="glass-card p-6">
+                        <h3 className="text-lg font-bold text-white mb-4">Key Contacts</h3>
+                        <div className="space-y-4">
+                            {entity.contacts?.map(contact => <ContactCard key={contact.id} contact={contact}/>)}
+                        </div>
+                    </div>
+                    <div className="glass-card p-6">
+                        <h3 className="text-lg font-bold text-white mb-4">Information</h3>
+                        <div className="space-y-2 text-sm text-slate-300">
+                             <p className="flex items-center gap-2"><MapPinIcon className="w-4 h-4 text-slate-500"/>{entity.location}</p>
+                             <a href={`http://${entity.domain}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:underline"><GlobeAltIcon className="w-4 h-4"/>{entity.domain}</a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    );
 };
 
 export default EntityProfile;

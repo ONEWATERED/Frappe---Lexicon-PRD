@@ -45,6 +45,8 @@ export const users: User[] = [
     stats: { commentsPosted: 112, documentsUploaded: 12, insightfulMarks: 68 },
     badges: ['B01', 'B02', 'B03', 'B05'],
   },
+  { id: 'user-789', name: 'Sam Chen', email: 's.chen@citywater.gov', avatarUrl: 'https://i.pravatar.cc/150?u=user-789', tierId: 'T2', xp: 2200, stats: { commentsPosted: 15, documentsUploaded: 1, insightfulMarks: 4 }, badges: ['B01'] },
+
 ];
 
 export const PROFESSIONAL_TIERS: ProfessionalTier[] = [
@@ -230,17 +232,58 @@ export const initialTerms: LexiconTerm[] = [
 ];
 
 export const ecosystemEntities: EcosystemEntity[] = [
-    { id: 'v001', name: 'Xylem Inc.', logoUrl: 'https://logo.clearbit.com/xylem.com', type: 'Vendor', tagline: 'Global water technology provider for water and wastewater applications.', location: 'Rye Brook, NY', domain: 'xylem.com', isClaimed: true, claimedByUserId: 'user-123' },
+    { 
+        id: 'v001', 
+        name: 'Xylem Inc.', 
+        logoUrl: 'https://logo.clearbit.com/xylem.com', 
+        type: 'Vendor', 
+        tagline: 'Global water technology provider for water and wastewater applications.', 
+        location: 'Rye Brook, NY', 
+        domain: 'xylem.com', 
+        isClaimed: true, 
+        isFeatured: true,
+        claimedByUserId: 'user-123',
+        featuredVideoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        longDescription: 'Xylem is a leading global water technology company committed to developing innovative technology solutions to the world’s water challenges. The Company’s products and services move, treat, analyze, monitor and return water to the environment in public utility, industrial, residential and commercial building services settings. Xylem also provides a leading portfolio of smart metering, network technologies and advanced infrastructure analytics solutions for water, electric and gas utilities.',
+        contacts: [
+          { id: 'vc001', name: 'Samantha Carter', title: 'Lead Solutions Architect', avatarUrl: 'https://i.pravatar.cc/150?u=vc001', email: 's.carter@xylem.com', phone: '555-123-4567', status: 'online' },
+          { id: 'vc002', name: 'Daniel Jackson', title: 'Director of Sales, NA', avatarUrl: 'https://i.pravatar.cc/150?u=vc002', email: 'd.jackson@xylem.com', status: 'offline' },
+          { id: 'vc003', name: 'Janet Fraiser', title: 'Product Manager, Treatment', avatarUrl: 'https://i.pravatar.cc/150?u=vc003', email: 'j.fraiser@xylem.com', status: 'online' },
+        ],
+        services: [
+            { title: 'Water & Wastewater Treatment', description: 'Comprehensive solutions for biological treatment, disinfection, filtration, and sludge management.'},
+            { title: 'Dewatering Solutions', description: 'Extensive rental fleet and expertise for temporary and permanent dewatering applications.'},
+            { title: 'Measurement & Control', description: 'Sensors, controllers, and software for real-time monitoring of water networks.'}
+        ],
+        futureOfferings: [
+            { title: 'Xy-AI Predictive Analytics Suite', description: 'A next-gen platform using AI to predict asset failure and optimize operational efficiency across entire water networks.'}
+        ],
+        resources: [
+          { id: 'vr001', title: 'Flygt Concertor Pumping System', description: 'The world\'s first wastewater pumping system with integrated intelligence.', fileUrl: '#', type: 'Brochure', category: 'Pumping Systems', views: 1204, downloads: 312 },
+          { id: 'vr002', title: 'Case Study: Digital Twin for City of South Bend', description: 'How real-time modeling reduced CSOs by 70%.', fileUrl: '#', type: 'Case Study', category: 'Digital Solutions', views: 855, downloads: 150 },
+          { id: 'vr003', title: 'Sensus AMI Network Specifications', description: 'Technical details for the FlexNet communication network.', fileUrl: '#', type: 'Specification', category: 'Metering & AMI', views: 2430, downloads: 980 },
+           { id: 'vr004', title: 'Leopold Filtration Systems Overview', description: 'Explore our comprehensive range of filtration solutions for municipal water.', fileUrl: '#', type: 'Brochure', category: 'Treatment', views: 540, downloads: 88 },
+
+        ],
+        jobPostings: [
+          { id: 'jp001', title: 'Senior Software Engineer, Digital Water', location: 'Remote', type: 'Full-time', description: 'Join our team building the next generation of water utility software.', applyUrl: '#' },
+          { id: 'jp002', title: 'Field Service Technician', location: 'Raleigh, NC', type: 'Full-time', description: 'Provide on-site support for Xylem\'s advanced treatment technologies.', applyUrl: '#' }
+        ],
+        visitorLogs: [
+          { userId: 'user-456', firstVisit: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), lastVisit: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), totalVisits: 5, downloads: 2, views: 8 },
+          { userId: 'user-789', firstVisit: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), lastVisit: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), totalVisits: 1, downloads: 0, views: 2 }
+        ]
+    },
     { id: 'v002', name: 'Badger Meter', logoUrl: 'https://logo.clearbit.com/badgermeter.com', type: 'Vendor', tagline: 'Innovator in flow measurement, control, and communications solutions.', location: 'Milwaukee, WI', domain: 'badgermeter.com', isClaimed: false },
     { id: 'v003', name: 'Innovyze (An Autodesk Company)', logoUrl: 'https://logo.clearbit.com/autodesk.com', type: 'Vendor', tagline: 'Global leader in water infrastructure software.', location: 'Portland, OR', domain: 'innovyze.com', isClaimed: true },
     { id: 'c001', name: 'Black & Veatch', logoUrl: 'https://logo.clearbit.com/bv.com', type: 'Consultant', tagline: 'Employee-owned engineering, procurement, and consulting company.', location: 'Overland Park, KS', domain: 'bv.com', isClaimed: false },
     { id: 'g001', name: 'Environmental Protection Agency (EPA)', logoUrl: 'https://logo.clearbit.com/epa.gov', type: 'Government', tagline: 'Protecting Human Health and the Environment', location: 'Washington, D.C.', domain: 'epa.gov', isClaimed: true },
     { id: 'v004', name: 'Mueller Water Products', logoUrl: 'https://logo.clearbit.com/muellerwaterproducts.com', type: 'Vendor', tagline: 'Leading manufacturer of products for water transmission and distribution.', location: 'Atlanta, GA', domain: 'muellerwaterproducts.com', isClaimed: false},
-    { id: 'v005', name: 'Grundfos', logoUrl: 'https://logo.clearbit.com/grundfos.com', type: 'Vendor', tagline: 'Advanced pump solutions and water technology.', location: 'Bjerringbro, Denmark (USA HQ: Brookshire, TX)', domain: 'grundfos.com', isClaimed: true},
+    { id: 'v005', name: 'Grundfos', logoUrl: 'https://logo.clearbit.com/grundfos.com', type: 'Vendor', tagline: 'Advanced pump solutions and water technology.', location: 'Bjerringbro, Denmark (USA HQ: Brookshire, TX)', domain: 'grundfos.com', isClaimed: true, isFeatured: true},
     { id: 'v006', name: 'Evoqua Water Technologies', logoUrl: 'https://logo.clearbit.com/evoqua.com', type: 'Vendor', tagline: 'Providing mission-critical water and wastewater treatment solutions.', location: 'Pittsburgh, PA', domain: 'evoqua.com', isClaimed: false},
     { id: 'v007', name: 'American Water', logoUrl: 'https://logo.clearbit.com/amwater.com', type: 'Vendor', tagline: 'The largest publicly traded U.S. water and wastewater utility company.', location: 'Camden, NJ', domain: 'amwater.com', isClaimed: true},
     { id: 'v008', name: 'SUEZ', logoUrl: 'https://logo.clearbit.com/suez.com', type: 'Vendor', tagline: 'Water and waste management solutions for municipalities and industries.', location: 'Paris, France (USA HQ: Paramus, NJ)', domain: 'suez.com', isClaimed: false},
-    { id: 'c002', name: 'Stantec', logoUrl: 'https://logo.clearbit.com/stantec.com', type: 'Consultant', tagline: 'Design with community in mind.', location: 'Edmonton, Canada (USA Offices Nationwide)', domain: 'stantec.com', isClaimed: true },
+    { id: 'c002', name: 'Stantec', logoUrl: 'https://logo.clearbit.com/stantec.com', type: 'Consultant', tagline: 'Design with community in mind.', location: 'Edmonton, Canada (USA Offices Nationwide)', domain: 'stantec.com', isClaimed: true, isFeatured: true },
     { id: 'a001', name: 'Water Research Foundation', logoUrl: 'https://logo.clearbit.com/waterrf.org', type: 'Academia', tagline: 'Advancing the science of water.', location: 'Denver, CO', domain: 'waterrf.org', isClaimed: true },
     { id: 'n001', name: 'Charity: Water', logoUrl: 'https://logo.clearbit.com/charitywater.org', type: 'Non-Profit', tagline: 'Bringing clean and safe drinking water to people in developing countries.', location: 'New York, NY', domain: 'charitywater.org', isClaimed: true },
      { id: 'v009', name: 'Hach Company', logoUrl: 'https://logo.clearbit.com/hach.com', type: 'Vendor', tagline: 'Manufacturing and distributing analytical instruments for water quality.', location: 'Loveland, CO', domain: 'hach.com', isClaimed: false },
@@ -271,6 +314,8 @@ export const manuals: Manual[] = [
     { id: 'm002', title: 'FlowIntel II Ultrasonic Sensor', vendorId: 'v002', assetType: 'Sensor', modelNumber: 'FI-2023-U', summary: 'Technical specifications and O&M guide for the FlowIntel II non-invasive ultrasonic flow sensor.', coverImageUrl: 'https://picsum.photos/seed/sensor-manual/300/400', fileUrl: '#', uploadedAt: '2024-01-20' },
     { id: 'm003', title: 'Guardian III Smart Hydrant', vendorId: 'v004', assetType: 'Hydrant', modelNumber: 'G-3-SM', summary: 'A complete guide to the Guardian III Smart Hydrant, including pressure monitoring and acoustic leak detection features.', coverImageUrl: 'https://picsum.photos/seed/hydrant-manual/300/400', fileUrl: '#', uploadedAt: '2024-03-05' },
     { id: 'm004', title: 'ResiValv Resilient Seated Gate Valve', vendorId: 'v004', assetType: 'Valve', modelNumber: 'RV-RSGV-24', summary: 'Installation, operation, and troubleshooting guide for Mueller resilient seated gate valves.', coverImageUrl: 'https://picsum.photos/seed/valve-manual/300/400', fileUrl: '#', uploadedAt: '2023-09-15' },
+    { id: 'm005', title: 'Sensus iPERL Smart Water Meter', vendorId: 'v001', assetType: 'Sensor', modelNumber: 'iPERL-2024', summary: 'Installation and configuration guide for the Sensus iPERL residential and commercial smart water meters.', coverImageUrl: 'https://picsum.photos/seed/iperl-manual/300/400', fileUrl: '#', uploadedAt: '2024-02-18' },
+
 ];
 
 export const userProgress: UserProgress = {

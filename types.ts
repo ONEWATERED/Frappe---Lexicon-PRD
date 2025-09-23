@@ -57,7 +57,7 @@ export type TermDocument = {
 };
 
 export type LexiconTerm = {
-  id: string;
+  id:string;
   term: string;
   category: LexiconCategory;
   plainLanguageDefinition: string;
@@ -173,6 +173,47 @@ export type Manual = {
 
 export type EntityType = 'Vendor' | 'Consultant' | 'Government' | 'Academia' | 'Non-Profit';
 
+// --- VENDOR MICRO-SITE TYPES ---
+export type VendorContact = {
+  id: string;
+  name: string;
+  title: string;
+  avatarUrl: string;
+  email: string;
+  phone?: string;
+  status: 'online' | 'offline';
+};
+
+export type VendorResource = {
+  id: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  type: 'Brochure' | 'Case Study' | 'Whitepaper' | 'Specification';
+  category: string; // Vendor-defined category
+  views: number;
+  downloads: number;
+};
+
+export type JobPosting = {
+  id: string;
+  title: string;
+  location: string;
+  type: 'Full-time' | 'Part-time' | 'Contract';
+  description: string;
+  applyUrl: string;
+};
+
+export type VisitorLog = {
+  userId: string;
+  firstVisit: string;
+  lastVisit: string;
+  totalVisits: number;
+  downloads: number;
+  views: number;
+};
+
+
 export type EcosystemEntity = {
   id: string;
   name: string;
@@ -182,8 +223,19 @@ export type EcosystemEntity = {
   location: string;
   domain: string;
   isClaimed: boolean;
+  isFeatured?: boolean;
   claimedByUserId?: string;
+  // Vendor-specific micro-site properties (optional)
+  featuredVideoUrl?: string;
+  longDescription?: string;
+  contacts?: VendorContact[];
+  services?: { title: string; description: string }[];
+  futureOfferings?: { title: string; description: string }[];
+  resources?: VendorResource[];
+  jobPostings?: JobPosting[];
+  visitorLogs?: VisitorLog[];
 };
+
 
 // This one was missing from the spec, but needed for the context.
 export type Vendor = EcosystemEntity & { type: 'Vendor' };

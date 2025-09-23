@@ -183,7 +183,7 @@ export const CalendarDaysIcon: React.FC<IconProps> = ({ className }) => (
 
 export const UsersIcon: React.FC<IconProps> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m-7.5-2.962c.51.056 1.02.082 1.535.082a9.041 9.041 0 0 0-5.455-2.036c-3.14-1.25-4.463-4.524-3.8-7.518 1.132-4.247 5.923-6.45 9.94-5.027 4.017 1.423 6.83 5.48 6.223 9.674M15 18.75a3 3 0 0 1-6 0v-1.5a3 3 0 0 1 6 0v1.5Z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m-7.5-2.962c.51.056 1.02.082 1.535.082a9.041 9.041 0 0 0-5.455-2.036c-3.14-1.25-4.463-4.524-3.8-7.518 1.132-4.247 5.923-6.45 9.94-5.027 4.017 1.423 6.83 5.48 6.223 9.674M15 18.75a3 3 0 0 1-6 0v-1.5a3 3 0 0 1 6 0v-1.5Z" />
   </svg>
 );
 
@@ -228,6 +228,25 @@ export const BeakerIcon: React.FC<IconProps> = ({ className }) => (
 export const BookmarkSquareIcon: React.FC<IconProps> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+    </svg>
+);
+
+export const BriefcaseIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.07a2.25 2.25 0 0 1-2.25 2.25H5.92a2.25 2.25 0 0 1-2.25-2.25v-4.07a2.25 2.25 0 0 1 2.25-2.25h1.03a2.25 2.25 0 0 1 2.094.882l.094.182a2.25 2.25 0 0 0 4.188 0l.094-.182a2.25 2.25 0 0 1 2.094-.882h1.03a2.25 2.25 0 0 1 2.25 2.25Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9.75 12 9.75m0 0 .375-3.375A2.25 2.25 0 0 1 4.5 3.75h15a2.25 2.25 0 0 1 2.25 2.25L18 9.75m-12 0h12" />
+    </svg>
+);
+
+export const ArrowDownTrayIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+    </svg>
+);
+
+export const CheckBadgeIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.745 3.745 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.745 3.745 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
     </svg>
 );
 
