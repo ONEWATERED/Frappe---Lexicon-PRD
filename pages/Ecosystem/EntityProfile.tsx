@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { VendorResource, VendorContact, JobPosting, VisitorLog, User, Manual } from '../../types';
+import { VendorResource, VendorContact, JobPosting, VisitorLog, User, Manual, EcosystemEntity } from '../../types';
 import { 
-    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, DocumentTextIcon, StarIcon 
+    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, DocumentTextIcon, StarIcon, CheckBadgeIcon 
 } from '../../components/icons/Icons';
 import VideoPlayer from '../../components/VideoPlayer';
 
@@ -100,6 +100,66 @@ const AnalyticsDashboard: React.FC<{ logs: VisitorLog[], getUserById: (id: strin
     </div>
 );
 
+const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => {
+    return (
+        <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+             <div className="mb-8">
+                <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
+                  &larr; Back to Partners Directory
+                </Link>
+              </div>
+            {/* Header with logo and name */}
+            <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
+                <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
+                    <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
+                </div>
+                <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
+                <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
+            </div>
+
+            {/* Claim CTA and blurred background */}
+            <div className="relative mt-8">
+                {/* The overlay */}
+                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md z-10 flex flex-col items-center justify-center text-center p-8 rounded-2xl">
+                    <h2 className="text-3xl font-bold text-white">This Profile is Unclaimed</h2>
+                    <p className="mt-2 text-slate-300 max-w-md">Are you an official representative of {entity.name}? Claim this profile to unlock your micro-site, add contacts, post jobs, and engage with the oraKLES community.</p>
+                    <button 
+                        onClick={() => alert(`This would start the verification process to claim the profile for ${entity.name}.`)}
+                        className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg flex items-center gap-2"
+                    >
+                        <CheckBadgeIcon className="w-6 h-6" />
+                        Claim This Profile
+                    </button>
+                </div>
+                
+                {/* The blurred content */}
+                <div className="opacity-20 pointer-events-none">
+                    <div className="space-y-8 glass-card p-8 rounded-2xl">
+                        <div>
+                            <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
+                            <p className="mt-2 text-slate-300">Claim this profile to add a detailed company description, showcase your services, and share future offerings with the water industry's top professionals. This section will become a rich overview of your organization's mission and capabilities.</p>
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-white">Key Contacts</h3>
+                            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-slate-800 h-24 rounded-lg"></div>
+                                <div className="bg-slate-800 h-24 rounded-lg"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-white">Resource Library</h3>
+                            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-slate-800 h-32 rounded-lg"></div>
+                                <div className="bg-slate-800 h-32 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 const EntityProfile: React.FC = () => {
     const { entityId, vendorId } = useParams<{ entityId?: string, vendorId?: string }>();
@@ -121,27 +181,37 @@ const EntityProfile: React.FC = () => {
         );
     }
 
-    const isVendorMicroSite = entity.type === 'Vendor' && entity.featuredVideoUrl;
-    if (!isVendorMicroSite) {
-        // Fallback for non-vendor or non-microsite entities
-         return (
-            <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-              <div className="mb-8">
-                <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
-                  &larr; Back to Partners Directory
-                </Link>
-              </div>
-              <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
-                <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
-                  <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
-                </div>
-                <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
-                <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
-                <p className="mt-4 text-slate-400">This profile is not yet a full micro-site. Check back later for more details.</p>
-              </div>
-            </div>
-        );
+    if (!entity.isClaimed) {
+        return <UnclaimedProfileView entity={entity} />;
     }
+
+    const isVendorMicroSite = entity.type === 'Vendor' && entity.featuredVideoUrl;
+    // Fallback for claimed non-vendors or vendors without a full micro-site
+    if (!isVendorMicroSite) {
+        return (
+           <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+             <div className="mb-8">
+               <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
+                 &larr; Back to Partners Directory
+               </Link>
+             </div>
+             <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
+               <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
+                 <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
+               </div>
+               <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
+               <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
+                <div className="mt-4 inline-flex items-center gap-2 bg-green-500/10 text-green-300 px-4 py-2 rounded-full border border-green-500/30">
+                    <CheckBadgeIcon className="w-5 h-5" />
+                    <span className="font-semibold">Profile Claimed</span>
+                </div>
+               {currentUser?.id === entity.claimedByUserId && (
+                   <p className="mt-4 text-slate-400">You can now build out your micro-site to add more details.</p>
+               )}
+             </div>
+           </div>
+       );
+   }
     
     const showAnalytics = entity.isClaimed && currentUser?.id === entity.claimedByUserId;
     const resourceCategories = useMemo(() => ['All', ...new Set(entity.resources?.map(r => r.category) || [])], [entity.resources]);

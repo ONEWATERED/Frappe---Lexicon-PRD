@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI } from "@google/genai";
 
 let ai: GoogleGenAI | null = null;
@@ -26,13 +27,13 @@ export const explainTermSimply = async (term: string, technicalDefinition: strin
 
     Simple Explanation:`;
 
-    // FIX: Access the .text property directly from the response object.
-    const { text } = await genAI.models.generateContent({
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
-    return text;
+    return response.text;
   } catch (error) {
     console.error("Error generating simple explanation:", error);
     return "I'm having trouble simplifying this right now. Please try again later.";
@@ -51,13 +52,13 @@ export const generateRealWorldExample = async (term: string, definition: string)
 
     Real-World Example:`;
 
-    // FIX: Access the .text property directly from the response object.
-    const { text } = await genAI.models.generateContent({
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
     
-    return text;
+    return response.text;
   } catch (error) {
     console.error("Error generating real-world example:", error);
     return "I'm having trouble generating an example right now. Please try again later.";
@@ -81,13 +82,13 @@ export const getAICoachResponse = async (cardFront: string, cardBack: string, qu
     Your task is to answer their question concisely and accurately, relating it back to the flashcard's topic. 
     If the question is unrelated, gently guide them back to the topic. Be encouraging and helpful.`;
 
-    // FIX: Access the .text property directly from the response object.
-    const { text } = await genAI.models.generateContent({
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    const response = await genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
     });
 
-    return text;
+    return response.text;
   } catch (error) {
     console.error("Error getting AI Coach response:", error);
     return "I'm sorry, I can't answer that right now. Let's focus on the card's topic. Do you have another question about it?";
@@ -109,35 +110,40 @@ export const getHardeepVoiceResponse = async (userQuery: string): Promise<string
     
     Hardeep's response:`;
 
-    // FIX: Access the .text property directly from the response object.
-    const { text } = await genAI.models.generateContent({
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    const response = await genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
     });
 
-    return text;
+    return response.text;
   } catch (error) {
     console.error("Error getting Hardeep voice response:", error);
     return "I'm sorry, I'm having trouble connecting right now. Could you please repeat that?";
   }
 };
 
-export const getDroobiResponse = async (message: string): Promise<string> => {
+// FIX: Added missing getDroobiResponse function for the Droobi AI assistant.
+export const getDroobiResponse = async (userQuery: string): Promise<string> => {
   try {
     const genAI = getAI();
-    const { text } = await genAI.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: message,
-      config: {
-        systemInstruction: `You are DROOBI, a friendly, helpful, and fun AI assistant for oraKLES, a water industry educational platform. 
-        Your personality is encouraging and you love to use water-related puns (e.g., "Water you waiting for?", "That's fintastic!").
-        Keep your answers concise, helpful, and easy to understand for professionals in the water sector.
-        Start your first response with a friendly greeting and introduce yourself.`
-      },
+    const prompt = `You are DROOBI, a friendly and helpful AI assistant for oraKLES, a knowledge platform for the water utility industry.
+    Your persona is curious, knowledgeable, and slightly playful. Use emojis where appropriate.
+    Your answers should be helpful and directly related to the platform's content (lexicon, videos, manuals, partners, etc.) or general water industry topics.
+    Keep your responses concise and conversational. Format responses with markdown for lists or emphasis if needed.
+
+    User's query: "${userQuery}"
+    
+    DROOBI's response:`;
+
+    const response = await genAI.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
     });
-    return text;
+
+    return response.text;
   } catch (error) {
-    console.error("Error getting Droobi response:", error);
-    return "I'm a bit backed up right now, like a clogged pipe! Please try again in a moment.";
+    console.error("Error getting DROOBI response:", error);
+    return "I'm sorry, I'm having a little trouble connecting. Please try again in a moment? 😅";
   }
 };

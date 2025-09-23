@@ -64,8 +64,8 @@ const BlogHome: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
                 <div className="text-center md:text-left">
                     <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">Insights</h1>
-                    <p className="mt-4 max-w-2xl text-lg text-slate-400">
-                        Thought leadership from industry experts, community contributors, and the oraKLES team.
+                    <p className="mt-4 max-w-3xl text-lg text-slate-400">
+                        Welcome to Insights, our collaborative thought leadership platform. We invite experts from across the water industry—vendors, consultants, academics, and government officials—to share their knowledge as contributors, authors, and editors. By aggregating diverse perspectives, we aim to create a comprehensive knowledge hub while recognizing and rewarding our top contributors for their invaluable input.
                     </p>
                 </div>
                 {currentUser && (
