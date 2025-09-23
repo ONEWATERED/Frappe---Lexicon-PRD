@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { explainTermSimply, generateRealWorldExample } from '../../services/geminiService';
 import { TermComment, TermDocument, LexiconTerm } from '../../types';
-import ConceptMapModal from '../../components/ConceptMapModal';
 // FIX: Added SparklesIcon to import to resolve missing component error.
 import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon } from '../../components/icons/Icons';
 
@@ -89,7 +88,6 @@ const TermDetail: React.FC = () => {
   const [isLoadingExplanation, setIsLoadingExplanation] = useState(false);
   const [realWorldExample, setRealWorldExample] = useState('');
   const [isLoadingExample, setIsLoadingExample] = useState(false);
-  const [isMapOpen, setIsMapOpen] = useState(false);
 
   const [comments, setComments] = useState<TermComment[]>(term?.comments || []);
   const [newCommentText, setNewCommentText] = useState('');
@@ -184,8 +182,6 @@ const TermDetail: React.FC = () => {
   const relatedDecks = term.relatedDeckIds?.map(did => flashcardDecks.find(d => d.id === did)).filter(Boolean) || [];
 
   return (
-    <>
-    {isMapOpen && <ConceptMapModal term={term} allTerms={terms} onClose={() => setIsMapOpen(false)} />}
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-slate-300">
       <div className="grid lg:grid-cols-3 gap-12">
       <main className="lg:col-span-2">
@@ -289,7 +285,7 @@ const TermDetail: React.FC = () => {
                       <Link to={`/term/${rt.id}`} key={rt.id} className="block p-3 rounded-md bg-slate-800/50 hover:bg-slate-800 border border-slate-700">{rt.term}</Link>
                     ))}
                   </div>
-                  <button onClick={() => setIsMapOpen(true)} className="mt-4 w-full text-sm flex items-center justify-center gap-2 p-2 rounded-md bg-slate-700 hover:bg-slate-600">
+                  <button className="mt-4 w-full text-sm flex items-center justify-center gap-2 p-2 rounded-md bg-slate-700 hover:bg-slate-600">
                     <ShareIcon className="w-4 h-4" /> View Concept Map
                   </button>
                 </div>
@@ -321,7 +317,6 @@ const TermDetail: React.FC = () => {
       </div>
 
     </div>
-    </>
   );
 };
 
