@@ -21,6 +21,7 @@ import {
   CommunityEvent,
   ResearcherProfile,
   ResearchOpportunity,
+  TopicSuggestion,
 } from './types';
 
 export const users: User[] = [
@@ -471,5 +472,40 @@ export const researchOpportunities: ResearchOpportunity[] = [
         domain: 'wastewater_treatment',
         relatedDocuments: [],
         interestedResearcherIds: ['res-001']
+    }
+];
+
+export const topicSuggestions: TopicSuggestion[] = [
+    {
+        id: 'ts-001',
+        title: 'Presentation on the Economics of Water Reuse for Agriculture',
+        description: 'With increasing drought conditions, the agricultural sector needs a clearer understanding of the ROI for different water reuse technologies. A deep dive into the costs, benefits, and financing models would be invaluable for farmers and water managers alike.',
+        submittedBy: users[1], // Maria Garcia
+        timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        upvoteUserIds: Array.from({ length: 128 }, () => `user-${Math.floor(Math.random() * 1000)}`),
+        recommendedSpeaker: 'Dr. David Sedlak (UC Berkeley)',
+        comments: [],
+        tags: ['agriculture', 'water-reuse', 'economics']
+    },
+    {
+        id: 'ts-002',
+        title: 'Live Demo: Using AI for Satellite-Based Leak Detection',
+        description: 'I\'ve seen some companies claim they can find leaks from space. I\'d love to see a real presentation on how this technology works, its accuracy, and its limitations. Is it ready for prime time?',
+        submittedBy: users[0], // Alex Johnson
+        timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        upvoteUserIds: Array.from({ length: 75 }, () => `user-${Math.floor(Math.random() * 1000)}`),
+        comments: [],
+        tags: ['leak-detection', 'ai', 'remote-sensing', 'data']
+    },
+    {
+        id: 'ts-003',
+        title: 'Panel Discussion: The Future of PFAS Regulation & Treatment',
+        description: 'The regulatory landscape for PFAS is changing rapidly. It would be great to have a panel of experts from regulatory bodies, technology providers, and utilities discuss what\'s coming next and how to prepare.',
+        submittedBy: users[1], // Maria Garcia
+        timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+        upvoteUserIds: Array.from({ length: 215 }, () => `user-${Math.floor(Math.random() * 1000)}`),
+        recommendedSpeaker: 'Xylem or Evoqua experts',
+        comments: [],
+        tags: ['pfas', 'regulations', 'treatment-tech']
     }
 ];

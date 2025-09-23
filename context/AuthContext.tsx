@@ -2,12 +2,13 @@ import React, { createContext, useState, useContext, ReactNode, useMemo } from '
 import {
   User, LexiconTerm, Vendor, DroobiVideo, Session, OnDemandSession, Manual,
   FlashcardDeck, Flashcard, LearningPathway, OneWaterMinute, EcosystemEntity, AuthContextType, UserProgress,
-  CommunityPost, CommunityEvent, ResearcherProfile, ResearchOpportunity
+  CommunityPost, CommunityEvent, ResearcherProfile, ResearchOpportunity, TopicSuggestion
 } from '../types';
 import {
   users, initialTerms, vendors, droobiVideos, droobiSessions, onDemandSessions,
   manuals, flashcardDecks, flashcards, learningPathways, oneWaterMinute, ecosystemEntities,
-  userProgress, communityPosts, communityEvents, researcherProfiles, researchOpportunities
+  userProgress, communityPosts, communityEvents, researcherProfiles, researchOpportunities,
+  topicSuggestions
 } from '../data';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,7 +56,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     communityPosts,
     communityEvents,
     researcherProfiles,
-    researchOpportunities
+    researchOpportunities,
+    topicSuggestions
   }), [currentUser]);
 
   return (

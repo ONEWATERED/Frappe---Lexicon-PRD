@@ -283,6 +283,26 @@ export type ResearchOpportunity = {
   interestedResearcherIds: string[];
 };
 
+export type TopicComment = {
+  id: string;
+  user: User;
+  text: string;
+  timestamp: string;
+};
+
+export type TopicSuggestion = {
+  id: string;
+  title: string;
+  description: string; // "Why is this important?"
+  submittedBy: User;
+  timestamp: string;
+  upvoteUserIds: string[];
+  recommendedSpeaker?: string;
+  comments: TopicComment[];
+  tags: string[];
+};
+
+
 export interface AuthContextType {
   currentUser: User | null;
   login: (userId: string) => void;
@@ -305,4 +325,5 @@ export interface AuthContextType {
   communityEvents: CommunityEvent[];
   researcherProfiles: ResearcherProfile[];
   researchOpportunities: ResearchOpportunity[];
+  topicSuggestions: TopicSuggestion[];
 }
