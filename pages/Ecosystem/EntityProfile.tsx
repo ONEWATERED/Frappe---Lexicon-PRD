@@ -7,6 +7,32 @@ import {
 } from '../../components/icons/Icons';
 import VideoPlayer from '../../components/VideoPlayer';
 
+// --- Reusable Helper Components ---
+
+const EmptyContent: React.FC<{ message: string }> = ({ message }) => (
+    <div className="text-center py-16 px-6 glass-card rounded-lg">
+        <p className="text-slate-400">{message}</p>
+    </div>
+);
+
+const ActionButton: React.FC<{ href?: string; children: React.ReactNode; className?: string; title?: string }> = ({ href, children, className, title }) => {
+    const isDisabled = !href || href === '#';
+    const finalClassName = `w-full font-semibold px-2 py-1 rounded-md text-xs transition-colors flex items-center justify-center gap-1 ${className} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+
+    return (
+        <a 
+            href={href || '#'} 
+            aria-disabled={isDisabled}
+            onClick={(e) => { if (isDisabled) e.preventDefault(); }}
+            title={isDisabled ? (title || 'Coming soon') : ''}
+            className={finalClassName}
+        >
+            {children}
+        </a>
+    );
+};
+
+// --- Microsite Sub-components ---
 
 const ContactCard: React.FC<{ contact: VendorContact }> = ({ contact }) => (
     <div className="flex items-center gap-4">
@@ -19,21 +45,19 @@ const ContactCard: React.FC<{ contact: VendorContact }> = ({ contact }) => (
             <p className="text-sm text-slate-400">{contact.title}</p>
             <a href={`mailto:${contact.email}`} className="text-xs text-blue-400 hover:underline">{contact.email}</a>
             <div className="mt-2 flex flex-col sm:flex-row gap-2">
-                {contact.status === 'online' && (
-                    <button className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold px-2 py-1 rounded-md text-xs transition-colors flex items-center justify-center gap-1">
-                        <ChatBubbleLeftRightIcon className="w-3 h-3" /> Chat Now
-                    </button>
-                )}
-                <a href="#" className="w-full bg-slate-600 hover:bg-slate-500 text-white font-semibold px-2 py-1 rounded-md text-xs transition-colors flex items-center justify-center gap-1">
+                <ActionButton href={contact.status === 'online' ? '#' : undefined} className="bg-green-500 hover:bg-green-600 text-white" title="Live chat coming soon">
+                    <ChatBubbleLeftRightIcon className="w-3 h-3" /> Chat Now
+                </ActionButton>
+                <ActionButton href={contact.calendarUrl} className="bg-slate-600 hover:bg-slate-500 text-white" title="Scheduling link not available">
                     <CalendarDaysIcon className="w-3 h-3" /> Schedule
-                </a>
+                </ActionButton>
             </div>
         </div>
     </div>
 );
 
 const ResourceCard: React.FC<{ resource: VendorResource }> = ({ resource }) => (
-    <div className="glass-card p-4 flex flex-col">
+    <div className="glass-card p-4 flex flex-col h-full">
         <p className="text-xs font-semibold text-purple-400">{resource.type}</p>
         <h4 className="font-semibold text-slate-100 mt-1">{resource.title}</h4>
         <p className="text-sm text-slate-400 mt-2 flex-grow">{resource.description}</p>
@@ -62,7 +86,7 @@ const JobPostingCard: React.FC<{ job: JobPosting }> = ({ job }) => (
 );
 
 const ManualCard: React.FC<{ manual: Manual }> = ({ manual }) => (
-    <Link to={`/manual/${manual.id}`} className="glass-card p-4 flex gap-4 items-center group">
+    <Link to={`/manual/${manual.id}`} className="glass-card p-4 flex gap-4 items-center group h-full">
         <img src={manual.coverImageUrl} alt={manual.title} className="w-20 h-28 object-cover rounded-md flex-shrink-0" />
         <div>
             <p className="text-xs font-semibold uppercase text-blue-400">{manual.assetType}</p>
@@ -71,7 +95,6 @@ const ManualCard: React.FC<{ manual: Manual }> = ({ manual }) => (
         </div>
     </Link>
 );
-
 
 const BlogCard: React.FC<{ post: BlogPost }> = ({ post }) => (
     <Link to={`/insights/${post.id}`} className="block group glass-card rounded-xl overflow-hidden h-full flex flex-col">
@@ -105,7 +128,7 @@ const VideoCard: React.FC<{ video: DroobiVideo }> = ({ video }) => (
 );
 
 const AcademyContributorBadge: React.FC<{ sponsoredDecks: FlashcardDeck[] }> = ({ sponsoredDecks }) => {
-    if (sponsoredDecks.length === 0) return null;
+    if (!sponsoredDecks || sponsoredDecks.length === 0) return null;
     return (
         <div className="glass-card p-6">
             <div className="flex items-center gap-3">
@@ -126,7 +149,7 @@ const AcademyContributorBadge: React.FC<{ sponsoredDecks: FlashcardDeck[] }> = (
     );
 };
 
-const SponsorshipShowcase: React.FC<{ sponsorships: EcosystemEntity['sponsorships'] }> = ({ sponsorships }) => {
+const SponsorshipShowcase: React.FC<{ sponsorships?: EcosystemEntity['sponsorships'] }> = ({ sponsorships }) => {
     if (!sponsorships || sponsorships.length === 0) return null;
     return (
         <div className="glass-card p-6">
@@ -143,7 +166,6 @@ const SponsorshipShowcase: React.FC<{ sponsorships: EcosystemEntity['sponsorship
         </div>
     );
 };
-
 
 const AnalyticsDashboard: React.FC<{ logs: VisitorLog[], getUserById: (id: string) => User | undefined }> = ({ logs, getUserById }) => (
     <div className="space-y-6">
@@ -182,52 +204,40 @@ const AnalyticsDashboard: React.FC<{ logs: VisitorLog[], getUserById: (id: strin
     </div>
 );
 
-const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => {
-    return (
-        <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-             <div className="mb-8">
-                <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
-                  &larr; Back to Partners Directory
-                </Link>
-              </div>
-            <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
-                <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
-                    <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
-                </div>
-                <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
-                <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
+const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => (
+    <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+            <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
+                &larr; Back to Partners Directory
+            </Link>
+        </div>
+        <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
+            <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
+                <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
             </div>
-            <div className="relative mt-8">
-                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md z-10 flex flex-col items-center justify-center text-center p-8 rounded-2xl">
-                    <h2 className="text-3xl font-bold text-white">This Profile is Unclaimed</h2>
-                    <p className="mt-2 text-slate-300 max-w-md">Are you an official representative of {entity.name}? Claim this profile to unlock your micro-site, add contacts, post jobs, and engage with the oraKLES community.</p>
-                    <button 
-                        onClick={() => alert(`This would start the verification process to claim the profile for ${entity.name}.`)}
-                        className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg flex items-center gap-2"
-                    >
-                        <CheckBadgeIcon className="w-6 h-6" />
-                        Claim This Profile
-                    </button>
-                </div>
-                <div className="opacity-20 pointer-events-none">
-                    <div className="space-y-8 glass-card p-8 rounded-2xl">
-                        <div>
-                            <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
-                            <p className="mt-2 text-slate-300">Claim this profile to add a detailed company description, showcase your services, and share future offerings with the water industry's top professionals. This section will become a rich overview of your organization's mission and capabilities.</p>
-                        </div>
-                        <div>
-                            <h3 className="text-2xl font-bold text-white">Key Contacts</h3>
-                            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="bg-slate-800 h-24 rounded-lg"></div>
-                                <div className="bg-slate-800 h-24 rounded-lg"></div>
-                            </div>
-                        </div>
+            <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
+            <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
+        </div>
+        <div className="relative mt-8">
+            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md z-10 flex flex-col items-center justify-center text-center p-8 rounded-2xl">
+                <h2 className="text-3xl font-bold text-white">This Profile is Unclaimed</h2>
+                <p className="mt-2 text-slate-300 max-w-md">Are you an official representative of {entity.name}? Claim this profile to unlock your micro-site, add contacts, post jobs, and engage with the oraKLES community.</p>
+                <button onClick={() => alert(`This would start the verification process to claim the profile for ${entity.name}.`)} className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg flex items-center gap-2">
+                    <CheckBadgeIcon className="w-6 h-6" />
+                    Claim This Profile
+                </button>
+            </div>
+            <div className="opacity-20 pointer-events-none">
+                <div className="space-y-8 glass-card p-8 rounded-2xl">
+                    <div>
+                        <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
+                        <p className="mt-2 text-slate-300">Claim this profile to add a detailed company description, showcase your services, and share future offerings with the water industry's top professionals. This section will become a rich overview of your organization's mission and capabilities.</p>
                     </div>
                 </div>
             </div>
         </div>
-    );
-};
+    </div>
+);
 
 
 const EntityProfile: React.FC = () => {
@@ -257,33 +267,6 @@ const EntityProfile: React.FC = () => {
     if (!entity.isClaimed) {
         return <UnclaimedProfileView entity={entity} />;
     }
-
-    const isVendorMicroSite = entity.type === 'Vendor' && entity.featuredVideoUrl;
-    if (!isVendorMicroSite) {
-        return (
-           <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-             <div className="mb-8">
-               <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
-                 &larr; Back to Partners Directory
-               </Link>
-             </div>
-             <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 text-center">
-               <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 mx-auto">
-                 <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
-               </div>
-               <h1 className="text-3xl font-extrabold text-white mt-4">{entity.name}</h1>
-               <p className="text-lg text-slate-300 mt-1">{entity.tagline}</p>
-                <div className="mt-4 inline-flex items-center gap-2 bg-green-500/10 text-green-300 px-4 py-2 rounded-full border border-green-500/30">
-                    <CheckBadgeIcon className="w-5 h-5" />
-                    <span className="font-semibold">Profile Claimed</span>
-                </div>
-               {currentUser?.id === entity.claimedByUserId && (
-                   <p className="mt-4 text-slate-400">You can now build out your micro-site to add more details.</p>
-               )}
-             </div>
-           </div>
-       );
-    }
     
     const showAnalytics = entity.isClaimed && currentUser?.id === entity.claimedByUserId;
     const resourceCategories = useMemo(() => ['All', ...new Set(entity.resources?.map(r => r.category) || [])], [entity.resources]);
@@ -303,8 +286,12 @@ const EntityProfile: React.FC = () => {
 
     return (
         <div className="min-h-screen">
-            <div className="relative h-[60vh] md:h-96 w-full">
-                <VideoPlayer src={entity.featuredVideoUrl!} />
+            <div className="relative h-[60vh] md:h-96 w-full bg-slate-800">
+                {entity.featuredVideoUrl ? (
+                    <VideoPlayer src={entity.featuredVideoUrl} autoPlay loop muted controls={false} />
+                ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-4 md:p-12 max-w-7xl mx-auto w-full">
                     <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 border-4 border-slate-700">
@@ -316,6 +303,27 @@ const EntityProfile: React.FC = () => {
             </div>
 
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8">
+                <aside className="lg:col-span-4 xl:col-span-3 space-y-6 sticky top-24 self-start">
+                     <div className="glass-card p-6">
+                        <h3 className="text-lg font-bold text-white mb-4">Key Contacts</h3>
+                        {entity.contacts && entity.contacts.length > 0 ? (
+                            <div className="space-y-6">
+                                {entity.contacts.map(contact => <ContactCard key={contact.id} contact={contact}/>)}
+                            </div>
+                        ) : (
+                             <p className="text-sm text-slate-400">Contact information is not available.</p>
+                        )}
+                    </div>
+                    <div className="glass-card p-6">
+                        <h3 className="text-lg font-bold text-white mb-4">Information</h3>
+                        <div className="space-y-2 text-sm text-slate-300">
+                             {entity.location && <p className="flex items-center gap-2"><MapPinIcon className="w-4 h-4 text-slate-500"/>{entity.location}</p>}
+                             {entity.domain && <a href={`http://${entity.domain}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:underline"><GlobeAltIcon className="w-4 h-4"/>{entity.domain}</a>}
+                        </div>
+                    </div>
+                    <SponsorshipShowcase sponsorships={entity.sponsorships} />
+                    <AcademyContributorBadge sponsoredDecks={sponsoredDecks} />
+                </aside>
                 <main className="lg:col-span-8 xl:col-span-9">
                     <div className="flex flex-wrap gap-2 mb-6 border-b border-slate-800 pb-4">
                         <TabButton tabId="about" label="About" />
@@ -330,99 +338,116 @@ const EntityProfile: React.FC = () => {
                     <div className="mt-4">
                         {activeTab === 'about' && (
                             <div className="space-y-8">
-                                <div>
-                                    <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
-                                    <p className="mt-2 text-slate-300 whitespace-pre-line">{entity.longDescription}</p>
-                                </div>
-                                {entity.services && <div>
-                                    <h3 className="text-2xl font-bold text-white">Services</h3>
-                                    <div className="mt-4 space-y-4">
-                                        {entity.services?.map(service => (
-                                            <div key={service.title} className="glass-card p-4">
-                                                <h4 className="font-semibold text-slate-100">{service.title}</h4>
-                                                <p className="text-sm text-slate-400">{service.description}</p>
+                                {(!entity.longDescription && (!entity.services || entity.services.length === 0) && (!entity.futureOfferings || entity.futureOfferings.length === 0)) ? (
+                                    <EmptyContent message={`More information about ${entity.name} is coming soon.`} />
+                                ) : (
+                                    <>
+                                        {entity.longDescription && (
+                                            <div>
+                                                <h3 className="text-2xl font-bold text-white">About {entity.name}</h3>
+                                                <p className="mt-2 text-slate-300 whitespace-pre-line">{entity.longDescription}</p>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>}
-                                {entity.futureOfferings && <div>
-                                    <h3 className="text-2xl font-bold text-white">Coming Soon</h3>
-                                     <div className="mt-4 space-y-4">
-                                        {entity.futureOfferings?.map(offering => (
-                                            <div key={offering.title} className="glass-card p-4">
-                                                <h4 className="font-semibold text-slate-100">{offering.title}</h4>
-                                                <p className="text-sm text-slate-400">{offering.description}</p>
+                                        )}
+                                        {entity.services && entity.services.length > 0 && (
+                                            <div>
+                                                <h3 className="text-2xl font-bold text-white">Services</h3>
+                                                <div className="mt-4 space-y-4">
+                                                    {entity.services.map(service => (
+                                                        <div key={service.title} className="glass-card p-4">
+                                                            <h4 className="font-semibold text-slate-100">{service.title}</h4>
+                                                            <p className="text-sm text-slate-400">{service.description}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>}
+                                        )}
+                                        {entity.futureOfferings && entity.futureOfferings.length > 0 && (
+                                            <div>
+                                                <h3 className="text-2xl font-bold text-white">Coming Soon</h3>
+                                                <div className="mt-4 space-y-4">
+                                                    {entity.futureOfferings.map(offering => (
+                                                        <div key={offering.title} className="glass-card p-4">
+                                                            <h4 className="font-semibold text-slate-100">{offering.title}</h4>
+                                                            <p className="text-sm text-slate-400">{offering.description}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
                             </div>
                         )}
                         {activeTab === 'insights' && (
-                             <div>
+                            <div>
                                 <h3 className="text-2xl font-bold text-white mb-4">Insights from {entity.name}</h3>
-                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {vendorBlogPosts.map(post => <BlogCard key={post.id} post={post}/>)}
-                                </div>
+                                {vendorBlogPosts.length > 0 ? (
+                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {vendorBlogPosts.map(post => <BlogCard key={post.id} post={post}/>)}
+                                    </div>
+                                ) : (
+                                    <EmptyContent message="No insights from this partner yet." />
+                                )}
                             </div>
                         )}
                          {activeTab === 'videos' && (
                              <div>
                                 <h3 className="text-2xl font-bold text-white mb-4">Videos from {entity.name}</h3>
-                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {vendorVideos.map(video => <VideoCard key={video.id} video={video}/>)}
-                                </div>
+                                {vendorVideos.length > 0 ? (
+                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {vendorVideos.map(video => <VideoCard key={video.id} video={video}/>)}
+                                    </div>
+                                ) : (
+                                    <EmptyContent message="No videos from this partner yet." />
+                                )}
                             </div>
                         )}
                         {activeTab === 'resources' && (
                              <div>
                                 <h3 className="text-2xl font-bold text-white mb-4">Resource Library</h3>
-                                <div className="flex flex-wrap gap-2 mb-6">
-                                    {resourceCategories.map(cat => (
-                                        <button key={cat} onClick={() => setResourceFilter(cat)} className={`px-3 py-1 text-sm rounded-full ${resourceFilter === cat ? 'bg-purple-500 text-white font-semibold' : 'bg-slate-700 text-slate-300'}`}>{cat}</button>
-                                    ))}
-                                </div>
-                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {filteredResources.map(res => <ResourceCard key={res.id} resource={res}/>)}
-                                </div>
+                                {(entity.resources && entity.resources.length > 0) ? (
+                                    <>
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {resourceCategories.map(cat => (
+                                                <button key={cat} onClick={() => setResourceFilter(cat)} className={`px-3 py-1 text-sm rounded-full ${resourceFilter === cat ? 'bg-purple-500 text-white font-semibold' : 'bg-slate-700 text-slate-300'}`}>{cat}</button>
+                                            ))}
+                                        </div>
+                                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {filteredResources.map(res => <ResourceCard key={res.id} resource={res}/>)}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <EmptyContent message="No resources are available at this time." />
+                                )}
                             </div>
                         )}
                          {activeTab === 'manuals' && (
                             <div>
                                 <h3 className="text-2xl font-bold text-white mb-4">O&M Manuals</h3>
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    {vendorManuals.map(man => <ManualCard key={man.id} manual={man}/>)}
-                                </div>
+                                {vendorManuals.length > 0 ? (
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        {vendorManuals.map(man => <ManualCard key={man.id} manual={man}/>)}
+                                    </div>
+                                ) : (
+                                    <EmptyContent message="No manuals from this partner have been added yet." />
+                                )}
                             </div>
                          )}
                          {activeTab === 'careers' && (
                              <div>
                                 <h3 className="text-2xl font-bold text-white mb-4">Current Openings</h3>
-                                <div className="space-y-4">
-                                    {entity.jobPostings?.map(job => <JobPostingCard key={job.id} job={job}/>)}
-                                </div>
+                                {(entity.jobPostings && entity.jobPostings.length > 0) ? (
+                                    <div className="space-y-4">
+                                        {entity.jobPostings.map(job => <JobPostingCard key={job.id} job={job}/>)}
+                                    </div>
+                                ) : (
+                                    <EmptyContent message="There are no current openings." />
+                                )}
                             </div>
                          )}
                         {activeTab === 'analytics' && showAnalytics && <AnalyticsDashboard logs={entity.visitorLogs || []} getUserById={getUserById}/>}
                     </div>
                 </main>
-                <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
-                     <div className="glass-card p-6">
-                        <h3 className="text-lg font-bold text-white mb-4">Key Contacts</h3>
-                        <div className="space-y-6">
-                            {entity.contacts?.map(contact => <ContactCard key={contact.id} contact={contact}/>)}
-                        </div>
-                    </div>
-                    <div className="glass-card p-6">
-                        <h3 className="text-lg font-bold text-white mb-4">Information</h3>
-                        <div className="space-y-2 text-sm text-slate-300">
-                             <p className="flex items-center gap-2"><MapPinIcon className="w-4 h-4 text-slate-500"/>{entity.location}</p>
-                             <a href={`http://${entity.domain}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:underline"><GlobeAltIcon className="w-4 h-4"/>{entity.domain}</a>
-                        </div>
-                    </div>
-                    <SponsorshipShowcase sponsorships={entity.sponsorships} />
-                    <AcademyContributorBadge sponsoredDecks={sponsoredDecks} />
-                </aside>
             </div>
         </div>
     );

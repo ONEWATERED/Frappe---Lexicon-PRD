@@ -183,6 +183,7 @@ export type VendorContact = {
   email: string;
   phone?: string;
   status: 'online' | 'offline';
+  calendarUrl?: string;
 };
 
 export type VendorResource = {
