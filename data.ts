@@ -3,6 +3,7 @@ import {
   ProfessionalTier,
   LexiconTerm,
   TermComment,
+  TermDocument,
   Vendor,
   DroobiVideo,
   Session,
@@ -50,12 +51,49 @@ export const PROFESSIONAL_TIERS: ProfessionalTier[] = [
   { id: 'T6', name: 'Infrastructure Maverick', minXp: 100000, icon: 'TrophyIcon' },
 ];
 
+const term_documents: TermDocument[] = [
+    {
+        id: 'doc001',
+        user: users[1], // Maria Garcia
+        title: 'WRF Study on NRW Management Strategies',
+        fileUrl: '#',
+        fileType: 'PDF',
+        timestamp: '2024-03-15T10:00:00Z'
+    },
+    {
+        id: 'doc002',
+        user: users[0], // Alex Johnson
+        title: 'Case Study: AMI Implementation in Small Utilities',
+        fileUrl: '#',
+        fileType: 'Case Study',
+        timestamp: '2024-04-02T11:20:00Z'
+    }
+];
+
 const term_comments: TermComment[] = [
     {
         id: 'c001',
         user: users[1],
         text: "This is a critical metric for any utility. Good explanation.",
         timestamp: "2024-05-20T14:30:00Z",
+        insightfulCount: 18,
+        replies: [
+            {
+                id: 'c001-r1',
+                user: users[0],
+                text: "Agreed! We saw a 15% reduction in NRW after implementing a new acoustic leak detection program.",
+                timestamp: "2024-05-21T09:00:00Z",
+                insightfulCount: 5,
+                replies: []
+            }
+        ]
+    },
+    {
+        id: 'c002',
+        user: users[0],
+        text: "Does anyone have a good resource on the financial impact of high NRW? Looking for some data for a board presentation.",
+        timestamp: "2024-06-01T11:00:00Z",
+        insightfulCount: 3,
         replies: []
     }
 ];
@@ -69,6 +107,10 @@ export const initialTerms: LexiconTerm[] = [
     technicalDefinition: 'The difference between the volume of water put into a water distribution system and the volume that is billed to customers. It is usually expressed as a percentage of the total water produced.',
     linkedVendorIds: ['v001', 'v002'],
     comments: term_comments,
+    documents: [term_documents[0]],
+    viewCount: 1250,
+    relatedTermIds: ['t004', 't008'],
+    relatedDeckIds: ['d001'],
   },
   {
     id: 't002',
@@ -78,6 +120,10 @@ export const initialTerms: LexiconTerm[] = [
     technicalDefinition: 'A dynamic, virtual representation of a physical asset, process, or system, which is continuously updated with data from its physical counterpart to enable simulation, analysis, and optimization.',
     linkedVendorIds: ['v003', 'v008'],
     comments: [],
+    viewCount: 980,
+    relatedTermIds: ['t003', 't004'],
+    relatedDroobiVideoIds: ['vid001'],
+    relatedDeckIds: ['d003'],
   },
    {
     id: 't003',
@@ -86,22 +132,81 @@ export const initialTerms: LexiconTerm[] = [
     plainLanguageDefinition: 'A computer system that allows a water utility to monitor and control its equipment and processes remotely, like a central nervous system for the water network.',
     technicalDefinition: 'Supervisory Control and Data Acquisition (SCADA) is a system of software and hardware elements that allows industrial organizations to control industrial processes locally or at remote locations, monitor, gather, and process real-time data.',
     linkedVendorIds: ['v005'],
+    viewCount: 750,
+    relatedTermIds: ['t002']
   },
   {
     id: 't004',
     term: 'Advanced Metering Infrastructure (AMI)',
-    category: 'data',
+    category: 'water_distribution',
     plainLanguageDefinition: 'Smart water meters that can automatically send readings back to the utility, helping to detect leaks and provide customers with detailed usage information.',
-    technicalDefinition: 'An integrated system of smart meters, communications networks, and data management systems that enables two-way communication between utilities and customers.',
+    technicalDefinition: 'An integrated system of smart meters, communications networks, and data management systems that enables two-way communication between utilities and customers. It enables real-time monitoring and automated billing.',
     linkedVendorIds: ['v001', 'v002', 'v004'],
+    documents: [term_documents[1]],
+    viewCount: 1100,
+    relatedTermIds: ['t001', 't002'],
+    relatedDroobiVideoIds: ['vid003'],
   },
   {
     id: 't005',
     term: 'Membrane Bioreactor (MBR)',
-    category: 'governance',
+    category: 'wastewater_treatment',
     plainLanguageDefinition: 'An advanced wastewater treatment process that combines traditional biological treatment with membrane filtration, resulting in very high-quality treated water.',
     technicalDefinition: 'A process that combines a membrane process like microfiltration or ultrafiltration with a suspended growth bioreactor. It is now widely used for municipal and industrial wastewater treatment.',
     linkedVendorIds: ['v006'],
+    viewCount: 620,
+    relatedTermIds: ['t006', 't009']
+  },
+  {
+    id: 't006',
+    term: 'Activated Sludge',
+    category: 'wastewater_treatment',
+    plainLanguageDefinition: 'The most common method for treating sewage. It uses a mixture of microorganisms (the "activated sludge") and oxygen to break down organic pollutants in the wastewater, cleaning it before it\'s discharged.',
+    technicalDefinition: 'A biological wastewater treatment process in which a mixture of wastewater and microorganisms is agitated and aerated. The biological solids are then separated from the treated water and returned to the aeration process as needed.',
+    linkedVendorIds: ['v001', 'v006'],
+    viewCount: 450,
+    relatedTermIds: ['t005', 't007', 't010']
+  },
+  {
+    id: 't007',
+    term: 'Anaerobic Digestion',
+    category: 'wastewater_treatment',
+    plainLanguageDefinition: 'A process where bacteria break down organic waste (like sewage sludge) in an environment without oxygen. This process produces biogas (which can be used for energy) and reduces the amount of sludge to be disposed of.',
+    technicalDefinition: 'A sequence of processes by which microorganisms break down biodegradable material in the absence of oxygen. The process is used for industrial or domestic purposes to manage waste or to produce fuels.',
+    linkedVendorIds: ['v001', 'v008'],
+    viewCount: 380,
+    relatedTermIds: ['t006', 't010'],
+  },
+  {
+    id: 't008',
+    term: 'Asset Management',
+    category: 'utility_management',
+    plainLanguageDefinition: 'The process of managing a utility\'s physical assets (like pipes, pumps, and plants) in a way that minimizes the total cost of owning and operating them, while delivering the desired level of service.',
+    technicalDefinition: 'A systematic process of deploying, operating, maintaining, upgrading, and disposing of assets cost-effectively. It balances cost, risk, and performance to make informed decisions about infrastructure investment.',
+    isPremium: true,
+    viewCount: 2200,
+    relatedTermIds: ['t001'],
+    relatedDroobiVideoIds: ['vid004'],
+    relatedDeckIds: ['d001'],
+  },
+  {
+    id: 't009',
+    term: 'Biological Nutrient Removal (BNR)',
+    category: 'wastewater_treatment',
+    plainLanguageDefinition: 'A wastewater treatment process designed to remove nitrogen and phosphorus from the water. This helps protect rivers and lakes from algae blooms caused by too many nutrients.',
+    technicalDefinition: 'A process used for nitrogen and phosphorus removal from wastewater before it is discharged into surface or ground water. It involves configuring aerobic, anoxic, and anaerobic zones to encourage specific microbial activity.',
+    isPremium: true,
+    viewCount: 510,
+    relatedTermIds: ['t005', 't006'],
+  },
+  {
+    id: 't010',
+    term: 'Biosolids',
+    category: 'wastewater_treatment',
+    plainLanguageDefinition: 'The nutrient-rich organic materials resulting from the treatment of sewage sludge. When treated and processed, they can be recycled as a fertilizer to improve and maintain productive soils.',
+    technicalDefinition: 'Treated sewage sludge that meets U.S. Environmental Protection Agency (EPA) pollutant and pathogen requirements for land application and surface disposal. It is a source of essential plant nutrients and organic matter.',
+    viewCount: 300,
+    relatedTermIds: ['t006', 't007'],
   },
 ];
 

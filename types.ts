@@ -30,7 +30,7 @@ export type UserProgress = {
   currentStreak: number;
 };
 
-export type LexiconCategory = 'data' | 'asset_mgmt' | 'climate_impacts' | 'resiliency' | 'regulations' | 'governance' | 'modeling' | 'operations' | 'ai_blockchain';
+export type LexiconCategory = 'data' | 'asset_mgmt' | 'climate_impacts' | 'resiliency' | 'regulations' | 'governance' | 'modeling' | 'operations' | 'ai_blockchain' | 'wastewater_treatment' | 'water_distribution' | 'utility_management';
 
 export const lexiconCategoryNames: Record<LexiconCategory, string> = {
   data: 'Data',
@@ -41,9 +41,20 @@ export const lexiconCategoryNames: Record<LexiconCategory, string> = {
   governance: 'Governance',
   modeling: 'Modeling',
   operations: 'Operations',
-  ai_blockchain: 'AI & Blockchain'
+  ai_blockchain: 'AI & Blockchain',
+  wastewater_treatment: 'Wastewater Treatment',
+  water_distribution: 'Water Distribution',
+  utility_management: 'Utility Management',
 };
 
+export type TermDocument = {
+  id: string;
+  user: User;
+  title: string;
+  fileUrl: string;
+  fileType: 'PDF' | 'DOCX' | 'Whitepaper' | 'Case Study';
+  timestamp: string;
+};
 
 export type LexiconTerm = {
   id: string;
@@ -53,14 +64,21 @@ export type LexiconTerm = {
   technicalDefinition: string;
   linkedVendorIds?: string[];
   comments?: TermComment[];
+  isPremium?: boolean;
+  documents?: TermDocument[];
+  viewCount: number;
+  relatedTermIds?: string[];
+  relatedDroobiVideoIds?: string[];
+  relatedDeckIds?: string[];
 };
 
 export type TermComment = {
-  id: string;
+  id:string;
   user: User;
   text: string;
   timestamp: string;
   replies: TermComment[];
+  insightfulCount: number;
 };
 
 export type SeriesInfo = {
@@ -180,6 +198,7 @@ export interface AuthContextType {
   login: (userId: string) => void;
   logout: () => void;
   getUserById: (userId: string) => User | undefined;
+  getAllUsers: () => User[];
   terms: LexiconTerm[];
   vendors: Vendor[];
   droobiVideos: DroobiVideo[];
