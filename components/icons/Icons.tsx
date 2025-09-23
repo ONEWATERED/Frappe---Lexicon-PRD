@@ -219,6 +219,18 @@ export const ChatBubbleOvalLeftEllipsisIcon: React.FC<IconProps> = ({ className 
     </svg>
 );
 
+export const BeakerIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c.102.02.206.034.314.046a2.25 2.25 0 0 1 2.062 0c.108-.012.212-.026.314-.046M9.75 3.104C8.25 2.036 6.75 1.5 5.25 1.5c-1.5 0-3 1.018-3 3.635 0 .85.12 1.66.333 2.433M14.25 3.104c.102.02.206.034.314.046a2.25 2.25 0 0 0 2.062 0c.108-.012.212-.026.314-.046M14.25 3.104c1.5.932 3 1.438 4.5 1.438 1.5 0 3-1.018 3-3.635 0-.85-.12-1.66-.333-2.433M15 14.5l-4.132-4.132a2.25 2.25 0 0 1-.659-1.591V3.104m6.364 12.023L17.5 16.25a2.25 2.25 0 0 1 0 3l-2.25 2.25a2.25 2.25 0 0 1-3 0l-2.25-2.25a2.25 2.25 0 0 1 0-3l2.25-2.25a2.25 2.25 0 0 1 3 0Z" />
+    </svg>
+);
+
+export const BookmarkSquareIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+    </svg>
+);
+
 
 const iconMap: Record<IconName, React.FC<IconProps>> = {
     AcademicCapIcon,

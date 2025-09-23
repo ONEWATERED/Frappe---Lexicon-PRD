@@ -40,43 +40,82 @@ const EntityCard: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => {
 
 const EcosystemHome: React.FC = () => {
     const { ecosystemEntities } = useAuth();
-    const [activeFilter, setActiveFilter] = useState('All');
+    const [activeTypeFilter, setActiveTypeFilter] = useState('All');
+    const [activeLetter, setActiveLetter] = useState('All');
     
+    const alphabet = ['All', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+
     const filteredEntities = useMemo(() => {
-        if (activeFilter === 'All') return ecosystemEntities;
-        return ecosystemEntities.filter(e => e.type === activeFilter);
-    }, [ecosystemEntities, activeFilter]);
+        let results = [...ecosystemEntities];
+
+        if (activeTypeFilter !== 'All') {
+            results = results.filter(e => e.type === activeTypeFilter);
+        }
+
+        if (activeLetter !== 'All') {
+            results = results.filter(entity => entity.name.toUpperCase().startsWith(activeLetter));
+        }
+        
+        // Sort alphabetically by name for consistent, fair ordering
+        results.sort((a, b) => a.name.localeCompare(b.name));
+
+        return results;
+    }, [ecosystemEntities, activeTypeFilter, activeLetter]);
 
     return (
          <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-                <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">Industry Ecosystem</h1>
+                <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">Industry Partners</h1>
                 <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
                     Discover and connect with the vendors, consultants, and agencies shaping the future of infrastructure.
                 </p>
             </div>
 
-             <div className="mt-10 flex justify-center flex-wrap gap-2">
-                <button
-                    onClick={() => setActiveFilter('All')}
-                    className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors ${activeFilter === 'All' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
-                >
-                    All
-                </button>
-                {entityTypes.map(type => (
+            <div className="mt-12 bg-slate-800/50 py-6 rounded-xl border border-slate-700">
+                <div className="flex justify-center flex-wrap gap-1 sm:gap-2 px-4">
+                    {alphabet.map(letter => (
+                        <button
+                            key={letter}
+                            onClick={() => setActiveLetter(letter)}
+                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg text-sm font-bold transition-colors flex items-center justify-center ${
+                            activeLetter === letter ? 'bg-blue-500 text-white' : 'text-slate-200 hover:bg-slate-600'
+                            }`}
+                        >
+                            {letter}
+                        </button>
+                    ))}
+                </div>
+                 <div className="mt-6 flex justify-center flex-wrap gap-3 px-4">
                     <button
-                        key={type}
-                        onClick={() => setActiveFilter(type)}
-                        className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2 ${activeFilter === type ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                        onClick={() => setActiveTypeFilter('All')}
+                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 ${activeTypeFilter === 'All' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
                     >
-                        {React.createElement(typeStyles[type].Icon, { className: "w-4 h-4"})}
-                        {type}
+                        All Types
                     </button>
-                ))}
+                    {entityTypes.map(type => (
+                        <button
+                            key={type}
+                            onClick={() => setActiveTypeFilter(type)}
+                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 ${activeTypeFilter === type ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                        >
+                            {React.createElement(typeStyles[type].Icon, { className: "w-4 h-4"})}
+                            {type}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-             <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {filteredEntities.map(entity => <EntityCard key={entity.id} entity={entity} />)}
+             <div className="mt-12">
+                {filteredEntities.length > 0 ? (
+                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {filteredEntities.map(entity => <EntityCard key={entity.id} entity={entity} />)}
+                    </div>
+                ) : (
+                    <div className="text-center py-16 bg-slate-800/50 rounded-lg">
+                        <h3 className="text-2xl font-semibold text-slate-300">No Partners Found</h3>
+                        <p className="text-slate-500 mt-2">Try adjusting your filters.</p>
+                    </div>
+                )}
             </div>
         </div>
     );

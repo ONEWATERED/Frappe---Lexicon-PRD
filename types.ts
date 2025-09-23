@@ -195,7 +195,7 @@ export interface OneWaterMinute {
   deckId: string;
 }
 
-// --- NEW COMMUNITY TYPES ---
+// --- COMMUNITY TYPES ---
 export type CommunityPostType = 'discussion' | 'question' | 'poll';
 export type CommunityEventType = 'Webinar' | 'Conference' | 'Meetup' | 'Workshop';
 
@@ -224,6 +224,64 @@ export type CommunityEvent = {
   attendeeIds: string[];
 };
 
+// --- RESEARCH & INNOVATION HUB TYPES ---
+export type Publication = {
+  id: string;
+  title: string;
+  journal: string;
+  year: number;
+  url: string;
+  doi: string;
+};
+
+export type Patent = {
+  id: string;
+  title: string;
+  patentNumber: string;
+  dateGranted: string;
+  url: string;
+};
+
+export type ResearchProject = {
+  id: string;
+  title: string;
+  description: string;
+  status: 'Ongoing' | 'Completed';
+};
+
+export type ResearcherProfile = {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  title: string; // e.g., "PhD Candidate in Environmental Engineering"
+  university: string;
+  universityLogoUrl: string;
+  bio: string;
+  expertiseTags: string[];
+  publications: Publication[];
+  patents: Patent[];
+  projects: ResearchProject[];
+};
+
+export type ResearchDocument = {
+  id: string;
+  title: string;
+  fileUrl: string;
+  fileType: 'PDF' | 'Dataset' | 'Presentation';
+};
+
+export type ResearchOpportunity = {
+  id: string;
+  title: string;
+  submittedBy: User;
+  organization: EcosystemEntity;
+  timestamp: string;
+  problemStatement: string;
+  desiredOutcomes: string;
+  domain: LexiconCategory;
+  relatedDocuments: ResearchDocument[];
+  interestedResearcherIds: string[];
+};
 
 export interface AuthContextType {
   currentUser: User | null;
@@ -245,4 +303,6 @@ export interface AuthContextType {
   userProgress: UserProgress;
   communityPosts: CommunityPost[];
   communityEvents: CommunityEvent[];
+  researcherProfiles: ResearcherProfile[];
+  researchOpportunities: ResearchOpportunity[];
 }

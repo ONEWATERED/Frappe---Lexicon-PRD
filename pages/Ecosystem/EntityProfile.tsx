@@ -14,7 +14,7 @@ const EntityProfile: React.FC = () => {
     return (
       <div className="text-center py-20 text-white">
         <h1 className="text-2xl">Entity not found.</h1>
-        <Link to="/ecosystem" className="text-blue-400 hover:underline mt-4 inline-block">Back to Ecosystem Directory</Link>
+        <Link to="/ecosystem" className="text-blue-400 hover:underline mt-4 inline-block">Back to Partners Directory</Link>
       </div>
     );
   }
@@ -23,7 +23,7 @@ const EntityProfile: React.FC = () => {
     <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <Link to="/ecosystem" className="text-sm text-blue-400 hover:underline">
-          &larr; Back to Ecosystem Directory
+          &larr; Back to Partners Directory
         </Link>
       </div>
 

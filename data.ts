@@ -19,6 +19,8 @@ import {
   lexiconCategoryNames,
   CommunityPost,
   CommunityEvent,
+  ResearcherProfile,
+  ResearchOpportunity,
 } from './types';
 
 export const users: User[] = [
@@ -339,7 +341,7 @@ export const oneWaterMinute: OneWaterMinute = {
 };
 
 
-// --- NEW COMMUNITY DATA ---
+// --- COMMUNITY DATA ---
 export const communityPosts: CommunityPost[] = [
     {
         id: 'post-001',
@@ -399,5 +401,75 @@ export const communityEvents: CommunityEvent[] = [
         eventDate: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString(),
         location: 'Oakland, CA',
         attendeeIds: []
+    }
+];
+
+// --- RESEARCH & INNOVATION HUB DATA ---
+export const researcherProfiles: ResearcherProfile[] = [
+    {
+        id: 'res-001',
+        name: 'Dr. Kenji Tanaka',
+        avatarUrl: 'https://i.pravatar.cc/150?u=res-001',
+        title: 'Postdoctoral Fellow, Water Resources Engineering',
+        university: 'Stanford University',
+        universityLogoUrl: 'https://logo.clearbit.com/stanford.edu',
+        bio: 'Dr. Tanaka specializes in the application of machine learning for predictive modeling of urban water distribution networks. His research focuses on early leak detection and demand forecasting to improve operational efficiency and water conservation. He holds a Ph.D. in Civil Engineering from MIT.',
+        expertiseTags: ['Machine Learning', 'Hydraulic Modeling', 'Leak Detection', 'Data Analytics', 'Smart Water Networks'],
+        publications: [
+            { id: 'pub-001', title: 'A Novel Deep Learning Framework for Real-Time Anomaly Detection in Water Grids', journal: 'Journal of Water Resources Planning and Management', year: 2023, url: '#', doi: '10.1061/(ASCE)WR.1943-5452.0001234' },
+            { id: 'pub-002', title: 'Optimizing Pumping Schedules using Reinforcement Learning', journal: 'Water Research', year: 2022, url: '#', doi: '10.1016/j.watres.2022.118123' },
+        ],
+        patents: [],
+        projects: [
+            { id: 'proj-001', title: 'AI-Powered Digital Twin for the City of Palo Alto Water System', description: 'Developing a real-time, self-calibrating digital twin to simulate and predict system behavior.', status: 'Ongoing' }
+        ]
+    },
+    {
+        id: 'res-002',
+        name: 'Dr. Fatima Al-Jamil',
+        avatarUrl: 'https://i.pravatar.cc/150?u=res-002',
+        title: 'Professor, Environmental Chemistry',
+        university: 'University of Michigan',
+        universityLogoUrl: 'https://logo.clearbit.com/umich.edu',
+        bio: 'A leading expert in the detection and remediation of emerging contaminants, with a particular focus on PFAS compounds. Dr. Al-Jamil\'s lab has developed several novel adsorbent materials and advanced oxidation processes for water treatment.',
+        expertiseTags: ['PFAS Remediation', 'Emerging Contaminants', 'Advanced Oxidation', 'Water Quality', 'Environmental Chemistry'],
+        publications: [
+            { id: 'pub-003', title: 'Graphene-based Adsorbents for Rapid Removal of Per- and Polyfluoroalkyl Substances (PFAS)', journal: 'Environmental Science & Technology', year: 2023, url: '#', doi: '10.1021/acs.est.2c01234' },
+        ],
+        patents: [
+            { id: 'pat-001', title: 'Method for Catalytic Degradation of Perfluoroalkyl Substances in Water', patentNumber: 'US 11,123,456 B2', dateGranted: '2022-08-15', url: '#' }
+        ],
+        projects: [
+            { id: 'proj-002', title: 'Field Demonstration of a Novel AOP for PFAS Destruction', description: 'Pilot-scale testing of a new advanced oxidation process at a contaminated industrial site.', status: 'Completed' }
+        ]
+    }
+];
+
+export const researchOpportunities: ResearchOpportunity[] = [
+    {
+        id: 'ro-001',
+        title: 'Cost-Effective Real-Time Cyanotoxin Sensors for Reservoir Management',
+        submittedBy: users[1], // Maria Garcia
+        organization: ecosystemEntities.find(e => e.id === 'g001')!, // EPA
+        timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        problemStatement: 'Current methods for detecting cyanotoxins from harmful algal blooms (HABs) in reservoirs are lab-based, slow, and expensive. This delay hinders proactive water treatment adjustments, posing public health risks. We need a reliable, low-cost, real-time sensor that can be deployed in-situ.',
+        desiredOutcomes: 'A field-deployable sensor prototype capable of detecting common cyanotoxins (e.g., microcystins) at sub-ppb levels with a response time of less than one hour. The target manufacturing cost should be under $500 per unit.',
+        domain: 'water_distribution',
+        relatedDocuments: [
+            { id: 'rd-001', title: 'EPA Report on HABs and Drinking Water', fileUrl: '#', fileType: 'PDF' }
+        ],
+        interestedResearcherIds: ['res-002']
+    },
+    {
+        id: 'ro-002',
+        title: 'AI-driven Model for Predicting Wastewater Influent Quality',
+        submittedBy: users[0], // Alex Johnson
+        organization: ecosystemEntities.find(e => e.id === 'c001')!, // Black & Veatch
+        timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
+        problemStatement: 'Wastewater treatment plants (WWTPs) face significant operational challenges due to high variability in influent quality (BOD, TSS, nutrient loads), especially with industrial dischargers and storm events. This variability makes process control difficult, leading to inefficiencies and potential permit violations.',
+        desiredOutcomes: 'A machine learning model that uses upstream sensor data, weather forecasts, and historical data to predict influent quality 24-48 hours in advance. The model should integrate with existing SCADA systems to provide operators with actionable recommendations for process adjustments (e.g., aeration levels, chemical dosing).',
+        domain: 'wastewater_treatment',
+        relatedDocuments: [],
+        interestedResearcherIds: ['res-001']
     }
 ];
