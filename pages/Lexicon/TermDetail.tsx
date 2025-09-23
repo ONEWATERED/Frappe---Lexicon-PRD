@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { explainTermSimply, generateRealWorldExample } from '../../services/geminiService';
 import { TermComment, TermDocument, LexiconTerm } from '../../types';
-// FIX: Added SparklesIcon to import to resolve missing component error.
 import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon } from '../../components/icons/Icons';
 
 function getTimeAgo(dateString: string) {
@@ -285,7 +284,7 @@ const TermDetail: React.FC = () => {
                       <Link to={`/term/${rt.id}`} key={rt.id} className="block p-3 rounded-md bg-slate-800/50 hover:bg-slate-800 border border-slate-700">{rt.term}</Link>
                     ))}
                   </div>
-                  <button className="mt-4 w-full text-sm flex items-center justify-center gap-2 p-2 rounded-md bg-slate-700 hover:bg-slate-600">
+                  <button onClick={() => alert('Concept Map feature is coming soon!')} className="mt-4 w-full text-sm flex items-center justify-center gap-2 p-2 rounded-md bg-slate-700 hover:bg-slate-600">
                     <ShareIcon className="w-4 h-4" /> View Concept Map
                   </button>
                 </div>

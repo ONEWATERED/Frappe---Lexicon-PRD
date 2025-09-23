@@ -48,33 +48,31 @@ const TermCard: React.FC<{ term: LexiconTerm }> = ({ term }) => (
     </div>
 );
 
-const TrendingTerms: React.FC = () => {
-  const { terms } = useAuth();
-  const trending = useMemo(() => {
-    // Most discussed
-    const mostDiscussed = [...terms].sort((a,b) => (b.comments?.length || 0) - (a.comments?.length || 0)).slice(0, 3);
-    // Most viewed
-    const mostViewed = [...terms].sort((a,b) => b.viewCount - a.viewCount).slice(0, 3);
-    // Newly added (first 3 from data)
-    const newlyAdded = terms.slice(0, 3);
-    return { mostDiscussed, mostViewed, newlyAdded };
-  }, [terms]);
+const TrendingCarousel: React.FC = () => {
+    const { terms } = useAuth();
+    const trendingTerms = useMemo(() => {
+        const mostViewed = [...terms].sort((a,b) => b.viewCount - a.viewCount).slice(0, 3);
+        const mostDiscussed = [...terms].sort((a,b) => (b.comments?.length || 0) - (a.comments?.length || 0)).slice(0, 3);
+        const newlyAdded = terms.slice(0, 3);
+        
+        const combined = [...mostViewed, ...mostDiscussed, ...newlyAdded];
+        const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
+        
+        return unique.slice(0, 8);
+    }, [terms]);
 
-  return (
-    <div className="mt-12">
-      <h2 className="text-2xl font-bold text-white mb-4">Trending & Popular Terms</h2>
-      <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800">
-        {[...trending.mostViewed, ...trending.mostDiscussed, ...trending.newlyAdded]
-          .filter((term, index, self) => index === self.findIndex(t => t.id === term.id)) // unique
-          .slice(0, 8)
-          .map(term => (
-          <div key={term.id} className="w-80 flex-shrink-0">
-            <TermCard term={term} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <div className="mt-12">
+            <h2 className="text-2xl font-bold text-white mb-4">Trending & Popular Terms</h2>
+            <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4">
+                {trendingTerms.map(term => (
+                    <div key={term.id} className="w-80 flex-shrink-0">
+                        <TermCard term={term} />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 };
 
 
@@ -201,7 +199,7 @@ const LexiconHome: React.FC = () => {
         </p>
       </div>
 
-      <TrendingTerms />
+      <TrendingCarousel />
       
       <div className="mt-12 grid lg:grid-cols-3 gap-8">
         <main className="lg:col-span-2">
