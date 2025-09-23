@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { explainTermSimply, generateRealWorldExample } from '../../services/geminiService';
 import { TermComment, TermDocument, LexiconTerm } from '../../types';
-import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon } from '../../components/icons/Icons';
+// FIX: Added SparklesIcon to import to resolve missing component error.
+import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon } from '../../components/icons/Icons';
 
 function getTimeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -297,7 +298,7 @@ const TermDetail: React.FC = () => {
               </h2>
               <div className="space-y-3">
                 {term.documents && term.documents.length > 0 ? (
-                    term.documents.map(doc => <DocumentItem key={doc.id} doc={doc} />)
+                    term.documents.map(doc => <DocumentItem key={doc.id} doc={doc} />
                 ) : (
                     <p className="text-slate-500 text-sm">No documents have been contributed for this term yet.</p>
                 )}

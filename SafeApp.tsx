@@ -1,6 +1,3 @@
-
-
-
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -11,17 +8,13 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
-// FIX: Refactored the ErrorBoundary class component to use a constructor for state initialization.
-// This ensures the component's 'this' context is correctly established, resolving errors where
-// 'setState' and 'props' were not found.
+// FIX: Refactored the ErrorBoundary to use a class property for state initialization.
+// This resolves errors where 'this.state' was not found.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
+  state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     // Update state so the next render will show the fallback UI.
