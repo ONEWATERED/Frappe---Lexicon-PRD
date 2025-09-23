@@ -1,4 +1,5 @@
 
+
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -40,8 +41,8 @@ const AcademyHome: React.FC = () => {
   const oneWaterMinuteDeck = flashcardDecks.find(d => d.id === oneWaterMinute.deckId);
 
   const decksByCategory = useMemo(() => {
-    // FIX: Explicitly typing the accumulator in the `reduce` function resolves an issue where
-    // TypeScript could not infer the type of the `decks` array, causing a runtime error.
+    // FIX: Explicitly typing the initial value for `reduce` ensures that the accumulator's
+    // type is correctly inferred, preventing downstream errors when mapping over the results.
     return flashcardDecks.reduce((acc: Record<string, FlashcardDeck[]>, deck) => {
         const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
         if (!acc[categoryName]) {
@@ -49,7 +50,7 @@ const AcademyHome: React.FC = () => {
         }
         acc[categoryName].push(deck);
         return acc;
-    }, {});
+    }, {} as Record<string, FlashcardDeck[]>);
   }, [flashcardDecks]);
 
   return (

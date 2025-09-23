@@ -39,6 +39,7 @@ export const Header: React.FC = () => {
                 <NavItem to="/academy">Academy</NavItem>
                 <NavItem to="/manuals">Manuals</NavItem>
                 <NavItem to="/ecosystem">Ecosystem</NavItem>
+                <NavItem to="/ai-agents">AI Co-pilots</NavItem>
               </div>
             </div>
           </div>

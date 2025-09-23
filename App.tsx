@@ -14,6 +14,7 @@ import ManualsHome from './pages/Manuals/ManualsHome';
 import EcosystemHome from './pages/Ecosystem/EcosystemHome';
 import EntityProfile from './pages/Ecosystem/EntityProfile';
 import ComingSoon from './pages/ComingSoon';
+import AIAgentsPage from './pages/AIAgents/AIAgentsPage';
 
 
 const MainLayout: React.FC = () => (
@@ -44,6 +45,7 @@ const App: React.FC = () => {
             <Route path="/academy/pathway/:pathwayId" element={<ComingSoon title="Learning Pathway" />} />
             <Route path="/ecosystem" element={<EcosystemHome />} />
             <Route path="/ecosystem/:entityId" element={<EntityProfile />} />
+            <Route path="/ai-agents" element={<AIAgentsPage />} />
           </Route>
           {/* Fullscreen route without main layout */}
           <Route path="/academy/deck/:deckId" element={<FlashcardPlayer />} />
