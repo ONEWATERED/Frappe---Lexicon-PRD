@@ -15,7 +15,8 @@ import {
   EcosystemEntity,
   OneWaterMinute,
   IconName,
-  UserProgress
+  UserProgress,
+  lexiconCategoryNames
 } from './types';
 
 export const users: User[] = [
@@ -273,26 +274,60 @@ export const userProgress: UserProgress = {
     currentStreak: 8,
 };
 
-export const flashcardDecks: FlashcardDeck[] = [
+// --- ACADEMY DATA GENERATION ---
+
+// 1. Auto-generate flashcards from lexicon terms
+const lexiconFlashcards: Flashcard[] = initialTerms.map((term, index) => ({
+    id: `fc-term-${term.id}`,
+    deck_id: `d-cat-${term.category}`, // This will be used to link to the auto-generated decks
+    category_id: term.category,
+    front: { content: `What is ${term.term}?` },
+    back: { content: term.plainLanguageDefinition },
+    media: {},
+}));
+
+// 2. Auto-generate decks from lexicon categories
+const termsByCategory = initialTerms.reduce((acc, term) => {
+    if (!acc[term.category]) {
+        acc[term.category] = [];
+    }
+    acc[term.category].push(term);
+    return acc;
+}, {} as Record<string, LexiconTerm[]>);
+
+const lexiconDecks: FlashcardDeck[] = Object.entries(termsByCategory).map(([category, terms]) => ({
+    id: `d-cat-${category}`,
+    title: `${lexiconCategoryNames[category as keyof typeof lexiconCategoryNames]} Concepts`,
+    description: `Key terms and concepts related to ${lexiconCategoryNames[category as keyof typeof lexiconCategoryNames]}.`,
+    thumbnail_url: `https://picsum.photos/seed/${category}/400/225`,
+    category_id: category as keyof typeof lexiconCategoryNames,
+    cardCount: terms.length,
+}));
+
+// 3. Existing + new data
+const existingDecks: FlashcardDeck[] = [
     { id: 'd001', title: 'Asset Management Fundamentals', description: 'Key concepts in water asset management.', thumbnail_url: 'https://picsum.photos/seed/d001/400/225', category_id: 'asset_mgmt', cardCount: 25 },
     { id: 'd002', title: 'Key Regulatory Frameworks', description: 'Understanding the SDWA, CWA, and other key regulations.', thumbnail_url: 'https://picsum.photos/seed/d002/400/225', category_id: 'regulations', sponsorship: { sponsor_id: 'c001' }, cardCount: 18 },
     { id: 'd003', title: 'Intro to Water Modeling', description: 'Learn the basics of hydraulic and water quality modeling.', thumbnail_url: 'https://picsum.photos/seed/d003/400/225', category_id: 'modeling', sponsorship: { sponsor_id: 'v003' }, cardCount: 32 },
 ];
 
-export const flashcards: Flashcard[] = [
-    // Deck d001
+const existingFlashcards: Flashcard[] = [
     { id: 'fc001', deck_id: 'd001', category_id: 'asset_mgmt', front: { content: 'What is "Level of Service" (LoS)?' }, back: { content: 'The outcomes a water utility and its customers agree it should provide.', bullets: ['Defines performance targets', 'Balances cost, risk, and performance', 'Key to asset management planning'] }, media: {} },
     { id: 'fc002', deck_id: 'd001', category_id: 'asset_mgmt', front: { content: 'What are the two main types of asset failure?' }, back: { content: 'Physical Failure & Functional Failure' }, media: { image_url: 'https://picsum.photos/seed/fc002/400/200' } },
-    // Deck d002
     { id: 'fc101', deck_id: 'd002', category_id: 'regulations', front: { content: 'What is the primary objective of the Safe Drinking Water Act (SDWA)?' }, back: { content: 'The principal federal law in the United States intended to ensure safe drinking water for the public.', bullets: ['Enacted in 1974', 'Authorizes EPA to set national health-based standards'] }, media: {} },
     { id: 'fc102', deck_id: 'd002', category_id: 'regulations', front: { content: 'What does NPDES stand for?' }, back: { content: 'National Pollutant Discharge Elimination System.', bullets: ['Authorized by the Clean Water Act', 'Controls water pollution by regulating point sources'] }, media: {} },
-     // Deck d003
     { id: 'fc201', deck_id: 'd003', category_id: 'modeling', front: { content: 'What does a hydraulic model simulate?' }, back: { content: 'The flow and pressure of water in a pipe network.' }, media: {} },
 ];
 
+// Combine all decks and flashcards
+export const flashcardDecks: FlashcardDeck[] = [...existingDecks, ...lexiconDecks];
+export const flashcards: Flashcard[] = [...existingFlashcards, ...lexiconFlashcards];
+
+// 4. Create more valuable learning pathways
 export const learningPathways: LearningPathway[] = [
-    { id: 'lp001', title: 'Utility Manager Certification', description: 'Master the language of asset management, finance, and regulatory compliance for aspiring utility leaders.', thumbnail_url: 'https://picsum.photos/seed/lp001/400/225', steps: [{ deck_id: 'd001' }, { deck_id: 'd002' }], badge_id: 'B05', badge_name: 'Cert. Manager' },
-    { id: 'lp002', title: 'Digital Water Professional', description: 'Gain expertise in the tools and concepts shaping the future of water, from AMI to Digital Twins.', thumbnail_url: 'https://picsum.photos/seed/lp002/400/225', steps: [{ deck_id: 'd003' }], badge_id: 'B06', badge_name: 'Digital Pro' },
+    { id: 'lp001', title: 'Utility Manager Certification', description: 'Master asset management, finance, and regulatory compliance for aspiring utility leaders.', thumbnail_url: 'https://picsum.photos/seed/lp001/400/225', steps: [{ deck_id: 'd-cat-asset_mgmt' }, { deck_id: 'd002' }, { deck_id: 'd-cat-utility_management' }], badge_id: 'B05', badge_name: 'Cert. Manager' },
+    { id: 'lp002', title: 'Digital Water Professional', description: 'Gain expertise in the tools shaping the future of water, from AMI to Digital Twins.', thumbnail_url: 'https://picsum.photos/seed/lp002/400/225', steps: [{ deck_id: 'd-cat-modeling' }, { deck_id: 'd-cat-water_distribution' }], badge_id: 'B06', badge_name: 'Digital Pro' },
+    { id: 'lp003', title: 'Wastewater Operator Basics', description: 'Understand the fundamental processes and concepts of modern wastewater treatment.', thumbnail_url: 'https://picsum.photos/seed/lp003/400/225', steps: [{ deck_id: 'd-cat-wastewater_treatment' }], badge_id: 'B07', badge_name: 'Wastewater Cert.' },
 ];
 
 export const oneWaterMinute: OneWaterMinute = {

@@ -205,7 +205,11 @@ const TermDetail: React.FC = () => {
   const linkedVendors = term.linkedVendorIds?.map(vid => vendors.find(v => v.id === vid)).filter(Boolean) || [];
   const relatedTerms = term.relatedTermIds?.map(tid => terms.find(t => t.id === tid)).filter(Boolean) as LexiconTerm[] || [];
   const relatedVideos = term.relatedDroobiVideoIds?.map(vid => droobiVideos.find(v => v.id === vid)).filter(Boolean) || [];
-  const relatedDecks = term.relatedDeckIds?.map(did => flashcardDecks.find(d => d.id === did)).filter(Boolean) || [];
+  
+  // Find the auto-generated deck for this term's category
+  const relatedAcademyDeck = flashcardDecks.find(deck => deck.id === `d-cat-${term.category}`);
+  
+  const manuallyLinkedDecks = term.relatedDeckIds?.map(did => flashcardDecks.find(d => d.id === did)).filter(Boolean) || [];
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-slate-300">
@@ -300,7 +304,7 @@ const TermDetail: React.FC = () => {
       
       <aside className="lg:col-span-1 space-y-8">
           <div className="sticky top-24 space-y-8">
-            {(relatedTerms.length > 0 || relatedVideos.length > 0 || relatedDecks.length > 0) && (
+            {(relatedTerms.length > 0 || relatedVideos.length > 0 || manuallyLinkedDecks.length > 0 || relatedAcademyDeck) && (
               <div className="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
                 <h3 className="text-xl font-bold text-slate-100 mb-4">Learn More in the oraKLES Ecosystem</h3>
                 <div className="space-y-4">
@@ -310,7 +314,13 @@ const TermDetail: React.FC = () => {
                       <p className="font-semibold text-slate-200">{video.title}</p>
                     </Link>
                   ))}
-                  {relatedDecks.map(deck => (
+                  {relatedAcademyDeck && (
+                     <Link to={`/academy/deck/${relatedAcademyDeck.id}`} className="block p-3 rounded-md bg-slate-700/50 hover:bg-slate-700">
+                      <p className="text-xs uppercase text-amber-400 font-semibold">Study in Academy</p>
+                      <p className="font-semibold text-slate-200">{relatedAcademyDeck.title}</p>
+                    </Link>
+                  )}
+                  {manuallyLinkedDecks.map(deck => (
                      <Link key={deck.id} to={`/academy/deck/${deck.id}`} className="block p-3 rounded-md bg-slate-700/50 hover:bg-slate-700">
                       <p className="text-xs uppercase text-amber-400 font-semibold">Academy Deck</p>
                       <p className="font-semibold text-slate-200">{deck.title}</p>

@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { ArrowRightIcon, StarIcon } from '../../components/icons/Icons';
+import { FlashcardDeck, lexiconCategoryNames } from '../../types';
 
 const ProgressCard: React.FC<{ title: string; progress: number; goal: number; label: string }> = ({ title, progress, goal, label }) => {
   const percentage = goal > 0 ? (progress / goal) * 100 : 0;
@@ -20,10 +21,36 @@ const ProgressCard: React.FC<{ title: string; progress: number; goal: number; la
   );
 };
 
+const DeckCard: React.FC<{ deck: FlashcardDeck }> = ({ deck }) => (
+    <Link to={`/academy/deck/${deck.id}`} className="block bg-slate-800 rounded-lg overflow-hidden group border border-slate-700 hover:border-blue-400 transition-all duration-300">
+        <div className="h-32 bg-slate-700">
+             <img src={deck.thumbnail_url} alt={deck.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform"/>
+        </div>
+        <div className="p-4">
+            <h4 className="font-bold text-slate-100 truncate group-hover:text-blue-400">{deck.title}</h4>
+            <p className="text-sm text-slate-400">{deck.cardCount} Cards</p>
+        </div>
+    </Link>
+);
+
+
 const AcademyHome: React.FC = () => {
   const { userProgress, oneWaterMinute, flashcardDecks, learningPathways } = useAuth();
   
   const oneWaterMinuteDeck = flashcardDecks.find(d => d.id === oneWaterMinute.deckId);
+
+  const decksByCategory = useMemo(() => {
+    // FIX: Explicitly typing the accumulator in the `reduce` function resolves an issue where
+    // TypeScript could not infer the type of the `decks` array, causing a runtime error.
+    return flashcardDecks.reduce((acc: Record<string, FlashcardDeck[]>, deck) => {
+        const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
+        if (!acc[categoryName]) {
+            acc[categoryName] = [];
+        }
+        acc[categoryName].push(deck);
+        return acc;
+    }, {});
+  }, [flashcardDecks]);
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -70,18 +97,18 @@ const AcademyHome: React.FC = () => {
         </div>
       )}
 
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold text-white mb-4">Deep Learning Pathways</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-white mb-6">Featured Learning Pathways</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {learningPathways.map(pathway => (
-                <Link to={`/academy/pathway/${pathway.id}`} key={pathway.id} className="bg-slate-800 rounded-lg overflow-hidden group">
+                <Link to={`/academy/pathway/${pathway.id}`} key={pathway.id} className="bg-slate-800 rounded-lg overflow-hidden group border border-slate-700 hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-1">
                     <div className="relative">
                         <img src={pathway.thumbnail_url} alt={pathway.title} className="w-full h-48 object-cover"/>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
                         <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-white">{pathway.title}</h3>
                     </div>
                     <div className="p-6">
-                        <p className="text-slate-400 text-sm">{pathway.description}</p>
+                        <p className="text-slate-400 text-sm h-20">{pathway.description}</p>
                         <div className="mt-4 flex justify-between items-center text-sm">
                             <span className="text-slate-300 font-semibold">{pathway.steps.length} Decks</span>
                             <div className="flex items-center gap-2 px-3 py-1 bg-yellow-400/10 text-yellow-300 rounded-full border border-yellow-400/30">
@@ -94,6 +121,21 @@ const AcademyHome: React.FC = () => {
             ))}
         </div>
       </div>
+
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-white mb-6">Browse Decks by Category</h2>
+        <div className="space-y-8">
+            {Object.entries(decksByCategory).map(([category, decks]) =>(
+                <div key={category}>
+                    <h3 className="text-2xl font-semibold text-slate-200 mb-4">{category}</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {decks.map(deck => <DeckCard key={deck.id} deck={deck} />)}
+                    </div>
+                </div>
+            ))}
+        </div>
+      </div>
+
     </div>
   );
 };
