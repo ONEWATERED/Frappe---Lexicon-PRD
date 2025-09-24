@@ -79,7 +79,7 @@ const JobBoardHome: React.FC = () => {
                 </div>
                 <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mt-4">Premium Job Board</h1>
                 <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400">
-                    Exclusive career opportunities from top partners in the oraKLES ecosystem.
+                    Exclusive career opportunities from top partners in the ORAKLES ecosystem.
                 </p>
             </div>
 
@@ -123,7 +123,7 @@ const JobBoardHome: React.FC = () => {
                 <aside className="lg:col-span-4 sticky top-24">
                     <div className="glass-card p-6 rounded-2xl text-center">
                         <h3 className="text-xl font-bold text-white">Hiring?</h3>
-                        <p className="text-slate-400 mt-2 text-sm">Reach qualified professionals in the water industry. Post your job opening on the oraKLES Premium Job Board.</p>
+                        <p className="text-slate-400 mt-2 text-sm">Reach qualified professionals in the water industry. Post your job opening on the ORAKLES Premium Job Board.</p>
                         <button className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
                             Post a Job
                         </button>

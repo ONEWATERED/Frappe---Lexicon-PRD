@@ -53,7 +53,7 @@ const AcademyHome: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="text-center">
-        <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">oraKLES Academy</h1>
+        <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">ORAKLES Academy</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
           Master the language of the water industry with interactive flashcard decks, learning pathways, and credentials.
         </p>

@@ -353,7 +353,7 @@ const AcademyContributorBadge: React.FC<{ sponsoredDecks: FlashcardDeck[] }> = (
                 <AcademicCapIcon className="w-8 h-8 text-amber-400" />
                 <h3 className="text-lg font-bold text-white">Academy Contributor</h3>
             </div>
-            <p className="text-sm text-slate-400 mt-3">This partner contributes valuable knowledge to the oraKLES Academy by sponsoring the following decks:</p>
+            <p className="text-sm text-slate-400 mt-3">This partner contributes valuable knowledge to the ORAKLES Academy by sponsoring the following decks:</p>
             <ul className="mt-2 space-y-2">
                 {sponsoredDecks.map(deck => (
                     <li key={deck.id}>
@@ -955,7 +955,7 @@ const EntityProfile: React.FC = () => {
             document.title = `${entity.name} – Partner Microsite`;
             
             const existingMeta = document.querySelector('meta[name="description"]');
-            const descriptionContent = entity.tagline || (entity.longDescription ? entity.longDescription.substring(0, 160) + '...' : 'Partner profile on oraKLES.');
+            const descriptionContent = entity.tagline || (entity.longDescription ? entity.longDescription.substring(0, 160) + '...' : 'Partner profile on ORAKLES.');
 
             if (existingMeta) {
                 existingMeta.setAttribute('content', descriptionContent);
@@ -967,7 +967,7 @@ const EntityProfile: React.FC = () => {
             }
         }
         return () => {
-            document.title = 'oraKLES';
+            document.title = 'ORAKLES';
             const existingMeta = document.querySelector('meta[name="description"]');
             if (existingMeta) {
                  existingMeta.setAttribute('content', 'A comprehensive water industry educational platform with a lexicon, video streaming, an educational academy, manuals library, and ecosystem directory.');

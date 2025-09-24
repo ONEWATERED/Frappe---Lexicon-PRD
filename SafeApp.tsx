@@ -1,4 +1,6 @@
 
+
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -66,7 +68,7 @@ const BootScreen: React.FC<{ message: string }> = ({ message }) => (
 const SafeApp: React.FC = () => {
   return (
     <ErrorBoundary>
-      <BootScreen message="oraKLES is booting..." />
+      <BootScreen message="ORAKLES is booting..." />
       <Suspense fallback={<div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white text-xl">Loading...</div>}>
         <App />
       </Suspense>

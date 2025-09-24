@@ -1,5 +1,7 @@
 
 
+
+
 import React, { useState } from 'react';
 // FIX: Added MicrophoneIcon to imports to resolve usage error.
 import { PhoneIcon, ChatBubbleLeftRightIcon, CpuChipIcon, SparklesIcon, MicrophoneIcon } from '../../components/icons/Icons';
@@ -37,7 +39,7 @@ const AIAgentsPage: React.FC = () => {
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="text-center">
                     <CpuChipIcon className="w-16 h-16 text-blue-500 mx-auto" />
-                    <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mt-4">oraKLES AI Co-pilots</h1>
+                    <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mt-4">ORAKLES AI Co-pilots</h1>
                     <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400">
                         Interact with digital experts and AI-powered tools. Democratizing expertise to accelerate learning and professional growth.
                     </p>

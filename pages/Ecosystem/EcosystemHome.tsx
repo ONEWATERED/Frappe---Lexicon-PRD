@@ -143,7 +143,7 @@ const EcosystemHome: React.FC = () => {
     return (
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-                <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">oraKLES Partner Ecosystem</h1>
+                <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">ORAKLES Partner Ecosystem</h1>
                 <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400">
                     Discover the vendors, consultants, and organizations shaping the future of the water industry.
                 </p>

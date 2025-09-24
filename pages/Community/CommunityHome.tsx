@@ -288,8 +288,8 @@ const OraKLESLabs: React.FC = () => {
             <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 mb-8">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
-                         <h2 className="text-2xl font-bold text-white">oraKLES Labs</h2>
-                         <p className="text-slate-400 mt-1">Help shape the future of oraKLES. Suggest and vote on new features.</p>
+                         <h2 className="text-2xl font-bold text-white">ORAKLES Labs</h2>
+                         <p className="text-slate-400 mt-1">Help shape the future of ORAKLES. Suggest and vote on new features.</p>
                     </div>
                     <button onClick={() => setShowForm(!showForm)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-5 rounded-lg transition-colors w-full md:w-auto">
                         {showForm ? 'Cancel' : 'Suggest a Feature'}
@@ -461,7 +461,7 @@ const CommunityHome: React.FC = () => {
             <div className="grid lg:grid-cols-12 gap-8">
                 <aside className="lg:col-span-3 space-y-4">
                     <div className="glass-card p-3 space-y-1">
-                        <NavButton viewId="labs" icon={<SparklesIcon className="w-5 h-5 text-yellow-400"/>} label="oraKLES Labs" />
+                        <NavButton viewId="labs" icon={<SparklesIcon className="w-5 h-5 text-yellow-400"/>} label="ORAKLES Labs" />
                         <NavButton viewId="feed" icon={<UsersIcon className="w-5 h-5"/>} label="Community Feed" />
                         <NavButton viewId="members" icon={<UserGroupIcon className="w-5 h-5"/>} label="Members" />
                         <NavButton viewId="events" icon={<CalendarDaysIcon className="w-5 h-5"/>} label="Events" />

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DroobiVideo } from '../../types';
+import VideoPlayer from '../../components/VideoPlayer';
 
 const VideoCard: React.FC<{ video: DroobiVideo }> = ({ video }) => (
   <Link to={`/video/${video.id}`} className="flex-shrink-0 w-72 sm:w-80 group">
