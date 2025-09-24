@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { CommunityEvent, CommunityPost, LexiconCategory, lexiconCategoryNames, User } from '../../types';
+import { CommunityEvent, CommunityPost, LexiconCategory, lexiconCategoryNames, User, Conversation } from '../../types';
 import { 
     UsersIcon, 
     CalendarDaysIcon, 
@@ -17,7 +17,8 @@ import {
     UserMinusIcon,
     XIcon,
     SparklesIcon,
-    UserGroupIcon
+    UserGroupIcon,
+    InboxIcon
 } from '../../components/icons/Icons';
 import { PROFESSIONAL_TIERS } from '../../data';
 
@@ -133,9 +134,9 @@ const MembersList: React.FC = () => {
         if (isConnected) {
             return (
                  <div className="flex items-center gap-2">
-                    <button className="flex-1 flex items-center justify-center gap-2 bg-slate-600 text-white font-semibold py-2 px-3 rounded-md text-sm hover:bg-slate-500">
+                    <Link to={`/community/messages/${user.id}`} className="flex-1 flex items-center justify-center gap-2 bg-slate-600 text-white font-semibold py-2 px-3 rounded-md text-sm hover:bg-slate-500">
                         <PaperAirplaneIcon className="w-4 h-4" /> Message
-                    </button>
+                    </Link>
                      <button className="p-2 bg-slate-600 text-slate-300 rounded-md hover:bg-red-500/50 hover:text-red-300">
                         <UserMinusIcon className="w-4 h-4" />
                     </button>
@@ -244,6 +245,45 @@ const MyNetworkWidget: React.FC = () => {
     );
 }
 
+const MyMessagesWidget: React.FC = () => {
+    const { currentUser, conversations, getUserById } = useAuth();
+    if (!currentUser) return null;
+
+    const myConversations = conversations.filter(c => c.participantIds.includes(currentUser.id));
+    
+    const getOtherParticipant = (convo: Conversation) => {
+        const otherId = convo.participantIds.find(id => id !== currentUser.id);
+        return getUserById(otherId || '');
+    };
+
+    return (
+        <div className="glass-card p-4 space-y-3">
+            <h3 className="font-bold text-white">My Messages</h3>
+            {myConversations.slice(0, 3).map(convo => {
+                const otherUser = getOtherParticipant(convo);
+                const lastMessage = convo.messages[convo.messages.length - 1];
+                if (!otherUser || !lastMessage) return null;
+
+                const isUnread = !lastMessage.isRead && lastMessage.fromUserId !== currentUser.id;
+
+                return (
+                    <Link to={`/community/messages/${otherUser.id}`} key={convo.id} className="flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-slate-700/50 relative">
+                        <img src={otherUser.avatarUrl} alt={otherUser.name} className="w-10 h-10 rounded-full" />
+                        <div className="flex-grow overflow-hidden">
+                           <p className={`font-semibold text-slate-200 text-sm ${isUnread ? 'text-white' : 'text-slate-300'}`}>{otherUser.name}</p>
+                           <p className={`text-xs truncate ${isUnread ? 'text-slate-200' : 'text-slate-400'}`}>{lastMessage.content}</p>
+                        </div>
+                        {isUnread && <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-blue-500 rounded-full"></div>}
+                    </Link>
+                );
+            })}
+             <Link to="/community/messages" className="block w-full text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors">
+                View All Messages
+            </Link>
+        </div>
+    );
+};
+
 const FindMentorWidget: React.FC = () => {
     const { getAllUsers, currentUser } = useAuth();
     const mentors = useMemo(() => {
@@ -311,6 +351,10 @@ const CommunityHome: React.FC = () => {
                         <NavButton viewId="feed" icon={<UsersIcon className="w-5 h-5"/>} label="Community Feed" />
                         <NavButton viewId="members" icon={<UserGroupIcon className="w-5 h-5"/>} label="Members" />
                         <NavButton viewId="events" icon={<CalendarDaysIcon className="w-5 h-5"/>} label="Events" />
+                        <Link to="/community/messages" className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-semibold transition-colors text-slate-300 hover:bg-slate-700/50`}>
+                            <InboxIcon className="w-5 h-5"/>
+                            Messages
+                        </Link>
                     </div>
                     <div className="glass-card p-3 space-y-1">
                         <p className="px-3 pt-2 pb-1 text-xs font-bold uppercase text-slate-400">Discussion Channels</p>
@@ -351,6 +395,7 @@ const CommunityHome: React.FC = () => {
 
                 <aside className="lg:col-span-3 space-y-6">
                     <MyNetworkWidget />
+                    <MyMessagesWidget />
                     <FindMentorWidget />
                     <UpcomingEventsWidget />
                 </aside>

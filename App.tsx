@@ -21,6 +21,7 @@ import ResearcherProfilePage from './pages/Research/ResearcherProfilePage';
 import BlogHome from './pages/Insights/BlogHome';
 import BlogPostDetail from './pages/Insights/BlogPostDetail';
 import CreateBlogPost from './pages/Insights/CreateBlogPost';
+import CommunityMessages from './pages/Community/CommunityMessages';
 
 
 const MainLayout: React.FC = () => (
@@ -50,6 +51,8 @@ const App: React.FC = () => {
             <Route path="/academy" element={<AcademyHome />} />
             <Route path="/academy/pathway/:pathwayId" element={<ComingSoon title="Learning Pathway" />} />
             <Route path="/community" element={<CommunityHome />} />
+            <Route path="/community/messages" element={<CommunityMessages />} />
+            <Route path="/community/messages/:userId" element={<CommunityMessages />} />
             <Route path="/insights" element={<BlogHome />} />
             <Route path="/insights/new" element={<CreateBlogPost />} />
             <Route path="/insights/:postId" element={<BlogPostDetail />} />
