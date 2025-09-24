@@ -22,6 +22,7 @@ import BlogHome from './pages/Insights/BlogHome';
 import BlogPostDetail from './pages/Insights/BlogPostDetail';
 import CreateBlogPost from './pages/Insights/CreateBlogPost';
 import CommunityMessages from './pages/Community/CommunityMessages';
+import JobBoardHome from './pages/Jobs/JobBoardHome';
 
 
 const MainLayout: React.FC = () => (
@@ -60,6 +61,7 @@ const App: React.FC = () => {
             <Route path="/research/researcher/:researcherId" element={<ResearcherProfilePage />} />
             <Route path="/ecosystem" element={<EcosystemHome />} />
             <Route path="/ecosystem/:entityId" element={<EntityProfile />} />
+            <Route path="/jobs" element={<JobBoardHome />} />
             <Route path="/ai-agents" element={<AIAgentsPage />} />
           </Route>
           {/* Fullscreen route without main layout */}

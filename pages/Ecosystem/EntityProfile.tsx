@@ -251,7 +251,7 @@ const FeaturedProjectsSection: React.FC<{ projects: Project[] }> = ({ projects }
 
     return (
         <div>
-            <h3 className="text-2xl font-bold text-white mb-4">Featured Projects</h3>
+            <h3 id="projects-heading" className="text-2xl font-bold text-white mb-4">Featured Projects & Case Studies</h3>
             <div className="flex flex-wrap gap-2 mb-6">
                 {allTags.map(tag => (
                     <button
@@ -794,7 +794,6 @@ const SocialLinksSection: React.FC<{ social?: SocialLinks }> = ({ social }) => {
 
 
 const MicrositeProfile: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => {
-    const [activeTab, setActiveTab] = useState('about');
     const { manuals, blogPosts, droobiVideos, flashcardDecks } = useAuth();
     
     const hasContentHubMaterial = useMemo(() => {
@@ -804,11 +803,19 @@ const MicrositeProfile: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => 
             blogPosts.some(p => p.vendorId === entity.id) ||
             droobiVideos.some(v => v.vendorId === entity.id) ||
             flashcardDecks.some(d => d.sponsorship?.sponsor_id === entity.id);
-        return hasOwnContent || hasRelatedContent;
+        return !!(hasOwnContent || hasRelatedContent);
     }, [entity, manuals, blogPosts, droobiVideos, flashcardDecks]);
 
     const hasConferenceBooth = useMemo(() => !!(entity.conferenceBooth && entity.conferenceBooth.length > 0), [entity.conferenceBooth]);
+    
+    const availableTabs = useMemo(() => {
+        const tabs = [];
+        if (hasConferenceBooth) tabs.push('booth');
+        if (hasContentHubMaterial) tabs.push('content');
+        return tabs;
+    }, [hasConferenceBooth, hasContentHubMaterial]);
 
+    const [activeTab, setActiveTab] = useState(availableTabs[0] || '');
 
     const TabButton: React.FC<{ name: string; children: React.ReactNode; activeTab: string; setActiveTab: (name: string) => void; }> = ({ name, children, activeTab, setActiveTab }) => (
         <button
@@ -833,66 +840,65 @@ const MicrositeProfile: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => 
             <MicrositeHero entity={entity} />
 
             <div id="content" className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8 items-start">
-                <main className="lg:col-span-8 space-y-8">
-                    <div className="border-b border-slate-700">
-                        <nav className="-mb-px flex space-x-8" role="tablist" aria-label="Tabs">
-                            <TabButton name="about" activeTab={activeTab} setActiveTab={setActiveTab}>About</TabButton>
-                            {hasConferenceBooth && <TabButton name="booth" activeTab={activeTab} setActiveTab={setActiveTab}>Digital Booth</TabButton>}
-                            {entity.projects && entity.projects.length > 0 && <TabButton name="projects" activeTab={activeTab} setActiveTab={setActiveTab}>Featured Projects</TabButton>}
-                            {hasContentHubMaterial && <TabButton name="content" activeTab={activeTab} setActiveTab={setActiveTab}>Content Hub</TabButton>}
-                        </nav>
-                    </div>
-                    
-                    <div className="mt-8">
-                        <TabPanel name="about" activeTab={activeTab}>
-                             <div className="space-y-12">
-                                <section className="glass-card p-6" aria-labelledby="about-heading">
-                                    <h3 id="about-heading" className="text-lg font-bold text-white">About {entity.name}</h3>
-                                    <p className="mt-2 text-slate-300 whitespace-pre-line">{entity.longDescription}</p>
-                                </section>
-                                {entity.services && (
-                                     <section className="glass-card p-6" aria-labelledby="services-heading">
-                                        <h3 id="services-heading" className="text-lg font-bold text-white">Services & Offerings</h3>
-                                        <div className="mt-4 space-y-4">
-                                            {entity.services.map(s => (
-                                                <div key={s.title}>
-                                                    <p className="font-semibold text-slate-100">{s.title}</p>
-                                                    <p className="text-sm text-slate-400">{s.description}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-                                 {entity.futureOfferings && (
-                                     <section className="glass-card p-6 border-l-4 border-purple-500" aria-labelledby="future-heading">
-                                        <h3 id="future-heading" className="text-lg font-bold text-white">Coming Soon</h3>
-                                        <div className="mt-4 space-y-4">
-                                            {entity.futureOfferings.map(s => (
-                                                <div key={s.title}>
-                                                    <p className="font-semibold text-slate-100">{s.title}</p>
-                                                    <p className="text-sm text-slate-400">{s.description}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-                             </div>
-                        </TabPanel>
-                        <TabPanel name="booth" activeTab={activeTab}>
-                            {hasConferenceBooth ? (
-                                <ConferenceBoothSection materials={entity.conferenceBooth!} />
-                            ) : null}
-                        </TabPanel>
-                        <TabPanel name="projects" activeTab={activeTab}>
-                           {entity.projects && entity.projects.length > 0 ? (
-                               <FeaturedProjectsSection projects={entity.projects} />
-                           ) : <EmptyContent message="No projects have been featured yet." />}
-                        </TabPanel>
-                        <TabPanel name="content" activeTab={activeTab}>
-                            <ContentHub entity={entity} />
-                        </TabPanel>
-                    </div>
+                <main className="lg:col-span-8 space-y-12">
+                    <section className="glass-card p-6" aria-labelledby="about-heading">
+                        <h3 id="about-heading" className="text-lg font-bold text-white">About {entity.name}</h3>
+                        <p className="mt-2 text-slate-300 whitespace-pre-line">{entity.longDescription}</p>
+                    </section>
+                    {entity.services && (
+                         <section className="glass-card p-6" aria-labelledby="services-heading">
+                            <h3 id="services-heading" className="text-lg font-bold text-white">Services & Offerings</h3>
+                            <div className="mt-4 space-y-4">
+                                {entity.services.map(s => (
+                                    <div key={s.title}>
+                                        <p className="font-semibold text-slate-100">{s.title}</p>
+                                        <p className="text-sm text-slate-400">{s.description}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+                     {entity.futureOfferings && (
+                         <section className="glass-card p-6 border-l-4 border-purple-500" aria-labelledby="future-heading">
+                            <h3 id="future-heading" className="text-lg font-bold text-white">Coming Soon</h3>
+                            <div className="mt-4 space-y-4">
+                                {entity.futureOfferings.map(s => (
+                                    <div key={s.title}>
+                                        <p className="font-semibold text-slate-100">{s.title}</p>
+                                        <p className="text-sm text-slate-400">{s.description}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
+                    {entity.projects && entity.projects.length > 0 && (
+                        <section aria-labelledby="projects-heading">
+                           <FeaturedProjectsSection projects={entity.projects} />
+                        </section>
+                    )}
+
+                    {availableTabs.length > 0 && (
+                        <div>
+                            <div className="border-b border-slate-700">
+                                <nav className="-mb-px flex space-x-8" role="tablist" aria-label="Tabs">
+                                    {hasConferenceBooth && <TabButton name="booth" activeTab={activeTab} setActiveTab={setActiveTab}>Digital Booth</TabButton>}
+                                    {hasContentHubMaterial && <TabButton name="content" activeTab={activeTab} setActiveTab={setActiveTab}>Content Hub</TabButton>}
+                                </nav>
+                            </div>
+                            
+                            <div className="mt-8">
+                                <TabPanel name="booth" activeTab={activeTab}>
+                                    {hasConferenceBooth ? (
+                                        <ConferenceBoothSection materials={entity.conferenceBooth!} />
+                                    ) : null}
+                                </TabPanel>
+                                <TabPanel name="content" activeTab={activeTab}>
+                                    <ContentHub entity={entity} />
+                                </TabPanel>
+                            </div>
+                        </div>
+                    )}
                 </main>
                 <aside id="team" className="lg:col-span-4 sticky top-24 space-y-6">
                     {entity.contacts && entity.contacts.length > 0 && (

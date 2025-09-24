@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { WaterDropIcon, MenuIcon, XIcon } from './icons/Icons';
+import { WaterDropIcon, MenuIcon, XIcon, StarIcon } from './icons/Icons';
 
 const NavItem: React.FC<{ to: string; children: React.ReactNode; isMobile?: boolean }> = ({ to, children, isMobile = false }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `px-3 py-2 rounded-md font-medium transition-colors duration-200 ${
+      `px-3 py-2 rounded-md font-medium transition-colors duration-200 flex items-center gap-1.5 ${
         isMobile ? 'block text-base' : 'text-sm'
       } ${
         isActive
@@ -49,6 +49,10 @@ export const Header: React.FC = () => {
                 <NavItem to="/insights">Insights</NavItem>
                 <NavItem to="/manuals">Manuals</NavItem>
                 <NavItem to="/ecosystem">Partners</NavItem>
+                <NavItem to="/jobs">
+                  Job Board
+                  <StarIcon className="w-4 h-4 text-yellow-400" />
+                </NavItem>
                 <NavItem to="/ai-agents">AI Co-pilots</NavItem>
               </div>
             </div>
@@ -92,6 +96,10 @@ export const Header: React.FC = () => {
             <NavItem to="/insights" isMobile>Insights</NavItem>
             <NavItem to="/manuals" isMobile>Manuals</NavItem>
             <NavItem to="/ecosystem" isMobile>Partners</NavItem>
+            <NavItem to="/jobs" isMobile>
+              Job Board
+              <StarIcon className="w-4 h-4 text-yellow-400" />
+            </NavItem>
             <NavItem to="/ai-agents" isMobile>AI Co-pilots</NavItem>
           </div>
         </div>
