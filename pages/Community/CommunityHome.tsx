@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { CommunityEvent, CommunityPost, LexiconCategory, lexiconCategoryNames, User, Conversation } from '../../types';
+import { CommunityEvent, CommunityPost, LexiconCategory, lexiconCategoryNames, User, Conversation, FeatureSuggestion } from '../../types';
 import { 
     UsersIcon, 
     CalendarDaysIcon, 
@@ -18,7 +18,8 @@ import {
     XIcon,
     SparklesIcon,
     UserGroupIcon,
-    InboxIcon
+    InboxIcon,
+    LightBulbIcon
 } from '../../components/icons/Icons';
 import { PROFESSIONAL_TIERS } from '../../data';
 
@@ -212,6 +213,118 @@ const MembersList: React.FC = () => {
     )
 }
 
+const statusStyles: Record<FeatureSuggestion['status'], { bg: string, text: string, border: string }> = {
+    'Under Consideration': { bg: 'bg-slate-600/50', text: 'text-slate-300', border: 'border-slate-500' },
+    'Planned': { bg: 'bg-purple-500/10', text: 'text-purple-300', border: 'border-purple-500/30' },
+    'In Progress': { bg: 'bg-blue-500/10', text: 'text-blue-300', border: 'border-blue-500/30' },
+    'Shipped': { bg: 'bg-green-500/10', text: 'text-green-300', border: 'border-green-500/30' },
+};
+
+const FeatureSuggestionCard: React.FC<{ suggestion: FeatureSuggestion }> = ({ suggestion }) => {
+    const { currentUser } = useAuth();
+    const [upvoted, setUpvoted] = useState(currentUser ? suggestion.upvoteUserIds.includes(currentUser.id) : false);
+    const [voteCount, setVoteCount] = useState(suggestion.upvoteUserIds.length);
+
+    const handleUpvote = () => {
+        if (upvoted) {
+            setVoteCount(prev => prev - 1);
+        } else {
+            setVoteCount(prev => prev + 1);
+        }
+        setUpvoted(!upvoted);
+    };
+    
+    const statusStyle = statusStyles[suggestion.status];
+
+    return (
+        <div className="glass-card p-6 flex flex-col h-full">
+            <div className="flex justify-between items-start gap-4">
+                <h3 className="text-lg font-bold text-white flex-grow">{suggestion.title}</h3>
+                <span className={`text-xs font-semibold px-2 py-1 rounded-full border whitespace-nowrap ${statusStyle.bg} ${statusStyle.text} ${statusStyle.border}`}>
+                    {suggestion.status}
+                </span>
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+                <img src={suggestion.submittedBy.avatarUrl} alt={suggestion.submittedBy.name} className="w-6 h-6 rounded-full" />
+                <p className="text-xs text-slate-400">Suggested by {suggestion.submittedBy.name}</p>
+            </div>
+            <p className="text-sm text-slate-300 mt-4 flex-grow">{suggestion.description}</p>
+             <div className="mt-4 flex flex-wrap gap-2">
+                {suggestion.tags.map(tag => (
+                    <span key={tag} className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded-full">{tag}</span>
+                ))}
+            </div>
+            <div className="mt-4 pt-4 border-t border-slate-700 flex items-center justify-between gap-4">
+                <button 
+                    onClick={handleUpvote} 
+                    className={`flex items-center gap-2 text-sm font-semibold py-2 px-4 rounded-lg transition-colors ${upvoted ? 'bg-yellow-400/10 text-yellow-300' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                >
+                    <LightBulbIcon className="w-5 h-5" />
+                    <span>{voteCount}</span>
+                </button>
+                 <button className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400">
+                    <ChatBubbleOvalLeftEllipsisIcon className="w-5 h-5"/> {suggestion.comments.length} Comments
+                 </button>
+            </div>
+        </div>
+    );
+};
+
+const OraKLESLabs: React.FC = () => {
+    const { featureSuggestions } = useAuth();
+    const [sortOrder, setSortOrder] = useState<'trending' | 'newest'>('trending');
+    const [showForm, setShowForm] = useState(false);
+
+    const sortedSuggestions = useMemo(() => {
+        const sorted = [...featureSuggestions];
+        if (sortOrder === 'trending') {
+            return sorted.sort((a, b) => b.upvoteUserIds.length - a.upvoteUserIds.length);
+        }
+        return sorted.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    }, [featureSuggestions, sortOrder]);
+
+    return (
+        <div>
+            <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700 mb-8">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                         <h2 className="text-2xl font-bold text-white">oraKLES Labs</h2>
+                         <p className="text-slate-400 mt-1">Help shape the future of oraKLES. Suggest and vote on new features.</p>
+                    </div>
+                    <button onClick={() => setShowForm(!showForm)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-5 rounded-lg transition-colors w-full md:w-auto">
+                        {showForm ? 'Cancel' : 'Suggest a Feature'}
+                    </button>
+                </div>
+                {showForm && (
+                    <form className="mt-6 border-t border-slate-700 pt-6 space-y-4">
+                        <div>
+                            <label className="text-sm font-semibold text-slate-300" htmlFor="feat-title">Feature Title</label>
+                            <input type="text" id="feat-title" placeholder="e.g., AI-Powered Resume Builder" className="w-full mt-1 bg-slate-700 text-white placeholder-slate-400 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                        <div>
+                            <label className="text-sm font-semibold text-slate-300" htmlFor="feat-desc">Why is this needed?</label>
+                            <textarea id="feat-desc" rows={4} placeholder="Describe the feature and the problem it solves for the community..." className="w-full mt-1 bg-slate-700 text-white placeholder-slate-400 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div className="text-right">
+                             <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition-colors">Submit Idea</button>
+                        </div>
+                    </form>
+                )}
+            </div>
+
+            <div className="flex justify-end items-center gap-2 mb-6">
+                <span className="text-sm font-semibold text-slate-400">Sort by:</span>
+                <button onClick={() => setSortOrder('trending')} className={`px-4 py-1.5 rounded-full text-sm font-semibold ${sortOrder === 'trending' ? 'bg-slate-600 text-white' : 'bg-slate-700 text-slate-300'}`}>Trending</button>
+                <button onClick={() => setSortOrder('newest')} className={`px-4 py-1.5 rounded-full text-sm font-semibold ${sortOrder === 'newest' ? 'bg-slate-600 text-white' : 'bg-slate-700 text-slate-300'}`}>Newest</button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+                {sortedSuggestions.map(suggestion => <FeatureSuggestionCard key={suggestion.id} suggestion={suggestion} />)}
+            </div>
+        </div>
+    );
+};
+
 const MyNetworkWidget: React.FC = () => {
     const { currentUser, getUserById } = useAuth();
     if (!currentUser) return null;
@@ -310,7 +423,7 @@ const FindMentorWidget: React.FC = () => {
 
 const CommunityHome: React.FC = () => {
     const { communityPosts, communityEvents } = useAuth();
-    const [activeView, setActiveView] = useState<string>('members');
+    const [activeView, setActiveView] = useState<string>('labs');
     
     const combinedFeed = useMemo(() => {
         const postsAsFeed = communityPosts.map(p => ({ ...p, feedType: 'post' as const, date: p.timestamp }));
@@ -341,13 +454,14 @@ const CommunityHome: React.FC = () => {
                 <UserGroupIcon className="w-16 h-16 text-blue-500 mx-auto" />
                 <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mt-4">Community Hub</h1>
                 <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400">
-                    Connect with peers, share knowledge, and discover events across the water industry.
+                    Connect with peers, shape our roadmap, and discover events across the water industry.
                 </p>
             </div>
             
             <div className="grid lg:grid-cols-12 gap-8">
                 <aside className="lg:col-span-3 space-y-4">
                     <div className="glass-card p-3 space-y-1">
+                        <NavButton viewId="labs" icon={<SparklesIcon className="w-5 h-5 text-yellow-400"/>} label="oraKLES Labs" />
                         <NavButton viewId="feed" icon={<UsersIcon className="w-5 h-5"/>} label="Community Feed" />
                         <NavButton viewId="members" icon={<UserGroupIcon className="w-5 h-5"/>} label="Members" />
                         <NavButton viewId="events" icon={<CalendarDaysIcon className="w-5 h-5"/>} label="Events" />
@@ -365,32 +479,36 @@ const CommunityHome: React.FC = () => {
                 </aside>
 
                 <main className="lg:col-span-6">
-                    {activeView === 'feed' && <CreatePost />}
-                    
-                    {activeView === 'members' ? (
+                    {activeView === 'labs' ? (
+                        <OraKLESLabs />
+                    ) : activeView === 'members' ? (
                         <MembersList />
-                    ) : (combinedFeed.length > 0 ? (
-                        <div className="space-y-6">
-                            {combinedFeed.map(item => {
-                                if ('feedType' in item && item.feedType === 'post') {
-                                    return <PostCard key={item.id} post={item as CommunityPost} />;
-                                }
-                                if ('feedType' in item && item.feedType === 'event') {
-                                    return <EventCard key={item.id} event={item as CommunityEvent} />;
-                                }
-                                // Handle cases where item is just a post without feedType
-                                if ('author' in item) {
-                                     return <PostCard key={item.id} post={item as CommunityPost} />;
-                                }
-                                return null;
-                            })}
-                        </div>
-                        ) : (
-                        <div className="text-center py-20 glass-card">
-                            <h3 className="text-xl font-semibold text-slate-300">No activity yet</h3>
-                            <p className="text-slate-500 mt-2">Be the first to post in this channel!</p>
-                        </div>
-                    ))}
+                    ) : (
+                        <>
+                            {activeView === 'feed' && <CreatePost />}
+                            {combinedFeed.length > 0 ? (
+                                <div className="space-y-6">
+                                    {combinedFeed.map(item => {
+                                        if ('feedType' in item && item.feedType === 'post') {
+                                            return <PostCard key={item.id} post={item as CommunityPost} />;
+                                        }
+                                        if ('feedType' in item && item.feedType === 'event') {
+                                            return <EventCard key={item.id} event={item as CommunityEvent} />;
+                                        }
+                                        if ('author' in item) {
+                                            return <PostCard key={item.id} post={item as CommunityPost} />;
+                                        }
+                                        return null;
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="text-center py-20 glass-card">
+                                    <h3 className="text-xl font-semibold text-slate-300">No activity yet</h3>
+                                    <p className="text-slate-500 mt-2">Be the first to post in this channel!</p>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </main>
 
                 <aside className="lg:col-span-3 space-y-6">

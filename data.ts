@@ -38,6 +38,7 @@ import {
   Publication,
   Patent,
   ResearchProject,
+  FeatureSuggestion,
 } from './types';
 
 // --- CAREER GOALS DATA ---
@@ -741,6 +742,47 @@ export const researchOpportunities: ResearchOpportunity[] = [
   }
 ];
 export const topicSuggestions: TopicSuggestion[] = [];
+
+// --- ORAKLES LABS DATA ---
+export const featureSuggestions: FeatureSuggestion[] = [
+  {
+    id: 'feat-001',
+    title: 'Interactive Manual Library',
+    description: 'Create a centralized, searchable clearinghouse for all vendor O&M manuals. Users could annotate, share, and link manual sections directly to lexicon terms or community discussions, turning static PDFs into living documents.',
+    submittedBy: users[0], // Alex Johnson
+    timestamp: '2024-06-10T10:00:00Z',
+    upvoteUserIds: ['user-123', 'user-456', 'user-789', 'user-456', 'user-123'],
+    comments: [
+// FIX: Removed 'replies' and 'insightfulCount' properties to match the 'FeatureComment' (TopicComment) type.
+      { id: 'fc-1', user: users[1], text: 'This would be a game-changer for field technicians!', timestamp: '2024-06-11T11:00:00Z' }
+    ],
+    status: 'Planned',
+    tags: ['Manuals', 'Library', 'Vendor Content'],
+  },
+  {
+    id: 'feat-002',
+    title: 'AI-Powered Resume Builder',
+    description: 'Allow users to automatically generate a tailored resume based on their profile data, including project portfolio, skills, credentials, and learning transcripts. The AI could suggest keywords and formats for specific job applications.',
+    submittedBy: users[2], // Sam Chen
+    timestamp: '2024-05-28T14:00:00Z',
+    upvoteUserIds: ['user-789', 'user-456'],
+    comments: [],
+    status: 'Under Consideration',
+    tags: ['AI', 'Profile', 'Careers'],
+  },
+  {
+    id: 'feat-003',
+    title: 'Live CEU Tracking & Reporting',
+    description: 'Integrate with credential renewals to automatically track Continuing Education Units (CEUs) earned through Academy courses, Droobi TV sessions, and community contributions. Users could then generate official reports for their licensing boards.',
+    submittedBy: users[1], // Maria Garcia
+    timestamp: '2024-06-05T09:20:00Z',
+    upvoteUserIds: ['user-456', 'user-123'],
+    comments: [],
+    status: 'In Progress',
+    tags: ['Credentials', 'Academy', 'Profile'],
+  }
+];
+
 
 // --- INSIGHTS (BLOG) DATA ---
 export const blogAuthors: BlogAuthor[] = [

@@ -591,6 +591,22 @@ export type TopicSuggestion = {
   tags: string[];
 };
 
+// --- ORAKLES LABS (FEATURE SUGGESTIONS) ---
+export type FeatureComment = TopicComment;
+
+export type FeatureSuggestion = {
+  id: string;
+  title: string;
+  description: string;
+  submittedBy: User;
+  timestamp: string;
+  upvoteUserIds: string[];
+  comments: FeatureComment[];
+  status: 'Under Consideration' | 'Planned' | 'In Progress' | 'Shipped';
+  tags: string[];
+};
+
+
 // --- INSIGHTS (BLOG) TYPES ---
 export type BlogAuthor = {
   id: string;
@@ -665,4 +681,5 @@ export interface AuthContextType {
   careerGoals: CareerGoal[];
   conversations: Conversation[];
   pipDocuments: PIPDocument[];
+  featureSuggestions: FeatureSuggestion[];
 }
