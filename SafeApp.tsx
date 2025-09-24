@@ -1,7 +1,4 @@
 
-
-
-
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -16,8 +13,11 @@ class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
-  // FIX: Replaced the constructor with a class property for state initialization. This is a more modern and concise approach that avoids potential `this` context issues.
-  state: ErrorBoundaryState = { hasError: false };
+  // FIX: Reverted to a standard constructor for state initialization. The class field syntax, while modern, may not be correctly interpreted by the build environment, leading to `this` context issues where `setState` and `props` appear to be missing.
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Update state so the next render will show the fallback UI.

@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { VendorResource, VendorContact, JobPosting, VisitorLog, User, Manual, EcosystemEntity, BlogPost, DroobiVideo, FlashcardDeck } from '../../types';
 import { 
-    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, CheckBadgeIcon, SparklesIcon, CalendarDaysIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, ClockIcon 
+    BriefcaseIcon, ArrowDownTrayIcon, EyeIcon, LinkIcon, MapPinIcon, GlobeAltIcon, UsersIcon, CheckBadgeIcon, SparklesIcon, CalendarDaysIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, ClockIcon, ArrowLeftIcon, ChevronDownIcon 
 } from '../../components/icons/Icons';
 import VideoPlayer from '../../components/VideoPlayer';
 
@@ -38,14 +38,14 @@ const ContactCard: React.FC<{ contact: VendorContact }> = ({ contact }) => (
     <div className="flex items-center gap-4">
         <div className="relative flex-shrink-0">
             <img src={contact.avatarUrl} alt={contact.name} className="w-16 h-16 rounded-full" />
-            <span className={`absolute bottom-0 right-0 block h-4 w-4 rounded-full border-2 border-slate-800 ${contact.status === 'online' ? 'bg-green-400' : 'bg-slate-500'}`}></span>
+            <span className={`absolute bottom-0 right-0 block h-4 w-4 rounded-full border-2 border-slate-800 ${contact.online ? 'bg-green-400' : 'bg-slate-500'}`}></span>
         </div>
         <div>
             <p className="font-bold text-white">{contact.name}</p>
             <p className="text-sm text-slate-400">{contact.title}</p>
             <a href={`mailto:${contact.email}`} className="text-xs text-blue-400 hover:underline">{contact.email}</a>
             <div className="mt-2 flex flex-col sm:flex-row gap-2">
-                <ActionButton href={contact.status === 'online' ? '#' : undefined} className="bg-green-500 hover:bg-green-600 text-white" title="Live chat coming soon">
+                <ActionButton href={contact.online ? contact.chatUrl : undefined} className="bg-green-500 hover:bg-green-600 text-white" title="Live chat coming soon">
                     <ChatBubbleLeftRightIcon className="w-3 h-3" /> Chat Now
                 </ActionButton>
                 <ActionButton href={contact.calendarUrl} className="bg-slate-600 hover:bg-slate-500 text-white" title="Scheduling link not available">
@@ -239,12 +239,35 @@ const UnclaimedProfileView: React.FC<{ entity: EcosystemEntity }> = ({ entity })
     </div>
 );
 
+const VideoModal: React.FC<{ videoUrl: string, onClose: () => void }> = ({ videoUrl, onClose }) => {
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]);
+
+    return (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={onClose} role="dialog" aria-modal="true">
+            <div className="relative w-full max-w-4xl aspect-video bg-black rounded-lg" onClick={(e) => e.stopPropagation()}>
+                <VideoPlayer src={videoUrl} autoPlay controls />
+            </div>
+        </div>
+    );
+};
+
 
 const EntityProfile: React.FC = () => {
     const { entityId, vendorId } = useParams<{ entityId?: string, vendorId?: string }>();
     const { ecosystemEntities, currentUser, getUserById, manuals, blogPosts, droobiVideos, flashcardDecks } = useAuth();
     const id = entityId || vendorId;
     
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('about');
     const [resourceFilter, setResourceFilter] = useState('All');
     
@@ -275,6 +298,10 @@ const EntityProfile: React.FC = () => {
         return entity.resources?.filter(r => r.category === resourceFilter) || [];
     }, [entity.resources, resourceFilter]);
 
+    const hasContacts = entity.contacts && entity.contacts.length > 0;
+    const hero = entity.hero;
+    const hasVideo = !!hero?.videoUrl;
+
     const TabButton: React.FC<{ tabId: string, label: string }> = ({ tabId, label }) => (
         <button
             onClick={() => setActiveTab(tabId)}
@@ -285,25 +312,63 @@ const EntityProfile: React.FC = () => {
     );
 
     return (
-        <div className="min-h-screen">
-            <div className="relative h-[60vh] md:h-96 w-full bg-slate-800">
-                {entity.featuredVideoUrl ? (
-                    <VideoPlayer src={entity.featuredVideoUrl} autoPlay loop muted controls={false} />
-                ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-4 md:p-12 max-w-7xl mx-auto w-full">
-                    <div className="w-24 h-24 bg-white rounded-xl flex items-center justify-center p-2 border-4 border-slate-700">
-                      <img src={entity.logoUrl} alt={`${entity.name} logo`} className="max-w-full max-h-full object-contain" />
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-white mt-4">{entity.name}</h1>
-                    <p className="text-lg text-slate-300 mt-1 max-w-3xl">{entity.tagline}</p>
+        <div className="min-h-screen bg-slate-900">
+            <Link to="/ecosystem" className="absolute top-6 left-6 z-30 flex items-center gap-2 text-sm text-white bg-black/30 px-3 py-2 rounded-lg hover:bg-black/50 transition-colors">
+                <ArrowLeftIcon className="w-4 h-4" />
+                Back to All Partners
+            </Link>
+            
+            {!hero ? (
+                <div className="h-64 bg-slate-800 flex flex-col items-center justify-center text-center p-4">
+                    <h1 className="text-4xl font-extrabold text-white">{entity.name}</h1>
+                    <p className="text-lg text-slate-300 mt-2">{entity.tagline}</p>
                 </div>
-            </div>
+            ) : (
+                <section className="relative h-screen flex items-center justify-center text-center text-white overflow-hidden">
+                    <div className="absolute inset-0 z-0 bg-slate-900">
+                        {hero.videoUrl ? (
+                            <VideoPlayer src={hero.videoUrl} poster={hero.posterImage} autoPlay loop muted controls={false} />
+                        ) : hero.posterImage ? (
+                            <img src={hero.posterImage} alt={`${entity.name} background`} className="w-full h-full object-cover" />
+                        ) : null}
+                         <div className="absolute inset-0 bg-black/50"></div>
+                    </div>
+                    <div className="relative z-10 flex flex-col items-center p-8 max-w-3xl">
+                        <img src={entity.logoUrl} alt={`${entity.name} logo`} className="w-32 h-32 object-contain mb-4" />
+                        <h1 className="text-4xl md:text-5xl font-bold leading-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                            {entity.tagline}
+                        </h1>
+                        <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                            <button
+                                onClick={() => hasVideo && setIsModalOpen(true)}
+                                disabled={!hasVideo}
+                                aria-disabled={!hasVideo}
+                                aria-label={hero.primaryCta?.label || "Watch Our Story"}
+                                className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-500 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg"
+                            >
+                                {hero.primaryCta?.label || 'Watch Our Story'}
+                            </button>
+                            <a
+                                href={hasContacts ? '#team' : undefined}
+                                onClick={(e) => !hasContacts && e.preventDefault()}
+                                aria-disabled={!hasContacts}
+                                aria-label={hero.secondaryCta?.label || "Meet Our Team"}
+                                className={`bg-white/20 hover:bg-white/30 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg ${!hasContacts ? 'pointer-events-none' : ''}`}
+                            >
+                                {hero.secondaryCta?.label || 'Meet Our Team'}
+                            </a>
+                        </div>
+                    </div>
+                    <a href="#main-content" aria-label="Scroll to main content" className="absolute bottom-8 z-10 animate-bounce">
+                        <ChevronDownIcon className="w-8 h-8"/>
+                    </a>
+                </section>
+            )}
 
-            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8">
-                <aside className="lg:col-span-4 xl:col-span-3 space-y-6 sticky top-24 self-start">
+            {isModalOpen && hero?.videoUrl && <VideoModal videoUrl={hero.videoUrl} onClose={() => setIsModalOpen(false)} />}
+
+            <div id="main-content" className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-8">
+                <aside id="team" className="lg:col-span-4 xl:col-span-3 space-y-6 self-start lg:sticky top-24">
                      <div className="glass-card p-6">
                         <h3 className="text-lg font-bold text-white mb-4">Key Contacts</h3>
                         {entity.contacts && entity.contacts.length > 0 ? (

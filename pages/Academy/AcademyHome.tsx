@@ -1,7 +1,4 @@
 
-
-
-
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -43,15 +40,15 @@ const AcademyHome: React.FC = () => {
   const oneWaterMinuteDeck = flashcardDecks.find(d => d.id === oneWaterMinute.deckId);
 
   const decksByCategory = useMemo(() => {
-    // FIX: Explicitly typing the accumulator for `reduce` ensures that the resulting object's type is correctly inferred as `Record<string, FlashcardDeck[]>`, preventing `decks.map` from failing due to an `unknown` type on the `decks` variable.
-    return flashcardDecks.reduce<Record<string, FlashcardDeck[]>>((acc, deck) => {
+    // FIX: Cast the initial value of the `reduce` function to `Record<string, FlashcardDeck[]>`. This ensures TypeScript correctly infers the type of the accumulator, resolving an error where `decks.map` was called on an `unknown` type.
+    return flashcardDecks.reduce((acc, deck) => {
         const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
         if (!acc[categoryName]) {
             acc[categoryName] = [];
         }
         acc[categoryName].push(deck);
         return acc;
-    }, {});
+    }, {} as Record<string, FlashcardDeck[]>);
   }, [flashcardDecks]);
 
   return (

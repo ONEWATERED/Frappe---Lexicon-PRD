@@ -175,6 +175,18 @@ export type Manual = {
 export type EntityType = 'Vendor' | 'Consultant' | 'Government' | 'Academia' | 'Non-Profit';
 
 // --- VENDOR MICRO-SITE TYPES ---
+export type CTA = {
+    label: string;
+    action: string; // e.g., 'modal:video', 'scroll:#team', or a URL
+};
+
+export type HeroData = {
+    videoUrl?: string;
+    posterImage?: string;
+    primaryCta?: CTA;
+    secondaryCta?: CTA;
+};
+
 export type VendorContact = {
   id: string;
   name: string;
@@ -182,8 +194,11 @@ export type VendorContact = {
   avatarUrl: string;
   email: string;
   phone?: string;
-  status: 'online' | 'offline';
+  online?: boolean;
   calendarUrl?: string;
+  chatUrl?: string;
+  region?: string;
+  role?: string;
 };
 
 export type VendorResource = {
@@ -227,6 +242,7 @@ export type EcosystemEntity = {
   isClaimed: boolean;
   isFeatured?: boolean;
   claimedByUserId?: string;
+  hero?: HeroData;
   sponsorships?: {
     feature: string;
     description: string;

@@ -239,19 +239,25 @@ export const ecosystemEntities: EcosystemEntity[] = [
         name: 'Xylem Inc.', 
         logoUrl: 'https://logo.clearbit.com/xylem.com', 
         type: 'Vendor', 
-        tagline: 'Global water technology provider for water and wastewater applications.', 
+        tagline: 'Let’s Solve Water.', 
         location: 'Rye Brook, NY', 
         domain: 'xylem.com', 
         isClaimed: true, 
         isFeatured: true,
         claimedByUserId: 'user-123',
+        hero: {
+            videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+            posterImage: 'https://images.pexels.com/photos/260931/pexels-photo-260931.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            primaryCta: { label: 'Watch Our Story', action: 'modal:video' },
+            secondaryCta: { label: 'Meet Our Team', action: 'scroll:#team' }
+        },
+        contacts: [
+          { id: 'vc001', name: 'Samantha Carter', title: 'Lead Solutions Architect', avatarUrl: 'https://i.pravatar.cc/150?u=vc001', email: 's.carter@xylem.com', phone: '555-123-4567', online: true, calendarUrl: 'https://calendly.com/sample', role: 'Engineering' },
+          { id: 'vc002', name: 'Daniel Jackson', title: 'Director of Sales, NA', avatarUrl: 'https://i.pravatar.cc/150?u=vc002', email: 'd.jackson@xylem.com', online: false, calendarUrl: 'https://calendly.com/sample', role: 'Sales' },
+          { id: 'vc003', name: 'Janet Fraiser', title: 'Product Manager, Treatment', avatarUrl: 'https://i.pravatar.cc/150?u=vc003', email: 'j.fraiser@xylem.com', online: true, calendarUrl: undefined, role: 'Sales' },
+        ],
         featuredVideoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
         longDescription: 'Xylem is a leading global water technology company committed to developing innovative technology solutions to the world’s water challenges. The Company’s products and services move, treat, analyze, monitor and return water to the environment in public utility, industrial, residential and commercial building services settings. Xylem also provides a leading portfolio of smart metering, network technologies and advanced infrastructure analytics solutions for water, electric and gas utilities.',
-        contacts: [
-          { id: 'vc001', name: 'Samantha Carter', title: 'Lead Solutions Architect', avatarUrl: 'https://i.pravatar.cc/150?u=vc001', email: 's.carter@xylem.com', phone: '555-123-4567', status: 'online' },
-          { id: 'vc002', name: 'Daniel Jackson', title: 'Director of Sales, NA', avatarUrl: 'https://i.pravatar.cc/150?u=vc002', email: 'd.jackson@xylem.com', status: 'offline' },
-          { id: 'vc003', name: 'Janet Fraiser', title: 'Product Manager, Treatment', avatarUrl: 'https://i.pravatar.cc/150?u=vc003', email: 'j.fraiser@xylem.com', status: 'online' },
-        ],
         services: [
             { title: 'Water & Wastewater Treatment', description: 'Comprehensive solutions for biological treatment, disinfection, filtration, and sludge management.'},
             { title: 'Dewatering Solutions', description: 'Extensive rental fleet and expertise for temporary and permanent dewatering applications.'},
