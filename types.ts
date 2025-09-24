@@ -13,6 +13,7 @@ export type User = {
     insightfulMarks: number;
   };
   badges: string[];
+  credentials?: UserCredential[];
 };
 
 export type IconName = 'AcademicCapIcon' | 'StarIcon' | 'ShieldCheckIcon' | 'SparklesIcon' | 'TrophyIcon';
@@ -29,6 +30,26 @@ export type UserProgress = {
   weeklyChallenges: { current: number, goal: number };
   currentStreak: number;
 };
+
+// --- CREDENTIALS TYPES ---
+export type CEUProgress = {
+  required: number;
+  completed: number;
+  unitName: 'CEU' | 'PDH' | 'Credit';
+};
+
+export type UserCredential = {
+  id: string;
+  name: string;
+  type: 'License' | 'Certification' | 'Accreditation';
+  issuingBody: string;
+  licenseNumber?: string;
+  issueDate: string; // ISO Date string
+  renewalDate: string; // ISO Date string
+  fileUrl: string;
+  ceuRequirements?: CEUProgress;
+};
+
 
 export type LexiconCategory = 'data' | 'asset_mgmt' | 'climate_impacts' | 'resiliency' | 'regulations' | 'governance' | 'modeling' | 'operations' | 'ai_blockchain' | 'wastewater_treatment' | 'water_distribution' | 'utility_management';
 

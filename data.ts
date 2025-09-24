@@ -24,7 +24,56 @@ import {
   TopicSuggestion,
   BlogAuthor,
   BlogPost,
+  UserCredential,
 } from './types';
+
+const userCredentials_Alex: UserCredential[] = [
+  {
+    id: 'cred-001',
+    name: 'Professional Engineer (PE), Civil',
+    type: 'License',
+    issuingBody: 'Texas Board of Professional Engineers',
+    licenseNumber: '123456',
+    issueDate: '2018-06-15T00:00:00Z',
+    renewalDate: new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString(), // Expires in 2 months
+    fileUrl: '#',
+    ceuRequirements: {
+      required: 15,
+      completed: 12,
+      unitName: 'PDH'
+    }
+  },
+  {
+    id: 'cred-002',
+    name: 'Certified Floodplain Manager (CFM)',
+    type: 'Certification',
+    issuingBody: 'Association of State Floodplain Managers (ASFPM)',
+    issueDate: '2020-01-20T00:00:00Z',
+    renewalDate: '2026-01-20T00:00:00Z',
+    fileUrl: '#',
+    ceuRequirements: {
+      required: 16,
+      completed: 4,
+      // FIX: Changed "CEC" to "CEU" to match the allowed types in `CEUProgress`.
+      unitName: 'CEU'
+    }
+  },
+   {
+    id: 'cred-003',
+    name: 'Water Treatment Operator, Class A',
+    type: 'License',
+    issuingBody: 'TCEQ',
+    licenseNumber: 'WWTO-98765',
+    issueDate: '2016-09-01T00:00:00Z',
+    renewalDate: '2024-03-01T00:00:00Z', // Expired
+    fileUrl: '#',
+    ceuRequirements: {
+      required: 30,
+      completed: 30,
+      unitName: 'Credit'
+    }
+  }
+];
 
 export const users: User[] = [
   {
@@ -36,6 +85,7 @@ export const users: User[] = [
     xp: 7250,
     stats: { commentsPosted: 42, documentsUploaded: 5, insightfulMarks: 15 },
     badges: ['B01', 'B02', 'B04'],
+    credentials: userCredentials_Alex,
   },
   {
     id: 'user-456',
