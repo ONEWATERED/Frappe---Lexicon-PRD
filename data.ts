@@ -35,6 +35,9 @@ import {
   KnowledgeMapData,
   Conversation,
   PIPDocument,
+  Publication,
+  Patent,
+  ResearchProject,
 } from './types';
 
 // --- CAREER GOALS DATA ---
@@ -564,7 +567,40 @@ export const ecosystemEntities: EcosystemEntity[] = [
 // FIX: Completed the visitor log entry with missing properties to match the 'VisitorLog' type.
           { userId: 'user-789', firstVisit: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), lastVisit: new Date(Date.now() - 30 * 60 * 1000).toISOString(), totalVisits: 3, downloads: 1, views: 10 },
         ],
-    }
+    },
+    {
+        id: 'gov-001',
+        name: 'US Environmental Protection Agency',
+        logoUrl: 'https://logo.clearbit.com/epa.gov',
+        type: 'Government',
+        tagline: 'Protecting human health and the environment.',
+        location: 'Washington, D.C.',
+        domain: 'epa.gov',
+        isClaimed: true,
+        isFeatured: false,
+    },
+    {
+        id: 'con-001',
+        name: 'Carollo Engineers',
+        logoUrl: 'https://logo.clearbit.com/carollo.com',
+        type: 'Consultant',
+        tagline: 'Engineers...Working Wonders With Water®',
+        location: 'Walnut Creek, CA',
+        domain: 'carollo.com',
+        isClaimed: true,
+        isFeatured: false,
+    },
+    {
+        id: 'acad-001',
+        name: 'Stanford University',
+        logoUrl: 'https://logo.clearbit.com/stanford.edu',
+        type: 'Academia',
+        tagline: 'The wind of freedom blows.',
+        location: 'Stanford, CA',
+        domain: 'stanford.edu',
+        isClaimed: true,
+        isFeatured: false,
+    },
 ];
 
 // --- DROOBI TV DATA ---
@@ -625,19 +661,144 @@ export const communityEvents: CommunityEvent[] = [
 ];
 
 // --- RESEARCH HUB DATA ---
-export const researcherProfiles: ResearcherProfile[] = [];
-export const researchOpportunities: ResearchOpportunity[] = [];
+export const researcherProfiles: ResearcherProfile[] = [
+  {
+    id: 'res-001',
+    name: 'Dr. Kenji Tanaka',
+    avatarUrl: 'https://i.pravatar.cc/150?u=res-001',
+    title: 'PhD Candidate in Civil & Environmental Engineering',
+    university: 'Stanford University',
+    universityLogoUrl: 'https://logo.clearbit.com/stanford.edu',
+    bio: 'Kenji\'s research focuses on the application of machine learning and artificial intelligence to predict failures in urban water distribution networks. He is developing novel predictive models that leverage real-time sensor data, historical maintenance records, and environmental factors to help utilities proactively manage their aging infrastructure and reduce non-revenue water. His work aims to bridge the gap between advanced data science and practical utility operations.',
+    expertiseTags: ['Machine Learning', 'Hydraulic Modeling', 'Asset Management', 'Digital Twin', 'Predictive Maintenance'],
+    publications: [
+      { id: 'pub-001', title: 'A Bayesian Approach to Water Main Break Prediction Using Multi-Source Data', journal: 'Journal of Water Resources Planning and Management', year: 2023, url: '#', doi: '10.1061/(ASCE)WR.1943-5452.0001234' },
+      { id: 'pub-002', title: 'Integrating SCADA and AMI Data for Real-Time Anomaly Detection in Water Networks', journal: 'Water Research', year: 2024, url: '#', doi: '10.1016/j.watres.2024.120567' }
+    ],
+    patents: [
+      { id: 'pat-001', title: 'System and Method for Adaptive Hydraulic Model Calibration', patentNumber: 'US 11,234,567 B2', dateGranted: '2024-03-15T00:00:00Z', url: '#' }
+    ],
+    projects: [
+      { id: 'proj-res-001', title: 'Digital Twin for the City of Palo Alto Water System', description: 'Lead developer for the predictive analytics module of a comprehensive digital twin, focusing on pressure transient analysis and leak localization.', status: 'Ongoing' }
+    ],
+  },
+  {
+    id: 'res-002',
+    name: 'Dr. Lena Petrova',
+    avatarUrl: 'https://i.pravatar.cc/150?u=res-002',
+    title: 'Postdoctoral Researcher, Chemical Engineering',
+    university: 'University of Michigan',
+    universityLogoUrl: 'https://logo.clearbit.com/umich.edu',
+    bio: 'Dr. Petrova is a leading researcher in the field of environmental remediation, with a specific focus on the destruction of per- and polyfluoroalkyl substances (PFAS). Her work involves synthesizing and testing novel nanocomposite materials for enhanced adsorption and catalytic degradation of "forever chemicals" in drinking water sources. She is passionate about developing cost-effective and scalable treatment solutions to address widespread PFAS contamination.',
+    expertiseTags: ['PFAS Remediation', 'Advanced Oxidation Processes', 'Water Chemistry', 'Nanomaterials', 'Environmental Catalysis'],
+    publications: [
+      { id: 'pub-003', title: 'Graphene Oxide-Bismuth Ferrite Nanocomposites for PFOA Degradation via Piezocatalysis', journal: 'Environmental Science & Technology', year: 2023, url: '#', doi: '10.1021/acs.est.3c01234' },
+      { id: 'pub-004', title: 'A Critical Review of Current and Emerging Technologies for PFAS Treatment', journal: 'Chemical Engineering Journal', year: 2024, url: '#', doi: '10.1016/j.cej.2024.148910' }
+    ],
+    patents: [],
+    projects: [
+      { id: 'proj-res-002', title: 'Pilot-Scale Testing of a Novel Adsorbent for GenX Removal', description: 'Investigating the performance and lifecycle of a new adsorbent material under real-world water matrix conditions.', status: 'Ongoing' },
+      { id: 'proj-res-003', title: 'Electrochemical Oxidation of Short-Chain PFAS Compounds', description: 'A completed lab-scale study demonstrating high degradation efficiency for emerging PFAS contaminants.', status: 'Completed' }
+    ],
+  }
+];
+export const researchOpportunities: ResearchOpportunity[] = [
+  {
+    id: 'opp-001',
+    title: 'Predictive Analytics for Real-Time CSO Event Management',
+    submittedBy: users[0], // Alex Johnson
+    organization: ecosystemEntities.find(e => e.id === 'v001')!, // Xylem Inc.
+    timestamp: '2024-05-10T09:00:00Z',
+    problemStatement: 'Combined Sewer Overflows (CSOs) pose a significant environmental challenge for many municipalities. While real-time control (RTC) systems exist, they often rely on rule-based logic. We are seeking research into the development and validation of a machine learning model that can predict CSO events with higher accuracy and longer lead times by integrating diverse data sources (rainfall, flow, level sensors, and weather radar data).',
+    desiredOutcomes: 'A validated predictive model with documented performance metrics. A research paper suitable for publication in a peer-reviewed journal. A prototype dashboard for visualizing model outputs and predictions. Recommendations for sensor placement to optimize model accuracy.',
+    domain: 'modeling',
+    relatedDocuments: [],
+    interestedResearcherIds: ['res-001'],
+  },
+  {
+    id: 'opp-002',
+    title: 'Assessing the Efficacy of Nature-Based Solutions for Urban Stormwater Runoff',
+    submittedBy: users[2], // Sam Chen
+    organization: ecosystemEntities.find(e => e.id === 'gov-001')!, // EPA
+    timestamp: '2024-05-22T14:00:00Z',
+    problemStatement: 'Green infrastructure and nature-based solutions (e.g., bioswales, green roofs, permeable pavements) are increasingly being implemented for stormwater management. However, there is a need for standardized methodologies to quantify their long-term performance, cost-effectiveness, and co-benefits (e.g., urban heat island reduction, biodiversity) across different climatic and geological regions within the US.',
+    desiredOutcomes: 'A comprehensive framework for evaluating the multi-faceted performance of various nature-based solutions. A comparative analysis of at least three case studies in different US regions. A life-cycle cost analysis tool for utilities considering green infrastructure investments.',
+    domain: 'resiliency',
+    relatedDocuments: [],
+    interestedResearcherIds: [],
+  },
+  {
+    id: 'opp-003',
+    title: 'Development of a Cost-Benefit Analysis Framework for Direct Potable Reuse (DPR) Projects',
+    submittedBy: users[1], // Maria Garcia
+    organization: ecosystemEntities.find(e => e.id === 'con-001')!, // Carollo
+    timestamp: '2024-06-01T11:30:00Z',
+    problemStatement: 'Direct Potable Reuse (DPR) is a promising strategy for water supply resilience, but it faces hurdles related to public perception, regulatory approval, and economic feasibility. A standardized, transparent framework is needed to help utilities and stakeholders conduct a holistic cost-benefit analysis that includes not only capital and O&M costs but also quantifies social, environmental, and public health factors.',
+    desiredOutcomes: 'A publicly available, spreadsheet-based C-B analysis tool. A guidance document for implementing the framework, including best practices for stakeholder engagement. A report summarizing the framework\'s application to a hypothetical or real-world DPR project scenario.',
+    domain: 'governance',
+    relatedDocuments: [],
+    interestedResearcherIds: [],
+  }
+];
 export const topicSuggestions: TopicSuggestion[] = [];
 
 // --- INSIGHTS (BLOG) DATA ---
 export const blogAuthors: BlogAuthor[] = [
   { id: 'author-1', name: 'Dr. Eleanor Vance', avatarUrl: 'https://i.pravatar.cc/150?u=author-1', title: 'Lead Water Scientist, Hydro-Solutions.io', isGuest: false },
   { id: 'author-2', name: 'Alex Johnson', avatarUrl: 'https://i.pravatar.cc/150?u=user-123', title: 'Senior Specialist, oraKLES Member', isGuest: true },
+  { id: 'author-3', name: 'Sam Chen', avatarUrl: 'https://i.pravatar.cc/150?u=user-789', title: 'Utility Operator, City Water', isGuest: true },
 ];
 
 export const blogPosts: BlogPost[] = [
-  { id: 'post-1', title: 'The Digital Twin Revolution: More Than Just a Model', subtitle: 'How real-time, data-driven replicas of physical systems are transforming utility operations, planning, and resilience.', authorId: 'author-1', publishDate: '2024-05-15T00:00:00Z', readTimeMinutes: 8, heroImageUrl: 'https://picsum.photos/seed/post-1/1200/630', content: 'Digital twins are rapidly moving from a buzzword to a fundamental tool for modern water utilities. They provide a dynamic, virtual representation of a physical asset or system, continuously updated with real-time data from sensors. This allows operators to not only see what is happening, but to simulate what *will* happen under different conditions.\n\nFor example, a utility can use a digital twin of its distribution network to predict the impact of a mainline break, optimize pumping schedules to reduce energy costs, or test the resilience of the system against climate change-induced drought scenarios. This proactive approach marks a significant shift from the reactive operational models of the past.', claps: 128, comments: [], vendorId: 'v003' },
+  { id: 'post-1', title: 'The Digital Twin Revolution: More Than Just a Model', subtitle: 'How real-time, data-driven replicas of physical systems are transforming utility operations, planning, and resilience.', authorId: 'author-1', publishDate: '2024-05-15T00:00:00Z', readTimeMinutes: 8, heroImageUrl: 'https://picsum.photos/seed/post-1/1200/630', content: 'Digital twins are rapidly moving from a buzzword to a fundamental tool for modern water utilities. They provide a dynamic, virtual representation of a physical asset or system, continuously updated with real-time data from sensors. This allows operators to not only see what is happening, but to simulate what *will* happen under different conditions.\n\nFor example, a utility can use a digital twin of its distribution network to predict the impact of a mainline break, optimize pumping schedules to reduce energy costs, or test the resilience of the system against climate change-induced drought scenarios. This proactive approach marks a significant shift from the reactive operational models of the past.', claps: 128, comments: [
+    { user: users[1], text: "Great overview. We're currently in the pilot phase of our own digital twin implementation and the benefits are already becoming clear.", timestamp: "2024-05-16T10:00:00Z" }
+  ], vendorId: 'v003' },
+  { 
+    id: 'post-2', 
+    title: 'Navigating the PFAS Maze: A Guide for Utilities', 
+    subtitle: "From detection to destruction, we break down the challenges and emerging solutions for tackling 'forever chemicals' in our water supplies.", 
+    authorId: 'author-1', 
+    publishDate: '2024-05-01T00:00:00Z', 
+    readTimeMinutes: 10, 
+    heroImageUrl: 'https://picsum.photos/seed/post-2/1200/630', 
+    content: "Per- and polyfluoroalkyl substances (PFAS) represent one of the most significant challenges facing the water industry today. Their persistence in the environment and potential health risks have led to increasingly stringent regulations, forcing utilities to act.\n\nThe first step is robust monitoring and detection, which can be complex due to the sheer number of PFAS compounds. Once identified, treatment options range from established methods like Granular Activated Carbon (GAC) and Ion Exchange (IX) to emerging destructive technologies such as electrochemical oxidation and supercritical water oxidation. Each approach has its own set of trade-offs in terms of cost, effectiveness for different chain lengths, and operational complexity. Choosing the right strategy requires a deep understanding of the local water chemistry and regulatory landscape.", 
+    claps: 256, 
+    comments: [
+        { user: users[0], text: "This is incredibly timely. We're evaluating GAC vs. IX right now and this provides some great context.", timestamp: "2024-05-02T14:00:00Z" },
+        { user: users[2], text: "The cost of these new treatment systems is a major hurdle for smaller utilities. Are there any resources on funding or grants available?", timestamp: "2024-05-03T09:00:00Z" }
+    ], 
+    vendorId: 'v001' 
+  },
+  { 
+    id: 'post-3', 
+    title: "From Technician to Maverick: Charting Your Course in the Water Sector", 
+    subtitle: "A veteran utility operator shares hard-won lessons on skill development, mentorship, and the mindset required to build a fulfilling and impactful career in water.", 
+    authorId: 'author-3', 
+    publishDate: '2024-05-20T00:00:00Z', 
+    readTimeMinutes: 7, 
+    heroImageUrl: 'https://picsum.photos/seed/post-3/1200/630', 
+    content: "The path to becoming a leader in the water industry isn't just about accumulating years of service; it's about intentional growth. It starts with mastering the fundamentals and obtaining the necessary certifications for your role. But don't stop there.\n\nEmbrace technology. The utility of the future is digital, and understanding SCADA, GIS, and asset management software is no longer optional. Seek out mentors—platforms like oraKLES connect you with seasoned professionals who have walked the path before. Their guidance is invaluable. Finally, never stop being curious. Attend webinars, read industry publications, and engage in community discussions. A career in water is a commitment to lifelong learning, and the opportunities for those who embrace it are limitless.", 
+    claps: 95, 
+    comments: [
+        { user: users[0], text: "Fantastic advice! Finding a good mentor made all the difference for me early in my career.", timestamp: "2024-05-21T11:00:00Z" }
+    ], 
+    vendorId: undefined
+  },
+  { 
+    id: 'post-4', 
+    title: "Beyond the Buzzword: What 'Digital Water' Actually Means for Your Utility", 
+    subtitle: "Cut through the noise and discover the practical, step-by-step approach to digital transformation that delivers real ROI and operational resilience.", 
+    authorId: 'author-2', 
+    publishDate: '2024-04-20T00:00:00Z', 
+    readTimeMinutes: 9, 
+    heroImageUrl: 'https://picsum.photos/seed/post-4/1200/630', 
+    content: "'Digital Water' is more than just a marketing term; it's a fundamental shift in how we manage water systems. At its core, it's about using data to make smarter, faster, and more predictive decisions. This journey often begins with foundational technologies like SCADA for process control and AMI for accurate billing and consumption data.\n\nThe next layer involves integrating this data. When your AMI system can inform your hydraulic model, or your SCADA alarms can automatically generate work orders in your asset management system, you start breaking down departmental silos. The ultimate goal is a holistic view of your entire operation, often visualized through a Digital Twin. This allows you to move from a reactive state (fixing breaks) to a proactive one (preventing them), saving money, reducing water loss, and improving service for your community.", 
+    claps: 182, 
+    comments: [], 
+    vendorId: 'v001' 
+  },
 ];
+
 
 // --- PIP DATA ---
 export const pipDocuments: PIPDocument[] = [
