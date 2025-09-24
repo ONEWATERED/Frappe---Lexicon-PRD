@@ -407,6 +407,11 @@ export const InboxIcon: React.FC<IconProps> = ({ className }) => (
     </svg>
 );
 
+export const ArchiveBoxIcon: React.FC<IconProps> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.383-.03.766-.03 1.149 0 1.13.094 1.976 1.057 1.976 2.192V7.5M8.25 7.5h7.5m-7.5 0-1.125 1.125a1.5 1.5 0 0 0-2.121 2.121L6.75 12.75m.75-1.5-2.25 2.25a1.5 1.5 0 0 1-2.121 0l-.879-.879m12.75 0-2.25-2.25a1.5 1.5 0 0 0-2.121 0l-.879.879M16.5 7.5l-1.125 1.125a1.5 1.5 0 0 1-2.121 2.121L12.75 12.75m.75-1.5 2.25 2.25a1.5 1.5 0 0 0 2.121 0l.879-.879M3 14.25a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V7.5a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v6.75Z" />
+    </svg>
+);
 
 const iconMap: Record<IconName, React.FC<IconProps>> = {
     AcademicCapIcon,

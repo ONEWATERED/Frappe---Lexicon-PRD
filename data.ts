@@ -34,6 +34,7 @@ import {
   LearningActivity,
   KnowledgeMapData,
   Conversation,
+  PIPDocument,
 } from './types';
 
 // --- CAREER GOALS DATA ---
@@ -636,6 +637,51 @@ export const blogAuthors: BlogAuthor[] = [
 
 export const blogPosts: BlogPost[] = [
   { id: 'post-1', title: 'The Digital Twin Revolution: More Than Just a Model', subtitle: 'How real-time, data-driven replicas of physical systems are transforming utility operations, planning, and resilience.', authorId: 'author-1', publishDate: '2024-05-15T00:00:00Z', readTimeMinutes: 8, heroImageUrl: 'https://picsum.photos/seed/post-1/1200/630', content: 'Digital twins are rapidly moving from a buzzword to a fundamental tool for modern water utilities. They provide a dynamic, virtual representation of a physical asset or system, continuously updated with real-time data from sensors. This allows operators to not only see what is happening, but to simulate what *will* happen under different conditions.\n\nFor example, a utility can use a digital twin of its distribution network to predict the impact of a mainline break, optimize pumping schedules to reduce energy costs, or test the resilience of the system against climate change-induced drought scenarios. This proactive approach marks a significant shift from the reactive operational models of the past.', claps: 128, comments: [], vendorId: 'v003' },
+];
+
+// --- PIP DATA ---
+export const pipDocuments: PIPDocument[] = [
+    {
+        id: 'pip-doc-001',
+        title: 'Water Research Foundation Report on Lead and Copper Rule Revisions',
+        description: 'A comprehensive analysis of the EPA\'s LCR revisions and their expected impact on public water systems across the United States.',
+        fileUrl: '#',
+        fileType: 'Report',
+        submittedByUserId: 'user-456',
+        submittedByEntityId: 'v001',
+        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+        region: 'United States',
+        tags: ['Regulations', 'Lead and Copper Rule', 'Compliance'],
+        viewCount: 152,
+        downloadCount: 45
+    },
+    {
+        id: 'pip-doc-002',
+        title: 'Case Study: City of Austin\'s Advanced Metering Infrastructure Rollout',
+        description: 'Details the 10-year implementation plan, challenges, and outcomes of Austin Water\'s city-wide AMI deployment, resulting in a 12% reduction in non-revenue water.',
+        fileUrl: '#',
+        fileType: 'Case Study',
+        submittedByUserId: 'user-123',
+        submittedByEntityId: 'v001',
+        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+        region: 'United States',
+        tags: ['AMI', 'Non-Revenue Water', 'Smart Water'],
+        viewCount: 388,
+        downloadCount: 120
+    },
+    {
+        id: 'pip-doc-003',
+        title: 'Innovations in Direct Potable Reuse: A National Perspective',
+        description: 'A peer-reviewed publication exploring the latest technologies and regulatory hurdles for direct potable reuse projects in the US.',
+        fileUrl: '#',
+        fileType: 'Publication',
+        submittedByUserId: 'user-789',
+        timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+        region: 'United States',
+        tags: ['Water Reuse', 'DPR', 'Treatment'],
+        viewCount: 210,
+        downloadCount: 78
+    }
 ];
 
 export const vendors: Vendor[] = ecosystemEntities.filter(e => e.type === 'Vendor') as Vendor[];

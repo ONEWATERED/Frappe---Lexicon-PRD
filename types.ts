@@ -620,6 +620,21 @@ export type BlogPost = {
   vendorId?: string;
 };
 
+// --- PUBLIC INFORMATION PROTOCOL (PIP) TYPES ---
+export type PIPDocument = {
+  id: string;
+  title: string;
+  description: string;
+  fileUrl: string;
+  fileType: 'Report' | 'Publication' | 'Case Study' | 'Whitepaper' | 'Dataset';
+  submittedByUserId: string;
+  submittedByEntityId?: string; // Optional if submitted by an individual not tied to a company
+  timestamp: string; // ISO Date
+  region: 'United States';
+  tags: string[];
+  viewCount: number;
+  downloadCount: number;
+};
 
 export interface AuthContextType {
   currentUser: User | null;
@@ -649,4 +664,5 @@ export interface AuthContextType {
   careerPathways: CareerPathway[];
   careerGoals: CareerGoal[];
   conversations: Conversation[];
+  pipDocuments: PIPDocument[];
 }

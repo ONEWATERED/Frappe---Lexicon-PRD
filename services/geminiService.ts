@@ -1,5 +1,4 @@
-
-
+// FIX: Use GoogleGenAI instead of the deprecated GoogleGenerativeAI.
 import { GoogleGenAI } from "@google/genai";
 
 let ai: GoogleGenAI | null = null;
@@ -10,6 +9,7 @@ const getAI = () => {
             console.error("API_KEY environment variable not set.");
             throw new Error("API_KEY environment variable not set.");
         }
+        // FIX: Initialize with an object containing the apiKey property.
         ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     }
     return ai;
@@ -27,12 +27,13 @@ export const explainTermSimply = async (term: string, technicalDefinition: strin
 
     Simple Explanation:`;
 
-    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    // FIX: Refactored to use ai.models.generateContent directly with the correct parameters.
     const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
     return response.text;
   } catch (error) {
     console.error("Error generating simple explanation:", error);
@@ -52,12 +53,13 @@ export const generateRealWorldExample = async (term: string, definition: string)
 
     Real-World Example:`;
 
-    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    // FIX: Refactored to use ai.models.generateContent directly with the correct parameters.
     const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
     
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
     return response.text;
   } catch (error) {
     console.error("Error generating real-world example:", error);
@@ -82,12 +84,13 @@ export const getAICoachResponse = async (cardFront: string, cardBack: string, qu
     Your task is to answer their question concisely and accurately, relating it back to the flashcard's topic. 
     If the question is unrelated, gently guide them back to the topic. Be encouraging and helpful.`;
 
-    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    // FIX: Refactored to use ai.models.generateContent directly with the correct parameters.
     const response = await genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
     });
 
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
     return response.text;
   } catch (error) {
     console.error("Error getting AI Coach response:", error);
@@ -110,12 +113,13 @@ export const getHardeepVoiceResponse = async (userQuery: string): Promise<string
     
     Hardeep's response:`;
 
-    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
+    // FIX: Refactored to use ai.models.generateContent directly with the correct parameters.
     const response = await genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
     });
 
+    // FIX: Access the .text property from the response object as recommended by the SDK guidelines.
     return response.text;
   } catch (error) {
     console.error("Error getting Hardeep voice response:", error);
