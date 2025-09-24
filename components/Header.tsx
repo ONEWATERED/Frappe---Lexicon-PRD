@@ -139,17 +139,13 @@ export const Header: React.FC = () => {
               <div className="ml-10 flex items-baseline space-x-2">
                 <DropdownNav title="Learn & Train">
                     <DropdownLink to="/">Lexicon</DropdownLink>
-                    <DropdownLink to="/academy">Academy</DropdownLink>
-                    <DropdownLink to="/insights">Insights</DropdownLink>
-                </DropdownNav>
-                <DropdownNav title="Operate & Interact">
-                    <DropdownLink to="/manuals">Manuals</DropdownLink>
-                    <DropdownLink to="/ai-agents">AI Co-pilots</DropdownLink>
+                    <DropdownLink to="/academy">Academy (LMS)</DropdownLink>
+                    <DropdownLink to="/insights">Insights (Blogs)</DropdownLink>
                 </DropdownNav>
                 <DropdownNav title="Engage & Connect">
-                    <DropdownLink to="/community">Community</DropdownLink>
-                    <DropdownLink to="/droobi-tv">Droobi TV</DropdownLink>
-                    <DropdownLink to="/ecosystem">Partners</DropdownLink>
+                    <DropdownLink to="/community">Community (Reddit)</DropdownLink>
+                    <DropdownLink to="/droobi-tv">Droobi TV (Netflix)</DropdownLink>
+                    <DropdownLink to="/ecosystem">Partners (Vendor)</DropdownLink>
                     <DropdownLink to="/jobs">
                         Job Board
                         <StarIcon className="w-4 h-4 text-yellow-400" />
@@ -160,6 +156,8 @@ export const Header: React.FC = () => {
                     <DropdownLink to="/research">Research</DropdownLink>
                 </DropdownNav>
                 <DropdownNav title="More">
+                    <DropdownLink to="/manuals">Manuals</DropdownLink>
+                    <DropdownLink to="/ai-agents">AI Co-pilots</DropdownLink>
                     <DropdownLink to="/community/messages">Messages</DropdownLink>
                     <DropdownLink to="/droobi-tv/sessions">Live Sessions</DropdownLink>
                 </DropdownNav>
@@ -212,17 +210,13 @@ export const Header: React.FC = () => {
              </div>
             <MobileDropdownNav title="Learn & Train">
                 <NavItem to="/" isMobile>Lexicon</NavItem>
-                <NavItem to="/academy" isMobile>Academy</NavItem>
-                <NavItem to="/insights" isMobile>Insights</NavItem>
-            </MobileDropdownNav>
-             <MobileDropdownNav title="Operate & Interact">
-                <NavItem to="/manuals" isMobile>Manuals</NavItem>
-                <NavItem to="/ai-agents" isMobile>AI Co-pilots</NavItem>
+                <NavItem to="/academy" isMobile>Academy (LMS)</NavItem>
+                <NavItem to="/insights" isMobile>Insights (Blogs)</NavItem>
             </MobileDropdownNav>
              <MobileDropdownNav title="Engage & Connect">
-                <NavItem to="/community" isMobile>Community</NavItem>
-                <NavItem to="/droobi-tv" isMobile>Droobi TV</NavItem>
-                <NavItem to="/ecosystem" isMobile>Partners</NavItem>
+                <NavItem to="/community" isMobile>Community (Reddit)</NavItem>
+                <NavItem to="/droobi-tv" isMobile>Droobi TV (Netflix)</NavItem>
+                <NavItem to="/ecosystem" isMobile>Partners (Vendor)</NavItem>
                 <NavItem to="/jobs" isMobile>
                   Job Board
                   <StarIcon className="w-4 h-4 text-yellow-400" />
@@ -233,6 +227,8 @@ export const Header: React.FC = () => {
                 <NavItem to="/research" isMobile>Research</NavItem>
             </MobileDropdownNav>
             <MobileDropdownNav title="More">
+                <NavItem to="/manuals" isMobile>Manuals</NavItem>
+                <NavItem to="/ai-agents" isMobile>AI Co-pilots</NavItem>
                 <NavItem to="/community/messages" isMobile>Messages</NavItem>
                 <NavItem to="/droobi-tv/sessions" isMobile>Live Sessions</NavItem>
             </MobileDropdownNav>

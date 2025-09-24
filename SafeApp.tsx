@@ -1,6 +1,11 @@
 
 
 
+
+
+
+
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -11,8 +16,7 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
-// FIX: Corrected the malformed class definition. The ErrorBoundary must extend React.Component
-// to be a valid class component and have access to `this.props` and `this.setState`.
+// FIX: Corrected the ErrorBoundary to extend React.Component, making it a valid class component with access to state and props.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
