@@ -1,3 +1,4 @@
+
 import { IconType } from 'react-icons';
 
 export type User = {
@@ -21,6 +22,8 @@ export type User = {
   credentials?: UserCredential[];
   careerGoals?: CareerGoal[];
   activePathwayId?: string;
+  // FIX: Added missing careerPathways property to User type.
+  careerPathways?: CareerPathway[];
   projectPortfolio?: ProjectPortfolioItem[];
   skills?: UserSkill[];
   resumeVault?: ResumeDocument[];
@@ -120,7 +123,7 @@ export type CEUProgress = {
 };
 
 export type UserCredential = {
-  id: string;
+  id:string;
   name: string;
   type: 'License' | 'Certification' | 'Accreditation';
   issuingBody: string;
@@ -502,6 +505,9 @@ export type CommunityEvent = {
   location: string;
   url?: string;
   attendeeIds: string[];
+  registeredUserIds: string[];
+  isLive: boolean;
+  joinUrl?: string;
 };
 
 export type DirectMessage = {

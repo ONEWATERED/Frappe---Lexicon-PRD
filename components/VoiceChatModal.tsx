@@ -12,12 +12,7 @@ interface ChatMessage {
     text: string;
 }
 
-// FIX: Cast window to 'any' to access non-standard SpeechRecognition properties, resolving TypeScript errors.
 const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-if (!SpeechRecognition) {
-    console.error("Browser does not support SpeechRecognition.");
-}
-const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
 const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     const [isListening, setIsListening] = useState(false);
@@ -25,6 +20,8 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const recognitionRef = useRef<any>(null);
+
 
     const processTranscript = async (transcript: string) => {
         if (!transcript.trim()) return;
@@ -46,6 +43,9 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     };
 
     const speak = (text: string) => {
+        // Cancel any previous speech
+        window.speechSynthesis.cancel();
+        
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.onstart = () => setIsSpeaking(true);
         utterance.onend = () => setIsSpeaking(false);
@@ -53,26 +53,31 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     };
 
     useEffect(() => {
-        if (!recognition) return;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
 
-        recognition.continuous = false;
-        recognition.lang = 'en-US';
-        recognition.interimResults = false;
-
-        recognition.onresult = (event: any) => {
-            const transcript = event.results[0][0].transcript;
-            processTranscript(transcript);
-        };
-        recognition.onerror = (event: any) => {
-            console.error('Speech recognition error:', event.error);
-            setIsListening(false);
-        };
-        recognition.onend = () => {
-            setIsListening(false);
-        };
+            recognition.onresult = (event: any) => {
+                const transcript = event.results[0][0].transcript;
+                processTranscript(transcript);
+            };
+            recognition.onerror = (event: any) => {
+                console.error('Speech recognition error:', event.error);
+                setIsListening(false);
+            };
+            recognition.onend = () => {
+                setIsListening(false);
+            };
+            recognitionRef.current = recognition;
+        } else {
+             console.error("Browser does not support SpeechRecognition.");
+        }
 
         return () => {
-            recognition.stop();
+            recognitionRef.current?.stop();
+            window.speechSynthesis.cancel();
         };
     }, []);
 
@@ -84,7 +89,7 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     useEffect(() => {
         if (!isOpen) {
             window.speechSynthesis.cancel();
-            if(recognition) recognition.stop();
+            recognitionRef.current?.stop();
             setIsListening(false);
             setIsSpeaking(false);
             setIsThinking(false);
@@ -92,17 +97,17 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     }, [isOpen]);
 
     const handleMicClick = () => {
+        const recognition = recognitionRef.current;
+        if (!recognition) return;
+
         if (isListening) {
-            recognition?.stop();
+            recognition.stop();
         } else {
-// FIX: Implemented logic to start speech recognition.
-            if (recognition) {
-                try {
-                    recognition.start();
-                    setIsListening(true);
-                } catch (error) {
-                    console.error("Speech recognition could not start: ", error);
-                }
+            try {
+                recognition.start();
+                setIsListening(true);
+            } catch (error) {
+                console.error("Speech recognition could not start: ", error);
             }
         }
     };
@@ -142,7 +147,7 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
                 <footer className="p-4 border-t border-slate-700 flex flex-col items-center justify-center">
                     <button 
                         onClick={handleMicClick}
-                        disabled={!recognition}
+                        disabled={!recognitionRef.current}
                         className={`w-20 h-20 rounded-full flex items-center justify-center transition-colors duration-300 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-blue-500 hover:bg-blue-600'}`}
                     >
                         <MicrophoneIcon className="w-10 h-10 text-white"/>
@@ -156,5 +161,4 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
     );
 };
 
-// FIX: Added default export to resolve module import error.
 export default VoiceChatModal;

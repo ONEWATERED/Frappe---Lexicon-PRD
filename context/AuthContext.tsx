@@ -75,7 +75,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <AuthContext.Provider value={value}>
       {children}
-{/* FIX: Corrected typo in the closing tag for AuthContext.Provider. */}
     </AuthContext.Provider>
   );
 };

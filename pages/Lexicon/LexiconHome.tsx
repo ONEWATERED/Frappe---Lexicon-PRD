@@ -1,127 +1,33 @@
 import React, { useMemo, useState, useEffect, FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LexiconTerm, lexiconCategoryNames, User } from '../../types';
-import { ArrowRightIcon, BuildingOffice2Icon, StarIcon, ClockIcon, ArrowUpTrayIcon, EyeIcon, TrophyIcon } from '../../components/icons/Icons';
+import { LexiconTerm, LexiconCategory, lexiconCategoryNames, User } from '../../types';
+import { 
+    ArrowRightIcon, 
+    BuildingOffice2Icon, 
+    StarIcon, 
+    TrophyIcon, 
+    SearchIcon,
+    FilterIcon,
+    ViewGridIcon,
+    ViewListIcon,
+    LightBulbIcon
+} from '../../components/icons/Icons';
 
-const useRecentlyViewed = () => {
-  const [viewed, setViewed] = useState<string[]>([]);
-  
-  useEffect(() => {
-    const stored = localStorage.getItem('recentlyViewed');
-    if (stored) {
-      setViewed(JSON.parse(stored));
-    }
-  }, []);
-
-  return viewed;
-};
-
-
-const TermCard: React.FC<{ term: LexiconTerm }> = ({ term }) => (
-    <div className="bg-slate-800 p-4 sm:p-6 rounded-lg shadow-lg border border-slate-700 hover:border-blue-400 transition-all duration-300 h-full flex flex-col group">
-      <div className="flex justify-between items-start">
-        <span className="text-xs font-semibold uppercase text-blue-400">{lexiconCategoryNames[term.category]}</span>
-        {term.isPremium && (
-          <div className="flex items-center gap-1 px-2 py-0.5 bg-purple-600/20 text-purple-300 rounded-full text-xs font-bold border border-purple-500/40">
-            <StarIcon className="w-3 h-3" />
-            Premium
-          </div>
-        )}
-      </div>
-      <h3 className="text-lg sm:text-xl font-bold text-slate-100 mt-2">{term.term}</h3>
-      <p className="text-slate-400 mt-2 text-sm flex-grow">{term.plainLanguageDefinition}</p>
-      
-      <div className="mt-4">
-        {term.linkedVendorIds && term.linkedVendorIds.length > 0 && (
-            <div className="flex items-center text-sm text-slate-400">
-                <BuildingOffice2Icon className="w-4 h-4 mr-2" />
-                {term.linkedVendorIds.length} Vendor{term.linkedVendorIds.length > 1 ? 's' : ''}
-            </div>
-        )}
-      </div>
-      
-      <Link to={`/term/${term.id}`} className="flex items-center justify-between text-blue-400 mt-4 font-semibold text-sm">
-        <span>View Details</span>
-        <ArrowRightIcon className="w-4 h-4 transform transition-transform group-hover:translate-x-1" />
-      </Link>
+const TermOfTheDay: React.FC<{ term: LexiconTerm }> = ({ term }) => (
+    <div className="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
+        <h3 className="flex items-center gap-2 font-bold text-white"><LightBulbIcon className="w-5 h-5 text-yellow-400"/>Term of the Day</h3>
+        <div className="mt-4">
+            <span className="text-xs font-semibold uppercase text-blue-400">{lexiconCategoryNames[term.category]}</span>
+            <h4 className="text-lg font-bold text-slate-100 mt-1">{term.term}</h4>
+            <p className="text-sm text-slate-400 mt-2">{term.plainLanguageDefinition}</p>
+            <Link to={`/term/${term.id}`} className="flex items-center justify-between text-blue-400 mt-4 font-semibold text-sm">
+                <span>Learn More</span>
+                <ArrowRightIcon className="w-4 h-4" />
+            </Link>
+        </div>
     </div>
 );
-
-const TrendingCarousel: React.FC = () => {
-    const { terms } = useAuth();
-    const trendingTerms = useMemo(() => {
-        const mostViewed = [...terms].sort((a,b) => b.viewCount - a.viewCount).slice(0, 3);
-        const mostDiscussed = [...terms].sort((a,b) => (b.comments?.length || 0) - (a.comments?.length || 0)).slice(0, 3);
-        const newlyAdded = terms.slice(0, 3);
-        
-        const combined = [...mostViewed, ...mostDiscussed, ...newlyAdded];
-        const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
-        
-        return unique.slice(0, 8);
-    }, [terms]);
-
-    return (
-        <div className="mt-12">
-            <h2 className="text-2xl font-bold text-white mb-4">Trending & Popular Terms</h2>
-            <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 -mx-4 px-4">
-                {trendingTerms.map(term => (
-                    <div key={term.id} className="w-72 sm:w-80 flex-shrink-0">
-                        <TermCard term={term} />
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-
-const PersonalDashboard: React.FC = () => {
-    const { currentUser, terms } = useAuth();
-    const recentlyViewedIds = useRecentlyViewed();
-    const recentlyViewedTerms = useMemo(() => {
-        return recentlyViewedIds.map(id => terms.find(t => t.id === id)).filter(Boolean) as LexiconTerm[];
-    }, [recentlyViewedIds, terms]);
-
-    const termsToExplore = useMemo(() => {
-        if (recentlyViewedTerms.length === 0) return terms.slice(0, 3);
-        const viewedCategories = new Set(recentlyViewedTerms.map(t => t.category));
-        return terms.filter(t => !recentlyViewedIds.includes(t.id) && viewedCategories.has(t.category)).slice(0, 3);
-    }, [recentlyViewedTerms, terms, recentlyViewedIds]);
-    
-    if (!currentUser) return null;
-
-    return (
-        <div className="mt-12 bg-slate-800/50 p-6 rounded-lg border border-slate-700">
-            <h2 className="font-bold text-white text-xl">Welcome back, {currentUser.name.split(' ')[0]}!</h2>
-            <div className="mt-4 grid md:grid-cols-3 gap-6">
-                <div>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-300"><ClockIcon className="w-4 h-4"/>Recently Viewed</h3>
-                    <div className="mt-2 space-y-2">
-                        {recentlyViewedTerms.slice(0,3).map(term => (
-                            <Link key={term.id} to={`/term/${term.id}`} className="block text-sm text-blue-400 hover:underline">{term.term}</Link>
-                        ))}
-                    </div>
-                </div>
-                <div>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-300"><ArrowUpTrayIcon className="w-4 h-4"/>My Contributions</h3>
-                     <div className="mt-2 space-y-1 text-sm text-slate-400">
-                        <p>Comments Posted: {currentUser.stats.commentsPosted}</p>
-                        <p>Documents Uploaded: {currentUser.stats.documentsUploaded}</p>
-                    </div>
-                </div>
-                 <div>
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-300"><EyeIcon className="w-4 h-4"/>Terms to Explore</h3>
-                    <div className="mt-2 space-y-2">
-                        {termsToExplore.map(term => (
-                           <Link key={term.id} to={`/term/${term.id}`} className="block text-sm text-blue-400 hover:underline">{term.term}</Link>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 const Leaderboard: React.FC = () => {
     const { getAllUsers } = useAuth();
@@ -150,37 +56,105 @@ const Leaderboard: React.FC = () => {
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
+
+const TermCard: React.FC<{ term: LexiconTerm }> = ({ term }) => (
+    <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 hover:border-blue-500 transition-all duration-300 h-full flex flex-col group">
+      <div className="flex justify-between items-start">
+        <span className="text-xs font-semibold uppercase text-blue-400">{lexiconCategoryNames[term.category]}</span>
+        {term.isPremium && (
+          <div className="flex items-center gap-1 px-2 py-0.5 bg-purple-600/20 text-purple-300 rounded-full text-xs font-bold border border-purple-500/40">
+            <StarIcon className="w-3 h-3" />
+            Premium
+          </div>
+        )}
+      </div>
+      <h3 className="text-xl font-bold text-slate-100 mt-2">{term.term}</h3>
+      <p className="text-slate-400 mt-2 text-sm flex-grow line-clamp-3">{term.plainLanguageDefinition}</p>
+      <Link to={`/term/${term.id}`} className="flex items-center justify-between text-blue-400 mt-4 font-semibold text-sm">
+        <span>View Details</span>
+        <ArrowRightIcon className="w-4 h-4 transform transition-transform group-hover:translate-x-1" />
+      </Link>
+    </div>
+);
+
+const TermRow: React.FC<{ term: LexiconTerm }> = ({ term }) => (
+    <Link to={`/term/${term.id}`} className="flex items-center justify-between p-4 rounded-lg hover:bg-slate-800 transition-colors group">
+        <div className="flex-grow">
+            <h3 className="font-bold text-slate-100 group-hover:text-blue-400">{term.term}</h3>
+            <p className="text-sm text-slate-400 line-clamp-1">{term.plainLanguageDefinition}</p>
+        </div>
+        <div className="flex-shrink-0 ml-4 text-right">
+             <span className="text-xs font-semibold uppercase text-blue-400">{lexiconCategoryNames[term.category]}</span>
+        </div>
+    </Link>
+);
+
+
+const Pagination: React.FC<{ currentPage: number; totalPages: number; onPageChange: (page: number) => void }> = ({ currentPage, totalPages, onPageChange }) => {
+    const pageNumbers = [];
+    // Logic to create page numbers array (e.g., [1, '...', 4, 5, 6, '...', 10])
+    // For simplicity, we'll just show prev/next and current page for now.
+    
+    if (totalPages <= 1) return null;
+
+    return (
+        <div className="flex items-center justify-center gap-4 mt-8">
+            <button
+                onClick={() => onPageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-slate-700 text-sm font-semibold rounded-md disabled:opacity-50 hover:bg-slate-600"
+            >
+                Previous
+            </button>
+            <span className="text-sm font-semibold text-slate-400">
+                Page {currentPage} of {totalPages}
+            </span>
+            <button
+                onClick={() => onPageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-slate-700 text-sm font-semibold rounded-md disabled:opacity-50 hover:bg-slate-600"
+            >
+                Next
+            </button>
+        </div>
+    );
+};
+
+const TERMS_PER_PAGE = 24;
 
 const LexiconHome: React.FC = () => {
-  const { terms, currentUser } = useAuth();
+  const { terms } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  
+  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [selectedCategories, setSelectedCategories] = useState<LexiconCategory[]>([]);
   const [activeLetter, setActiveLetter] = useState('All');
-  const query = searchParams.get('q')?.toLowerCase() || '';
-  const [inputValue, setInputValue] = useState(query);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    setInputValue(query);
-  }, [query]);
+  const termOfTheDay = useMemo(() => terms[Math.floor(Math.random() * terms.length)], [terms]);
 
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault();
-    setSearchParams(inputValue ? { q: inputValue } : {});
+  const handleCategoryToggle = (category: LexiconCategory) => {
+    setSelectedCategories(prev =>
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
+    );
   };
 
   const alphabet = ['All', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
 
   const filteredTerms = useMemo(() => {
+    setCurrentPage(1); // Reset page on filter change
     let results = terms;
+    const lowerCaseQuery = query.toLowerCase();
 
-    if (query) {
-      results = results.filter(
-        (term) =>
-          term.term.toLowerCase().includes(query) ||
-          term.plainLanguageDefinition.toLowerCase().includes(query) ||
-          term.technicalDefinition.toLowerCase().includes(query)
-      );
+    if (lowerCaseQuery) {
+      results = results.filter(term => term.term.toLowerCase().includes(lowerCaseQuery));
+    }
+    
+    if (selectedCategories.length > 0) {
+        results = results.filter(term => selectedCategories.includes(term.category));
     }
     
     if (activeLetter !== 'All') {
@@ -188,83 +162,112 @@ const LexiconHome: React.FC = () => {
     }
     
     return results;
-  }, [terms, query, activeLetter]);
+  }, [terms, query, selectedCategories, activeLetter]);
+
+  const totalPages = Math.ceil(filteredTerms.length / TERMS_PER_PAGE);
+  const paginatedTerms = useMemo(() => {
+    const start = (currentPage - 1) * TERMS_PER_PAGE;
+    const end = start + TERMS_PER_PAGE;
+    return filteredTerms.slice(start, end);
+  }, [filteredTerms, currentPage]);
+
+  const handleSearchSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setSearchParams(query ? { q: query } : {});
+  };
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div className="text-center">
-        <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">The Living Lexicon</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
-          The semantic backbone for the public infrastructure sector.
-        </p>
+    <div className="bg-slate-900 min-h-screen">
+      <div className="text-center py-16 sm:py-24 px-4">
+        <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-6xl">The Living Lexicon</h1>
+        <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-400">The semantic backbone for the public infrastructure sector.</p>
+        <form onSubmit={handleSearchSubmit} className="mt-8 max-w-xl mx-auto">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <SearchIcon className="h-5 w-5 text-slate-400" />
+            </div>
+            <input 
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search 500 terms..." 
+                className="w-full bg-slate-800/70 border border-slate-700 text-white placeholder-slate-400 px-4 py-3 pl-12 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </form>
       </div>
 
-      <TrendingCarousel />
-      
-      <div className="mt-12 grid lg:grid-cols-3 gap-8">
-        <main className="lg:col-span-2">
-            {currentUser ? <PersonalDashboard /> : (
-                 <div className="mt-12 grid md:grid-cols-2 gap-8">
-                    <div className="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
-                        <h2 className="font-bold text-white">Search Lexicon & Industry Partners</h2>
-                        <p className="text-sm text-slate-400 mt-1">Find terms, definitions, vendors, and more.</p>
-                        <form onSubmit={handleSearch} className="mt-4">
-                            <input 
-                            type="search"
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            placeholder="e.g., 'Non-Revenue Water' or 'AquaTech'..." 
-                            className="w-full bg-slate-700 text-white placeholder-slate-400 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </form>
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <aside className="lg:col-span-3 xl:col-span-2">
+            <div className="sticky top-24 space-y-8">
+                <div>
+                    <h3 className="flex items-center gap-2 font-bold text-white mb-4"><FilterIcon className="w-5 h-5"/> Categories</h3>
+                    <div className="space-y-2">
+                        {Object.entries(lexiconCategoryNames).map(([key, name]) => (
+                            <label key={key} className="flex items-center text-sm text-slate-300 hover:text-white cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={selectedCategories.includes(key as LexiconCategory)}
+                                    onChange={() => handleCategoryToggle(key as LexiconCategory)}
+                                    className="h-4 w-4 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500"
+                                />
+                                <span className="ml-3">{name}</span>
+                            </label>
+                        ))}
                     </div>
-                    <div className="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
-                        <h2 className="font-bold text-white">Request a New Term</h2>
-                        <p className="text-sm text-slate-400 mt-1">Don't see a term? Request it here and our community will help define it.</p>
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            const term = (e.currentTarget.elements.namedItem('term_request') as HTMLInputElement).value;
-                            if (term) alert(`Thank you! Your request for "${term}" has been submitted.`);
-                            (e.currentTarget.elements.namedItem('term_request') as HTMLInputElement).value = '';
-                            }} className="mt-4 flex gap-2">
-                            <input type="text" name="term_request" placeholder="e.g., 'Hydraulic Modeling'" className="flex-grow w-full bg-slate-700 text-white placeholder-slate-400 px-3 py-2 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                            <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md text-sm transition-colors">Request</button>
-                        </form>
+                </div>
+                <div>
+                    <h3 className="font-bold text-white mb-4">Browse A-Z</h3>
+                    <div className="flex flex-wrap gap-1">
+                        {alphabet.map(letter => (
+                            <button key={letter} onClick={() => setActiveLetter(letter)}
+                                className={`w-8 h-8 rounded-md text-xs font-semibold transition-colors ${activeLetter === letter ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                            >{letter}</button>
+                        ))}
                     </div>
-                 </div>
-            )}
+                </div>
+            </div>
+          </aside>
 
+          <main className="lg:col-span-9 xl:col-span-7">
+            <div className="flex justify-between items-center mb-6">
+                <p className="text-sm text-slate-400 font-semibold">{filteredTerms.length} terms found</p>
+                <div className="flex items-center gap-2">
+                    <button onClick={() => setViewMode('grid')} className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800'}`}><ViewGridIcon className="w-5 h-5"/></button>
+                    <button onClick={() => setViewMode('list')} className={`p-2 rounded-md ${viewMode === 'list' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800'}`}><ViewListIcon className="w-5 h-5"/></button>
+                </div>
+            </div>
 
-          <div className="mt-10 flex justify-center flex-wrap gap-2">
-            {alphabet.map(letter => (
-              <button
-                key={letter}
-                onClick={() => setActiveLetter(letter)}
-                className={`w-10 h-10 rounded-md text-sm font-semibold transition-colors ${
-                  activeLetter === letter ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
-              >
-                {letter}
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {filteredTerms.length > 0 ? (
-              filteredTerms.map((term) => <TermCard key={term.id} term={term} />)
+            {paginatedTerms.length > 0 ? (
+                viewMode === 'grid' ? (
+                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {paginatedTerms.map(term => <TermCard key={term.id} term={term} />)}
+                    </div>
+                ) : (
+                    <div className="space-y-2">
+                        {paginatedTerms.map(term => <TermRow key={term.id} term={term} />)}
+                    </div>
+                )
             ) : (
-              <div className="col-span-full text-center py-16">
-                <h3 className="text-2xl font-semibold text-slate-300">No terms found</h3>
-                <p className="text-slate-500 mt-2">Try adjusting your search or filter.</p>
-              </div>
+                <div className="text-center py-24 bg-slate-800/50 rounded-lg">
+                    <h3 className="text-2xl font-semibold text-slate-300">No terms found</h3>
+                    <p className="text-slate-500 mt-2">Try adjusting your search or filters.</p>
+                </div>
             )}
-          </div>
-        </main>
-        <aside className="lg:col-span-1 space-y-8 mt-12 lg:mt-0">
-            <Leaderboard />
-        </aside>
-      </div>
+            
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          </main>
 
+          <aside className="hidden xl:block xl:col-span-3">
+            <div className="sticky top-24 space-y-8">
+              <TermOfTheDay term={termOfTheDay} />
+              <Leaderboard />
+            </div>
+          </aside>
+        </div>
+      </div>
     </div>
   );
 };

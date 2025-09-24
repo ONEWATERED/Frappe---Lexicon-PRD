@@ -1,9 +1,4 @@
-
-
-
-
 import React, { useState } from 'react';
-// FIX: Added MicrophoneIcon to imports to resolve usage error.
 import { PhoneIcon, ChatBubbleLeftRightIcon, CpuChipIcon, SparklesIcon, MicrophoneIcon } from '../../components/icons/Icons';
 import AICoachModal from '../../components/AICoachModal'; // Re-using for simplicity
 import VoiceChatModal from '../../components/VoiceChatModal';
@@ -97,7 +92,7 @@ const AIAgentsPage: React.FC = () => {
             </div>
             
             {isHardeepModalOpen && <AICoachModal card={hardeepCard} onClose={() => setIsHardeepModalOpen(false)} />}
-            <VoiceChatModal isOpen={isVoiceChatOpen} onClose={() => setIsVoiceChatOpen(false)} />
+            {isVoiceChatOpen && <VoiceChatModal isOpen={isVoiceChatOpen} onClose={() => setIsVoiceChatOpen(false)} />}
         </>
     );
 };

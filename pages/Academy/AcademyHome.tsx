@@ -38,8 +38,8 @@ const AcademyHome: React.FC = () => {
   
   const oneWaterMinuteDeck = flashcardDecks.find(d => d.id === oneWaterMinute.deckId);
 
-  const decksByCategory = useMemo(() => {
-// FIX: Provided a generic type to `reduce` to ensure the accumulator `acc` is correctly typed as Record<string, FlashcardDeck[]>. This resolves the error where `decks.map` was called on an `unknown` type.
+  // FIX: Added explicit type annotation to resolve "Property 'map' does not exist on type 'unknown'" error.
+  const decksByCategory: Record<string, FlashcardDeck[]> = useMemo(() => {
     return flashcardDecks.reduce<Record<string, FlashcardDeck[]>>((acc, deck) => {
         const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
         if (!acc[categoryName]) {

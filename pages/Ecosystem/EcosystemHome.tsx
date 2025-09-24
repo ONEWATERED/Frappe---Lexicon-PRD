@@ -209,5 +209,4 @@ const EcosystemHome: React.FC = () => {
     );
 };
 
-// FIX: Added default export to resolve module import error.
 export default EcosystemHome;

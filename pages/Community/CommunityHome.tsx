@@ -19,7 +19,9 @@ import {
     SparklesIcon,
     UserGroupIcon,
     InboxIcon,
-    LightBulbIcon
+    LightBulbIcon,
+    ArrowLeftIcon,
+    ArrowRightIcon
 } from '../../components/icons/Icons';
 import { PROFESSIONAL_TIERS } from '../../data';
 
@@ -85,27 +87,126 @@ const PostCard: React.FC<{ post: CommunityPost }> = ({ post }) => (
     </div>
 );
 
-const EventCard: React.FC<{ event: CommunityEvent }> = ({ event }) => (
-    <div className="glass-card p-6">
-        <p className="text-xs font-bold uppercase text-purple-400">{event.type}</p>
-        <h3 className="text-xl font-bold text-white mt-2">{event.title}</h3>
-        <p className="text-sm text-slate-400 mt-2">{event.description}</p>
-        <div className="mt-4 space-y-2 text-sm">
-            <p className="flex items-center gap-2"><CalendarDaysIcon className="w-4 h-4 text-slate-500" /> {new Date(event.eventDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-            <p className="flex items-center gap-2"><MapPinIcon className="w-4 h-4 text-slate-500" /> {event.location}</p>
-            {event.url && <a href={event.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:underline"><LinkIcon className="w-4 h-4" /> Visit Event Website</a>}
-        </div>
-        <div className="mt-4 pt-3 border-t border-slate-700 flex items-center justify-between">
-            <div className="flex items-center -space-x-2">
-                {event.attendeeIds.slice(0, 3).map(id => <img key={id} src={`https://i.pravatar.cc/150?u=${id}`} className="w-8 h-8 rounded-full border-2 border-slate-800" alt="attendee" />)}
-                {event.attendeeIds.length > 0 && <span className="text-xs pl-3 text-slate-400">{event.attendeeIds.length} attending</span>}
+const EventsCalendar: React.FC = () => {
+    const { communityEvents, currentUser } = useAuth();
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [events, setEvents] = useState(communityEvents);
+
+    const handleToggleRegistration = (eventId: string) => {
+        if (!currentUser) return;
+
+        setEvents(prevEvents => prevEvents.map(event => {
+            if (event.id === eventId) {
+                const isRegistered = event.registeredUserIds.includes(currentUser.id);
+                const newRegisteredUserIds = isRegistered
+                    ? event.registeredUserIds.filter(id => id !== currentUser.id)
+                    : [...event.registeredUserIds, currentUser.id];
+                return { ...event, registeredUserIds: newRegisteredUserIds };
+            }
+            return event;
+        }));
+    };
+
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+
+    const startingDay = firstDayOfMonth.getDay();
+
+    const eventsByDate = useMemo(() => {
+        const map: { [key: string]: CommunityEvent[] } = {};
+        events.forEach(event => {
+            const date = new Date(event.eventDate).toDateString();
+            if (!map[date]) {
+                map[date] = [];
+            }
+            map[date].push(event);
+        });
+        return map;
+    }, [events]);
+
+    const selectedDayEvents = eventsByDate[selectedDate.toDateString()] || [];
+
+    const changeMonth = (amount: number) => {
+        setCurrentDate(prev => {
+            const newDate = new Date(prev);
+            newDate.setMonth(prev.getMonth() + amount);
+            return newDate;
+        });
+    };
+
+    const days = Array.from({ length: startingDay }).map((_, i) => (
+        <div key={`empty-start-${i}`} className="border-r border-b border-slate-700/50"></div>
+    ));
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+        const isToday = date.toDateString() === new Date().toDateString();
+        const isSelected = date.toDateString() === selectedDate.toDateString();
+        const hasEvents = !!eventsByDate[date.toDateString()];
+
+        days.push(
+            <div key={day} onClick={() => setSelectedDate(date)} className="border-r border-b border-slate-700/50 p-2 cursor-pointer hover:bg-slate-700/50 relative">
+                <span className={`flex items-center justify-center h-8 w-8 rounded-full text-sm ${isToday ? 'bg-blue-500 text-white font-bold' : ''} ${isSelected ? 'ring-2 ring-blue-400' : ''}`}>
+                    {day}
+                </span>
+                {hasEvents && <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-purple-400 rounded-full"></div>}
             </div>
-            <button className="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
-                I'm Attending
-            </button>
+        );
+    }
+
+    return (
+        <div className="glass-card p-6">
+            <div className="flex items-center justify-between mb-4">
+                <button onClick={() => changeMonth(-1)} className="p-2 rounded-full hover:bg-slate-700"><ArrowLeftIcon className="w-5 h-5" /></button>
+                <h2 className="text-xl font-bold text-white">
+                    {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                </h2>
+                <button onClick={() => changeMonth(1)} className="p-2 rounded-full hover:bg-slate-700"><ArrowRightIcon className="w-5 h-5" /></button>
+            </div>
+            <div className="grid grid-cols-7 text-center text-xs text-slate-400 border-t border-l border-slate-700/50">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                    <div key={day} className="py-2 border-r border-b border-slate-700/50">{day}</div>
+                ))}
+                {days}
+            </div>
+            <div className="mt-6">
+                <h3 className="font-bold text-white">Events for {selectedDate.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric' })}</h3>
+                <div className="mt-4 space-y-4">
+                    {selectedDayEvents.length > 0 ? selectedDayEvents.map(event => {
+                        const isRegistered = currentUser ? event.registeredUserIds.includes(currentUser.id) : false;
+                        return (
+                             <div key={event.id} className="bg-slate-800/50 p-4 rounded-lg">
+                                <p className="text-xs font-bold uppercase text-purple-400">{event.type}</p>
+                                <h4 className="font-bold text-slate-100 mt-1">{event.title}</h4>
+                                <p className="text-sm text-slate-400 mt-1">{event.description}</p>
+                                <div className="mt-2 text-xs text-slate-400 flex items-center gap-4">
+                                     <span><MapPinIcon className="w-3 h-3 inline mr-1" />{event.location}</span>
+                                     <span><UsersIcon className="w-3 h-3 inline mr-1" />{event.registeredUserIds.length} Registered</span>
+                                </div>
+                                <div className="mt-3">
+                                    {event.isLive ? (
+                                        <a href={event.joinUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-1.5 px-3 rounded-md text-sm transition-colors">
+                                            Join Live Session
+                                        </a>
+                                    ) : isRegistered ? (
+                                        <button onClick={() => handleToggleRegistration(event.id)} className="inline-flex items-center gap-2 bg-slate-600 text-slate-300 font-semibold py-1.5 px-3 rounded-md text-sm">
+                                            <CheckIcon className="w-4 h-4" /> Registered
+                                        </button>
+                                    ) : (
+                                        <button onClick={() => handleToggleRegistration(event.id)} className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-md text-sm transition-colors">
+                                            Register
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )
+                    }) : <p className="text-sm text-slate-500">No events scheduled for this day.</p>}
+                </div>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const MembersList: React.FC = () => {
     const { currentUser, getAllUsers } = useAuth();
@@ -422,24 +523,19 @@ const FindMentorWidget: React.FC = () => {
 };
 
 const CommunityHome: React.FC = () => {
-    const { communityPosts, communityEvents } = useAuth();
+    const { communityPosts } = useAuth();
     const [activeView, setActiveView] = useState<string>('labs');
     
     const combinedFeed = useMemo(() => {
         const postsAsFeed = communityPosts.map(p => ({ ...p, feedType: 'post' as const, date: p.timestamp }));
-        const eventsAsFeed = communityEvents.map(e => ({ ...e, feedType: 'event' as const, date: e.timestamp }));
         
-        if (activeView === 'events') {
-             return eventsAsFeed.sort((a,b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
-        }
-
         let filtered = postsAsFeed;
         if (activeView !== 'feed') {
             filtered = postsAsFeed.filter(item => item.channel === activeView);
         }
 
         return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    }, [communityPosts, communityEvents, activeView]);
+    }, [communityPosts, activeView]);
 
     const NavButton: React.FC<{ viewId: string, icon: React.ReactNode, label: string }> = ({ viewId, icon, label }) => (
         <button onClick={() => setActiveView(viewId)} className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-semibold transition-colors ${activeView === viewId ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700/50'}`}>
@@ -483,23 +579,16 @@ const CommunityHome: React.FC = () => {
                         <OraKLESLabs />
                     ) : activeView === 'members' ? (
                         <MembersList />
+                    ) : activeView === 'events' ? (
+                        <EventsCalendar />
                     ) : (
                         <>
                             {activeView === 'feed' && <CreatePost />}
                             {combinedFeed.length > 0 ? (
                                 <div className="space-y-6">
-                                    {combinedFeed.map(item => {
-                                        if ('feedType' in item && item.feedType === 'post') {
-                                            return <PostCard key={item.id} post={item as CommunityPost} />;
-                                        }
-                                        if ('feedType' in item && item.feedType === 'event') {
-                                            return <EventCard key={item.id} event={item as CommunityEvent} />;
-                                        }
-                                        if ('author' in item) {
-                                            return <PostCard key={item.id} post={item as CommunityPost} />;
-                                        }
-                                        return null;
-                                    })}
+                                    {combinedFeed.map(item => (
+                                         <PostCard key={item.id} post={item as CommunityPost} />
+                                    ))}
                                 </div>
                             ) : (
                                 <div className="text-center py-20 glass-card">

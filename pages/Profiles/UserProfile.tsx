@@ -8,10 +8,8 @@ import {
     RectangleStackIcon, WrenchScrewdriverIcon, HandThumbUpIcon, DocumentArrowDownIcon, StarIcon, DocumentTextIcon,
     ShareIcon, TrophyIcon, BookmarkSquareIcon, ClipboardDocumentListIcon, CpuChipIcon,
     CameraIcon, VideoCameraIcon, PhotoIcon, GlobeAltIcon, ArchiveBoxIcon,
-// FIX: Imported the MicrophoneIcon to resolve usage errors.
     MicrophoneIcon
 } from '../../components/icons/Icons';
-// FIX: Imported the User type to resolve a type error in KnowledgeStatsWidget.
 import { User, UserCredential, UserSkill, ResumeDocument, ProjectPortfolioItem, CareerGoal, CareerPathway, CareerPathwayStep, LibraryCollection, LibraryItem, LearningActivity, KnowledgeMapData, KnowledgeEntry, KnowledgeEntryType, SharingScope } from '../../types';
 import VideoPlayer from '../../components/VideoPlayer';
 import { DigitalWaterProBadge, UtilityManagementStewardBadge } from '../../components/Badges';
@@ -452,227 +450,121 @@ const AchievementsSection: React.FC<{ badgeIds: string[] }> = ({ badgeIds }) => 
 const useLibraryItemDetails = () => {
     const { terms, droobiVideos, flashcardDecks, manuals, blogPosts } = useAuth();
 
-    return (item: LibraryItem) => {
+    const getItemDetails = (item: LibraryItem) => {
         switch (item.type) {
-            case 'term':
+            case 'term': {
                 const term = terms.find(t => t.id === item.contentId);
-                return { title: term?.term, link: `/term/${item.contentId}`, Icon: DocumentTextIcon };
-            case 'video':
+                return term ? { title: term.term, description: term.plainLanguageDefinition, url: `/term/${term.id}`, typeLabel: 'Lexicon Term' } : null;
+            }
+            case 'video': {
                 const video = droobiVideos.find(v => v.id === item.contentId);
-                return { title: video?.title, link: `/video/${item.contentId}`, Icon: PlayCircleIcon };
-            case 'deck':
+                return video ? { title: video.title, description: video.description, url: `/video/${video.id}`, typeLabel: 'Droobi TV' } : null;
+            }
+            case 'deck': {
                  const deck = flashcardDecks.find(d => d.id === item.contentId);
-                return { title: deck?.title, link: `/academy/deck/${item.contentId}`, Icon: AcademicCapIcon };
-            case 'manual':
-                 const manual = manuals.find(m => m.id === item.contentId);
-                return { title: manual?.title, link: `/manual/${item.contentId}`, Icon: BookOpenIcon };
-            case 'post':
-                 const post = blogPosts.find(p => p.id === item.contentId);
-                return { title: post?.title, link: `/insights/${item.contentId}`, Icon: BookOpenIcon };
+                return deck ? { title: deck.title, description: deck.description, url: `/academy/deck/${deck.id}`, typeLabel: 'Flashcard Deck' } : null;
+            }
+            case 'manual': {
+                const manual = manuals.find(m => m.id === item.contentId);
+                return manual ? { title: manual.title, description: manual.summary, url: `/manual/${manual.id}`, typeLabel: 'Manual' } : null;
+            }
+            case 'post': {
+                const post = blogPosts.find(p => p.id === item.contentId);
+                return post ? { title: post.title, description: post.subtitle, url: `/insights/${post.id}`, typeLabel: 'Insight Post' } : null;
+            }
             default:
-                return { title: 'Unknown Item', link: '#', Icon: DocumentTextIcon };
+                return null;
         }
     };
+    return getItemDetails;
 };
 
-const MyLibrarySection: React.FC<{ collections: LibraryCollection[] }> = ({ collections }) => {
-    const [activeTab, setActiveTab] = useState(0);
-    const getItemDetails = useLibraryItemDetails();
-
-    return (
-        <div className="mt-12">
-            <div className="flex items-center gap-3 mb-6">
-                <BookmarkSquareIcon className="w-8 h-8 text-blue-400"/>
-                <h2 className="text-2xl font-bold text-white">My Library (Private)</h2>
-            </div>
-            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-                <div className="border-b border-slate-700">
-                    <nav className="-mb-px flex space-x-6" aria-label="Tabs">
-                        {collections.map((collection, index) => (
-                            <button
-                                key={collection.id}
-                                onClick={() => setActiveTab(index)}
-                                className={`${
-                                    activeTab === index
-                                        ? 'border-blue-500 text-blue-400'
-                                        : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500'
-                                } whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors`}
-                            >
-                                {collection.name} ({collection.items.length})
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-                <div className="mt-6">
-                    {collections[activeTab]?.items.map(item => {
-                        const details = getItemDetails(item);
-                        return (
-                             <Link to={details.link} key={item.id} className="flex items-center gap-4 p-3 -m-3 rounded-lg hover:bg-slate-700/50 transition-colors">
-                                <details.Icon className="w-5 h-5 text-slate-400 flex-shrink-0" />
-                                <div className="flex-grow">
-                                    <p className="text-sm font-semibold text-slate-200">{details.title}</p>
-                                    <p className="text-xs text-slate-500">Bookmarked on {new Date(item.addedAt).toLocaleDateString()}</p>
-                                </div>
-                            </Link>
-                        )
-                    })}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const LearningTranscriptSection: React.FC<{ activities: LearningActivity[] }> = ({ activities }) => {
-    const activityConfig = {
-        pathway_achieved: { Icon: TrophyIcon, color: 'text-yellow-400' },
-        deck_completed: { Icon: AcademicCapIcon, color: 'text-blue-400' },
-        video_watched: { Icon: PlayCircleIcon, color: 'text-rose-400' },
-    };
-
-    return (
-        <div className="mt-12">
-             <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
-                <div className="flex items-center gap-3">
-                    <ClipboardDocumentListIcon className="w-8 h-8 text-blue-400"/>
-                    <h2 className="text-2xl font-bold text-white">Learning Transcript (Private)</h2>
-                </div>
-                <button 
-                    onClick={() => alert('Transcript download coming soon!')}
-                    className="flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm"
-                >
-                    <DocumentArrowDownIcon className="w-4 h-4" /> Download Transcript
-                </button>
-            </div>
-            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-                <div className="space-y-4">
-                    {activities.map(activity => {
-                        const { Icon, color } = activityConfig[activity.type];
-                        return (
-                            <div key={activity.id} className="flex items-center gap-4">
-                                <div className={`flex-shrink-0 w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center`}>
-                                    <Icon className={`w-6 h-6 ${color}`} />
-                                </div>
-                                <div className="flex-grow">
-                                    <p className="font-semibold text-slate-200">{activity.contentTitle}</p>
-                                    <p className="text-xs text-slate-400">Completed on {new Date(activity.completedAt).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const KnowledgeMapSection: React.FC<{ mapData: KnowledgeMapData }> = ({ mapData }) => {
-    return (
-        <div className="mt-12">
-             <div className="flex items-center gap-3 mb-6">
-                <CpuChipIcon className="w-8 h-8 text-blue-400"/>
-                <h2 className="text-2xl font-bold text-white">Interactive Knowledge Map</h2>
-            </div>
-            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-                <p className="text-sm text-slate-400 mb-4">This map visualizes your areas of expertise based on your activity across ORAKLES. Larger nodes indicate more activity. Dashed nodes are suggested topics for you to explore next.</p>
-                <KnowledgeMap data={mapData} />
-            </div>
-        </div>
-    );
-};
-
-
+// FIX: Added the main UserProfile component and default export to resolve the module import error in App.tsx.
 const UserProfile: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
-  const { getUserById, currentUser, careerGoals, careerPathways } = useAuth();
+  const { getUserById, currentUser } = useAuth();
   
-  const user = getUserById(userId || '');
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const user = useMemo(() => getUserById(userId || ''), [userId, getUserById]);
 
   if (!user) {
     return (
       <div className="text-center py-20 text-white">
         <h1 className="text-2xl">User not found.</h1>
-        <Link to="/" className="text-blue-400 hover:underline mt-4 inline-block">Go Home</Link>
+        <Link to="/" className="text-blue-400 hover:underline mt-4 inline-block">Back to safety</Link>
       </div>
     );
   }
 
   const viewingOwnProfile = currentUser?.id === user.id;
+  const userTier = PROFESSIONAL_TIERS.find(t => t.id === user.tierId);
 
-  const currentTier = PROFESSIONAL_TIERS.find(t => t.id === user.tierId) || PROFESSIONAL_TIERS[0];
-  const nextTier = PROFESSIONAL_TIERS.find(t => t.minXp > user.xp) || currentTier;
-  const xpForNextTier = nextTier.minXp - currentTier.minXp;
-  const xpProgress = user.xp - currentTier.minXp;
-  const progressPercentage = xpForNextTier > 0 ? (xpProgress / xpForNextTier) * 100 : 100;
+  const TabButton: React.FC<{ tabName: string; children: React.ReactNode }> = ({ tabName, children }) => (
+    <button
+      onClick={() => setActiveTab(tabName)}
+      className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${
+        activeTab === tabName ? 'bg-blue-500 text-white' : 'text-slate-300 hover:bg-slate-700'
+      }`}
+    >
+      {children}
+    </button>
+  );
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-slate-300">
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-        <img src={user.avatarUrl} alt={user.name} className="h-40 w-40 rounded-full border-4 border-slate-700 shadow-lg"/>
-        <div className="text-center md:text-left">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white">{user.name}</h1>
-          <p className="text-lg text-slate-400">{user.email}</p>
-          <div className="mt-4 flex items-center justify-center md:justify-start gap-3 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
-            <TierIcon icon={currentTier.icon} className="h-6 w-6 text-blue-400"/>
-            <span className="font-semibold text-lg text-slate-200">{currentTier.name}</span>
+    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <header className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 flex flex-col md:flex-row items-center gap-8">
+        <div className="relative">
+          <img src={user.avatarUrl} alt={user.name} className="w-32 h-32 rounded-full border-4 border-slate-600" />
+          {user.isOnline && <div className="absolute bottom-2 right-2 w-5 h-5 bg-green-400 rounded-full border-2 border-slate-800" title="Online"></div>}
+        </div>
+        <div className="flex-grow text-center md:text-left">
+          <h1 className="text-4xl font-extrabold text-white">{user.name}</h1>
+          {userTier && (
+            <div className="flex items-center justify-center md:justify-start gap-2 mt-2">
+              <TierIcon icon={userTier.icon} className="w-6 h-6 text-yellow-400" />
+              <p className="text-lg font-bold text-yellow-400">{userTier.name}</p>
+            </div>
+          )}
+          <p className="text-slate-400 mt-1">{user.email}</p>
+        </div>
+        {!viewingOwnProfile && (
+            <div className="flex flex-col sm:flex-row gap-2">
+                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Connect</button>
+                 <button className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg">Message</button>
+            </div>
+        )}
+      </header>
+
+      <nav className="mt-8 flex flex-wrap items-center gap-2 border-b border-slate-700 pb-4">
+        <TabButton tabName="overview">Overview</TabButton>
+        <TabButton tabName="career">Career</TabButton>
+        <TabButton tabName="portfolio">Portfolio</TabButton>
+        <TabButton tabName="skills">Skills</TabButton>
+        {viewingOwnProfile && user.knowledgeEntries && <TabButton tabName="knowledge">Knowledge Capture</TabButton>}
+      </nav>
+
+      <div className="mt-8">
+        {activeTab === 'overview' && (
+          <div>
+            {user.credentials && <CredentialsSection credentials={user.credentials} />}
+            {user.badges && <AchievementsSection badgeIds={user.badges} />}
           </div>
-        </div>
-      </div>
-
-      <div className="mt-12 bg-slate-800/50 p-8 rounded-2xl border border-slate-700">
-        <h2 className="text-xl font-bold text-white">Progression</h2>
-        <div className="mt-4">
-          <div className="flex justify-between text-sm font-medium text-slate-400">
-            <span>{currentTier.name}</span>
-            <span>{nextTier.name}</span>
+        )}
+        {activeTab === 'career' && user.careerGoals && user.activePathwayId && user.careerPathways && (
+          <div>
+              <CareerPathwayPlanner goals={user.careerGoals} pathways={user.careerPathways} initialPathwayId={user.activePathwayId} />
+              {viewingOwnProfile && user.resumeVault && <ResumeVaultSection resumes={user.resumeVault} />}
           </div>
-          <div className="w-full bg-slate-700 rounded-full h-4 mt-1">
-            <div className="bg-gradient-to-r from-blue-500 to-cyan-400 h-4 rounded-full" style={{width: `${progressPercentage}%`}}></div>
-          </div>
-          <div className="text-center mt-2 text-sm text-slate-300 font-mono">{user.xp.toLocaleString()} / {nextTier.minXp.toLocaleString()} XP</div>
-        </div>
+        )}
+        {activeTab === 'portfolio' && user.projectPortfolio && <ProjectPortfolioSection projects={user.projectPortfolio} />}
+        {activeTab === 'skills' && user.skills && (
+            <SkillsSection skills={user.skills} currentUserId={currentUser?.id || ''} viewingOwnProfile={viewingOwnProfile} />
+        )}
+        {activeTab === 'knowledge' && viewingOwnProfile && user.knowledgeEntries && (
+            <PersonalKnowledgeCaptureSection entries={user.knowledgeEntries} />
+        )}
       </div>
-
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-slate-800 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-slate-400">Comments Posted</h3>
-          <p className="text-4xl font-bold text-white mt-2">{user.stats.commentsPosted}</p>
-        </div>
-        <div className="bg-slate-800 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-slate-400">Docs Uploaded</h3>
-          <p className="text-4xl font-bold text-white mt-2">{user.stats.documentsUploaded}</p>
-        </div>
-        <div className="bg-slate-800 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold text-slate-400">Insightful Marks</h3>
-          <p className="text-4xl font-bold text-white mt-2">{user.stats.insightfulMarks}</p>
-        </div>
-      </div>
-      
-      {viewingOwnProfile && user.knowledgeEntries && (
-        <PersonalKnowledgeCaptureSection entries={user.knowledgeEntries} />
-      )}
-
-      {user.knowledgeMap && <KnowledgeMapSection mapData={user.knowledgeMap} />}
-
-      <AchievementsSection badgeIds={user.badges} />
-
-      {user.credentials && <CredentialsSection credentials={user.credentials} />}
-
-      {viewingOwnProfile && user.careerGoals && user.activePathwayId && (
-        <CareerPathwayPlanner goals={careerGoals} pathways={careerPathways} initialPathwayId={user.activePathwayId} />
-      )}
-      
-      {user.projectPortfolio && user.projectPortfolio.length > 0 && <ProjectPortfolioSection projects={user.projectPortfolio} />}
-      
-      {user.skills && user.skills.length > 0 && currentUser && (
-        <SkillsSection skills={user.skills} currentUserId={currentUser.id} viewingOwnProfile={viewingOwnProfile} />
-      )}
-      
-      {viewingOwnProfile && user.myLibrary && user.myLibrary.length > 0 && <MyLibrarySection collections={user.myLibrary} />}
-      
-      {viewingOwnProfile && user.learningTranscript && user.learningTranscript.length > 0 && <LearningTranscriptSection activities={user.learningTranscript} />}
-
-      {viewingOwnProfile && user.resumeVault && user.resumeVault.length > 0 && <ResumeVaultSection resumes={user.resumeVault} />}
-
     </div>
   );
 };

@@ -33,7 +33,6 @@ const Leaderboard: React.FC<{ title: string; items: LeaderboardItem[]; icon: Rea
 
 
 const PIPHome: React.FC = () => {
-    // FIX: Destructure `getAllUsers` function from context instead of `users` array.
     const { pipDocuments, getAllUsers, ecosystemEntities } = useAuth();
     const users = getAllUsers();
     const [liveEvent, setLiveEvent] = useState<PIPDocument | null>(null);

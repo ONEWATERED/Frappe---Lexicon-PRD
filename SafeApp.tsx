@@ -1,8 +1,6 @@
 
 
 
-
-
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -13,6 +11,8 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
+// FIX: Corrected the malformed class definition. The ErrorBoundary must extend React.Component
+// to be a valid class component and have access to `this.props` and `this.setState`.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
@@ -24,7 +24,6 @@ class ErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
 
-// FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.setState` was not found.
   componentDidCatch = (error: Error, errorInfo: React.ErrorInfo) => {
     // We can also log the error to an error reporting service.
     // Here we'll just update state with more details.
@@ -32,7 +31,6 @@ class ErrorBoundary extends React.Component<
     console.error("Uncaught error:", error, errorInfo);
   }
 
-// FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.props` was not found.
   render = () => {
     if (this.state.hasError) {
       // Render fallback UI

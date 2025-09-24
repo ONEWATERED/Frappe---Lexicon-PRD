@@ -20,8 +20,8 @@ const DroobiTVHome: React.FC = () => {
   const { droobiVideos } = useAuth();
   const featuredVideo = droobiVideos[0];
   
-  const videosByCategory = useMemo(() => {
-// FIX: Provided a generic type to `reduce` to ensure the accumulator `acc` is correctly typed as Record<string, DroobiVideo[]>. This resolves the error where `videos.map` was called on an `unknown` type.
+  // FIX: Added explicit type annotation to resolve "Property 'map' does not exist on type 'unknown'" error.
+  const videosByCategory: Record<string, DroobiVideo[]> = useMemo(() => {
     return droobiVideos.reduce<Record<string, DroobiVideo[]>>((acc, video) => {
       const category = video.category || 'Uncategorized';
       if (!acc[category]) {

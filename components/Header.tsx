@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { WaterDropIcon, MenuIcon, XIcon, StarIcon, ChevronDownIcon } from './icons/Icons';
@@ -22,9 +22,10 @@ const NavItem: React.FC<{ to: string; children: React.ReactNode; isMobile?: bool
 );
 
 // New component for desktop dropdown menu items
-const DropdownLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => (
+const DropdownLink: React.FC<{ to: string; children: React.ReactNode; onClick?: () => void; }> = ({ to, children, onClick }) => (
   <NavLink
     to={to}
+    onClick={onClick}
     className={({ isActive }) =>
       `flex w-full items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors ${
         isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -39,20 +40,53 @@ const DropdownLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to,
 // New component for desktop dropdowns
 const DropdownNav: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     return (
-        <div 
-            className="relative"
-            onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={() => setIsOpen(false)}
-        >
-            <button className="px-3 py-2 rounded-md font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-1 transition-colors">
+        <div className="relative" ref={dropdownRef}>
+            <button 
+                onClick={() => setIsOpen(!isOpen)}
+                className="px-3 py-2 rounded-md font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-1 transition-colors"
+                aria-haspopup="true"
+                aria-expanded={isOpen}
+            >
                 <span>{title}</span>
                 <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
                 <div className="absolute top-full mt-1 w-56 bg-slate-800 border border-slate-700 rounded-md shadow-lg p-2 z-50">
-                    {children}
+                    {React.Children.map(children, (child) => {
+                        if (React.isValidElement(child)) {
+                            // This adds an onClick to each child link to close the dropdown when an item is selected.
+                            const originalOnClick = (child.props as any).onClick;
+                            return React.cloneElement(child as React.ReactElement<any>, {
+                                onClick: () => {
+                                    if (originalOnClick) {
+                                        originalOnClick();
+                                    }
+                                    setIsOpen(false);
+                                },
+                            });
+                        }
+                        return child;
+                    })}
                 </div>
             )}
         </div>
@@ -125,6 +159,10 @@ export const Header: React.FC = () => {
                     <DropdownLink to="/pip">PIP</DropdownLink>
                     <DropdownLink to="/research">Research</DropdownLink>
                 </DropdownNav>
+                <DropdownNav title="More">
+                    <DropdownLink to="/community/messages">Messages</DropdownLink>
+                    <DropdownLink to="/droobi-tv/sessions">Live Sessions</DropdownLink>
+                </DropdownNav>
               </div>
             </div>
           </div>
@@ -193,6 +231,10 @@ export const Header: React.FC = () => {
             <MobileDropdownNav title="Trust & Standards">
                 <NavItem to="/pip" isMobile>PIP</NavItem>
                 <NavItem to="/research" isMobile>Research</NavItem>
+            </MobileDropdownNav>
+            <MobileDropdownNav title="More">
+                <NavItem to="/community/messages" isMobile>Messages</NavItem>
+                <NavItem to="/droobi-tv/sessions" isMobile>Live Sessions</NavItem>
             </MobileDropdownNav>
           </div>
         </div>
