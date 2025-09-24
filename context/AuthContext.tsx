@@ -3,14 +3,14 @@ import {
   User, LexiconTerm, Vendor, DroobiVideo, Session, OnDemandSession, Manual,
   FlashcardDeck, Flashcard, LearningPathway, OneWaterMinute, EcosystemEntity, AuthContextType, UserProgress,
   CommunityPost, CommunityEvent, ResearcherProfile, ResearchOpportunity, TopicSuggestion, BlogAuthor, BlogPost,
-  CareerGoal, CareerPathway, Conversation, PIPDocument, FeatureSuggestion
+  CareerGoal, CareerPathway, Conversation, PIPDocument, FeatureSuggestion, KnowledgeEntry, KnowledgeCard, Reaction
 } from '../types';
 import {
   users, initialTerms, vendors, droobiVideos, droobiSessions, onDemandSessions,
   manuals, flashcardDecks, flashcards, learningPathways, oneWaterMinute, ecosystemEntities,
   userProgress, communityPosts, communityEvents, researcherProfiles, researchOpportunities,
   topicSuggestions, blogAuthors, blogPosts, careerGoals, careerPathways, conversations, pipDocuments,
-  featureSuggestions
+  featureSuggestions, knowledgeEntries, knowledgeCards, reactions
 } from '../data';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -67,6 +67,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     conversations,
     pipDocuments,
     featureSuggestions,
+    knowledgeEntries,
+    knowledgeCards,
+    reactions,
   }), [currentUser]);
 
   return (

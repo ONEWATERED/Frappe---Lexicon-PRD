@@ -6,9 +6,13 @@ import {
     TierIcon, IdentificationIcon, ArrowUpTrayIcon, DocumentDuplicateIcon, CalendarDaysIcon, BellIcon,
     RocketLaunchIcon, CheckBadgeIcon, PlayCircleIcon, BookOpenIcon, UsersIcon, AcademicCapIcon,
     RectangleStackIcon, WrenchScrewdriverIcon, HandThumbUpIcon, DocumentArrowDownIcon, StarIcon, DocumentTextIcon,
-    ShareIcon, TrophyIcon, BookmarkSquareIcon, ClipboardDocumentListIcon, CpuChipIcon
+    ShareIcon, TrophyIcon, BookmarkSquareIcon, ClipboardDocumentListIcon, CpuChipIcon,
+    CameraIcon, VideoCameraIcon, PhotoIcon, GlobeAltIcon, ArchiveBoxIcon,
+// FIX: Imported the MicrophoneIcon to resolve usage errors.
+    MicrophoneIcon
 } from '../../components/icons/Icons';
-import { UserCredential, UserSkill, ResumeDocument, ProjectPortfolioItem, CareerGoal, CareerPathway, CareerPathwayStep, LibraryCollection, LibraryItem, LearningActivity, KnowledgeMapData } from '../../types';
+// FIX: Imported the User type to resolve a type error in KnowledgeStatsWidget.
+import { User, UserCredential, UserSkill, ResumeDocument, ProjectPortfolioItem, CareerGoal, CareerPathway, CareerPathwayStep, LibraryCollection, LibraryItem, LearningActivity, KnowledgeMapData, KnowledgeEntry, KnowledgeEntryType, SharingScope } from '../../types';
 import VideoPlayer from '../../components/VideoPlayer';
 import { DigitalWaterProBadge, UtilityManagementStewardBadge } from '../../components/Badges';
 import KnowledgeMap from '../../components/KnowledgeMap';
@@ -85,6 +89,113 @@ const CredentialCard: React.FC<{ credential: UserCredential }> = ({ credential }
     </div>
   );
 };
+
+// --- PERSONAL KNOWLEDGE CAPTURE COMPONENTS ---
+
+const KnowledgeStatsWidget: React.FC<{ stats: User['stats'] }> = ({ stats }) => (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-slate-800 p-4 rounded-lg text-center">
+            <p className="text-3xl font-bold text-white">{stats?.knowledgeContributions || 0}</p>
+            <p className="text-xs text-slate-400">Contributions</p>
+        </div>
+        <div className="bg-slate-800 p-4 rounded-lg text-center">
+            <p className="text-3xl font-bold text-white">{stats?.publicShares || 0}</p>
+            <p className="text-xs text-slate-400">Public Shares</p>
+        </div>
+        <div className="bg-slate-800 p-4 rounded-lg text-center">
+            <p className="text-3xl font-bold text-white">{stats?.thanksReceived || 0}</p>
+            <p className="text-xs text-slate-400">"Thanks" Received</p>
+        </div>
+        <div className="bg-slate-800 p-4 rounded-lg text-center">
+            <p className="text-3xl font-bold text-white">{stats?.views || 0}</p>
+            <p className="text-xs text-slate-400">Total Views</p>
+        </div>
+    </div>
+);
+
+const KnowledgeEntryCard: React.FC<{ entry: KnowledgeEntry }> = ({ entry }) => {
+    const typeConfig: Record<KnowledgeEntryType, { Icon: React.FC<{className?:string}>, color: string }> = {
+        photo: { Icon: PhotoIcon, color: 'text-green-400' },
+        video: { Icon: VideoCameraIcon, color: 'text-rose-400' },
+        audio: { Icon: MicrophoneIcon, color: 'text-sky-400' },
+        card: { Icon: DocumentTextIcon, color: 'text-amber-400' },
+    };
+
+    const scopeConfig: Record<SharingScope, { label: string, bg: string, text: string }> = {
+        private: { label: 'Private', bg: 'bg-slate-600', text: 'text-slate-200' },
+        organization: { label: 'Organization', bg: 'bg-purple-500/20', text: 'text-purple-300' },
+        public: { label: 'Public', bg: 'bg-blue-500/20', text: 'text-blue-300' },
+    };
+
+    const { Icon, color } = typeConfig[entry.type];
+    const { label, bg, text } = scopeConfig[entry.sharingScope];
+    const isPending = entry.status === 'pending_sync';
+
+    return (
+        <div className={`bg-slate-800/70 p-4 rounded-xl border border-slate-700 flex flex-col relative overflow-hidden ${isPending ? 'opacity-60' : ''}`}>
+            {isPending && <div className="absolute top-2 right-2 text-xs font-bold text-yellow-300 bg-yellow-500/20 px-2 py-0.5 rounded-full">Pending Sync</div>}
+            <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center bg-slate-700/50 ${color}`}>
+                    <Icon className="w-7 h-7" />
+                </div>
+                <div className="flex-grow">
+                    <h4 className="font-bold text-white leading-tight">{entry.title}</h4>
+                    <p className="text-xs text-slate-400 mt-1">{new Date(entry.createdAt).toLocaleString()}</p>
+                </div>
+            </div>
+            {entry.description && <p className="text-sm text-slate-300 mt-3 line-clamp-2">{entry.description}</p>}
+            <div className="mt-4 pt-3 border-t border-slate-700 flex flex-wrap items-center justify-between gap-2">
+                <span className={`text-xs font-semibold px-2 py-1 rounded-full ${bg} ${text}`}>{label}</span>
+                <div className="flex items-center gap-2">
+                    {!entry.cardId && <button className="text-xs font-semibold text-blue-400 hover:underline">Convert to Card</button>}
+                    <button className="text-xs font-semibold text-slate-400 hover:text-white">Edit</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+const PersonalKnowledgeCaptureSection: React.FC<{ entries: KnowledgeEntry[] }> = ({ entries }) => {
+    const { currentUser } = useAuth();
+    if (!currentUser) return null;
+
+    return (
+        <div className="mt-12">
+            <div className="flex items-center gap-3 mb-6">
+                <ArchiveBoxIcon className="w-8 h-8 text-blue-400"/>
+                <h2 className="text-2xl font-bold text-white">Personal Knowledge Capture</h2>
+            </div>
+            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <button className="flex flex-col items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-4 px-2 rounded-lg transition-colors text-sm"><CameraIcon className="w-6 h-6"/> Capture Media</button>
+                    <button className="flex flex-col items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-4 px-2 rounded-lg transition-colors text-sm"><ArrowUpTrayIcon className="w-6 h-6"/> Upload Media</button>
+                    <button className="flex flex-col items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-4 px-2 rounded-lg transition-colors text-sm"><MicrophoneIcon className="w-6 h-6"/> Record Audio</button>
+                    <button className="flex flex-col items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-4 px-2 rounded-lg transition-colors text-sm"><DocumentDuplicateIcon className="w-6 h-6"/> Create Card</button>
+                </div>
+
+                <h3 className="text-lg font-bold text-white mb-4">Contribution Impact</h3>
+                <KnowledgeStatsWidget stats={currentUser.stats} />
+                
+                <div className="mt-8">
+                    <h3 className="text-lg font-bold text-white mb-4">My Recent Contributions</h3>
+                     {entries.length > 0 ? (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            {entries.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map(entry => (
+                                <KnowledgeEntryCard key={entry.id} entry={entry} />
+                            ))}
+                        </div>
+                     ) : (
+                        <div className="text-center py-12 text-slate-400">
+                            <p>No contributions yet. Capture your first piece of knowledge!</p>
+                        </div>
+                     )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 const CredentialsSection: React.FC<{ credentials: UserCredential[] }> = ({ credentials }) => (
   <div className="mt-12">
@@ -291,13 +402,13 @@ const badgeMap: Record<string, BadgeInfo> = {
         id: 'B05',
         Component: UtilityManagementStewardBadge,
         title: 'Utility Management Steward',
-        description: 'Awarded for demonstrating mastery in utility leadership, including asset management, finance, and regulatory compliance through the oraKLES Academy.'
+        description: 'Awarded for demonstrating mastery in utility leadership, including asset management, finance, and regulatory compliance through the ORAKLES Academy.'
     },
     'B06': {
         id: 'B06',
         Component: DigitalWaterProBadge,
         title: 'Digital Water Professional',
-        description: 'Recognizes expertise in digital water technologies, including smart metering, hydraulic modeling, and data analytics via the oraKLES Academy.'
+        description: 'Recognizes expertise in digital water technologies, including smart metering, hydraulic modeling, and data analytics via the ORAKLES Academy.'
     }
 };
 
@@ -462,7 +573,7 @@ const KnowledgeMapSection: React.FC<{ mapData: KnowledgeMapData }> = ({ mapData 
                 <h2 className="text-2xl font-bold text-white">Interactive Knowledge Map</h2>
             </div>
             <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-                <p className="text-sm text-slate-400 mb-4">This map visualizes your areas of expertise based on your activity across oraKLES. Larger nodes indicate more activity. Dashed nodes are suggested topics for you to explore next.</p>
+                <p className="text-sm text-slate-400 mb-4">This map visualizes your areas of expertise based on your activity across ORAKLES. Larger nodes indicate more activity. Dashed nodes are suggested topics for you to explore next.</p>
                 <KnowledgeMap data={mapData} />
             </div>
         </div>
@@ -536,6 +647,10 @@ const UserProfile: React.FC = () => {
         </div>
       </div>
       
+      {viewingOwnProfile && user.knowledgeEntries && (
+        <PersonalKnowledgeCaptureSection entries={user.knowledgeEntries} />
+      )}
+
       {user.knowledgeMap && <KnowledgeMapSection mapData={user.knowledgeMap} />}
 
       <AchievementsSection badgeIds={user.badges} />

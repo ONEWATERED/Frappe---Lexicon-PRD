@@ -39,6 +39,9 @@ import {
   Patent,
   ResearchProject,
   FeatureSuggestion,
+  KnowledgeEntry,
+  KnowledgeCard,
+  Reaction,
 } from './types';
 
 // --- CAREER GOALS DATA ---
@@ -217,6 +220,106 @@ const knowledgeMap_Alex: KnowledgeMapData = {
     ],
 };
 
+// --- KNOWLEDGE CAPTURE DATA ---
+export const knowledgeEntries: KnowledgeEntry[] = [
+    {
+        id: 'ke-001',
+        userId: 'user-123',
+        type: 'photo',
+        title: 'Corroded Flange at Pump Station 3',
+        description: 'Minor weeping observed on the lower bolt. Scheduled for replacement during next maintenance cycle.',
+        mediaUrl: 'https://picsum.photos/seed/ke-001/800/600',
+        thumbnailUrl: 'https://picsum.photos/seed/ke-001/400/300',
+        tags: ['leak', 'pump station', 'flange', 'maintenance', 'corrosion'],
+        lexiconTermIds: ['t001', 't008'],
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        sharingScope: 'private',
+        metadata: { timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), device: 'Pixel 8 Pro' },
+        status: 'published',
+    },
+    {
+        id: 'ke-002',
+        userId: 'user-123',
+        type: 'audio',
+        title: 'Field Note: Unusual Hum from VFD',
+        description: 'Recorded the sound from the VFD for motor #2. It has a high-frequency pitch that wasn\'t present last week. Sending to senior tech for review.',
+        mediaUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+        transcript: 'This is Alex Johnson at Pump Station 3, it\'s Tuesday around 1400 hours. I\'m recording the sound from the VFD on motor number two. There\'s a high-frequency hum here that sounds new. I\'m going to send this over to Maria to see if she recognizes the signature. Everything else seems normal.',
+        tags: ['vfd', 'motor', 'diagnostics', 'audio log'],
+        lexiconTermIds: ['t003'],
+        createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        sharingScope: 'public',
+        metadata: { timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), device: 'iPhone 15', duration: 35 },
+        status: 'published',
+    },
+    {
+        id: 'ke-003',
+        userId: 'user-123',
+        type: 'video',
+        title: 'Hydrant Flush Procedure',
+        description: 'Quick video showing the proper sequence for opening and closing the hydrant at Elm & Main to avoid water hammer.',
+        mediaUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        thumbnailUrl: 'https://picsum.photos/seed/ke-003/400/300',
+        tags: ['hydrant', 'flushing', 'procedure', 'operations'],
+        lexiconTermIds: [],
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        sharingScope: 'organization',
+        metadata: { timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), device: 'Samsung Galaxy S24', duration: 55 },
+        status: 'published',
+        cardId: 'kc-001',
+    },
+    {
+        id: 'ke-004',
+        userId: 'user-123',
+        type: 'photo',
+        title: 'New SCADA HMI Screen',
+        description: 'Screenshot of the new overview screen for the wastewater plant. Pending sync from my tablet.',
+        mediaUrl: 'https://picsum.photos/seed/ke-004/800/600',
+        thumbnailUrl: 'https://picsum.photos/seed/ke-004/400/300',
+        tags: ['scada', 'hmi', 'upgrade'],
+        lexiconTermIds: ['t003'],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        sharingScope: 'private',
+        metadata: { timestamp: new Date().toISOString(), device: 'iPad Pro' },
+        status: 'pending_sync',
+    }
+];
+
+export const knowledgeCards: KnowledgeCard[] = [
+    {
+        id: 'kc-001',
+        sourceEntryId: 'ke-003',
+        userId: 'user-123',
+        title: 'Standard Hydrant Flushing Procedure',
+        scenario: 'Routine flushing of a fire hydrant to maintain water quality and verify operation.',
+        steps: [
+            'Notify dispatch of flushing activity location.',
+            'Check for any potential hazards or obstructions around the hydrant.',
+            'Slowly open the hydrant valve using a hydrant wrench.',
+            'Let water flow until it runs clear.',
+            'Slowly close the hydrant valve to prevent water hammer.',
+            'Confirm the hydrant has fully drained.'
+        ],
+        materials: ['Hydrant wrench', 'Diffuser'],
+        warnings: ['Always open and close hydrant valves slowly.'],
+        attachmentEntryIds: ['ke-003'],
+        lexiconTermIds: [],
+        suggestedDestination: 'Manuals',
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'published'
+    }
+];
+
+export const reactions: Reaction[] = [
+    { id: 'r-001', entityId: 'ke-002', userId: 'user-456', type: 'thanks', createdAt: new Date().toISOString() },
+    { id: 'r-002', entityId: 'ke-002', userId: 'user-789', type: 'helped', createdAt: new Date().toISOString() },
+];
+
 
 export const users: User[] = [
   {
@@ -226,7 +329,16 @@ export const users: User[] = [
     avatarUrl: 'https://i.pravatar.cc/150?u=user-123',
     tierId: 'T3',
     xp: 7250,
-    stats: { commentsPosted: 42, documentsUploaded: 5, insightfulMarks: 15 },
+    stats: { 
+      commentsPosted: 42, 
+      documentsUploaded: 5, 
+      insightfulMarks: 15,
+      knowledgeContributions: 4,
+      publicShares: 1,
+      thanksReceived: 18,
+      views: 230,
+      savesByOthers: 25,
+    },
     badges: ['B01', 'B02', 'B04', 'B05', 'B06'],
     credentials: userCredentials_Alex,
     careerGoals: careerGoals,
@@ -237,6 +349,7 @@ export const users: User[] = [
     myLibrary: myLibrary_Alex,
     learningTranscript: learningTranscript_Alex,
     knowledgeMap: knowledgeMap_Alex,
+    knowledgeEntries: knowledgeEntries.filter(ke => ke.userId === 'user-123'),
     isOnline: true,
     lastSeen: new Date().toISOString(),
     connections: ['user-456'],
@@ -787,7 +900,7 @@ export const featureSuggestions: FeatureSuggestion[] = [
 // --- INSIGHTS (BLOG) DATA ---
 export const blogAuthors: BlogAuthor[] = [
   { id: 'author-1', name: 'Dr. Eleanor Vance', avatarUrl: 'https://i.pravatar.cc/150?u=author-1', title: 'Lead Water Scientist, Hydro-Solutions.io', isGuest: false },
-  { id: 'author-2', name: 'Alex Johnson', avatarUrl: 'https://i.pravatar.cc/150?u=user-123', title: 'Senior Specialist, oraKLES Member', isGuest: true },
+  { id: 'author-2', name: 'Alex Johnson', avatarUrl: 'https://i.pravatar.cc/150?u=user-123', title: 'Senior Specialist, ORAKLES Member', isGuest: true },
   { id: 'author-3', name: 'Sam Chen', avatarUrl: 'https://i.pravatar.cc/150?u=user-789', title: 'Utility Operator, City Water', isGuest: true },
 ];
 
@@ -819,7 +932,7 @@ export const blogPosts: BlogPost[] = [
     publishDate: '2024-05-20T00:00:00Z', 
     readTimeMinutes: 7, 
     heroImageUrl: 'https://picsum.photos/seed/post-3/1200/630', 
-    content: "The path to becoming a leader in the water industry isn't just about accumulating years of service; it's about intentional growth. It starts with mastering the fundamentals and obtaining the necessary certifications for your role. But don't stop there.\n\nEmbrace technology. The utility of the future is digital, and understanding SCADA, GIS, and asset management software is no longer optional. Seek out mentors—platforms like oraKLES connect you with seasoned professionals who have walked the path before. Their guidance is invaluable. Finally, never stop being curious. Attend webinars, read industry publications, and engage in community discussions. A career in water is a commitment to lifelong learning, and the opportunities for those who embrace it are limitless.", 
+    content: "The path to becoming a leader in the water industry isn't just about accumulating years of service; it's about intentional growth. It starts with mastering the fundamentals and obtaining the necessary certifications for your role. But don't stop there.\n\nEmbrace technology. The utility of the future is digital, and understanding SCADA, GIS, and asset management software is no longer optional. Seek out mentors—platforms like ORAKLES connect you with seasoned professionals who have walked the path before. Their guidance is invaluable. Finally, never stop being curious. Attend webinars, read industry publications, and engage in community discussions. A career in water is a commitment to lifelong learning, and the opportunities for those who embrace it are limitless.", 
     claps: 95, 
     comments: [
         { user: users[0], text: "Fantastic advice! Finding a good mentor made all the difference for me early in my career.", timestamp: "2024-05-21T11:00:00Z" }

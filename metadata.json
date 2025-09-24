@@ -2,6 +2,7 @@
   "name": "ORAKLES",
   "description": "A comprehensive water industry educational platform with a lexicon, video streaming, an educational academy, manuals library, and ecosystem directory.",
   "requestFramePermissions": [
-    "microphone"
+    "microphone",
+    "camera"
   ]
 }

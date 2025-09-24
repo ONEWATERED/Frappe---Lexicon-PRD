@@ -11,6 +11,11 @@ export type User = {
     commentsPosted: number;
     documentsUploaded: number;
     insightfulMarks: number;
+    knowledgeContributions?: number;
+    publicShares?: number;
+    thanksReceived?: number;
+    views?: number;
+    savesByOthers?: number;
   };
   badges: string[];
   credentials?: UserCredential[];
@@ -31,6 +36,7 @@ export type User = {
   };
   mentorshipStatus?: 'seeking' | 'offering' | 'none';
   mentorshipTopics?: LexiconCategory[];
+  knowledgeEntries?: KnowledgeEntry[];
 };
 
 export type IconName = 'AcademicCapIcon' | 'StarIcon' | 'ShieldCheckIcon' | 'SparklesIcon' | 'TrophyIcon';
@@ -652,6 +658,69 @@ export type PIPDocument = {
   downloadCount: number;
 };
 
+// --- PERSONAL KNOWLEDGE CAPTURE TYPES ---
+export type SharingScope = 'private' | 'organization' | 'public';
+export type KnowledgeEntryType = 'photo' | 'video' | 'audio' | 'card';
+
+export type AISuggestions = {
+  title?: string;
+  summary?: string;
+  tags?: string[];
+  lexiconTermIds?: string[];
+  destination?: 'Manuals' | 'Academy' | 'Insights';
+};
+
+export type KnowledgeEntry = {
+  id: string;
+  userId: string;
+  type: KnowledgeEntryType;
+  title: string;
+  description?: string;
+  mediaUrl: string;
+  thumbnailUrl?: string;
+  transcript?: string;
+  tags: string[];
+  lexiconTermIds: string[];
+  createdAt: string; // ISO Date
+  updatedAt: string; // ISO Date
+  sharingScope: SharingScope;
+  metadata: {
+    timestamp: string; // ISO Date
+    device?: string;
+    gps?: { lat: number; lon: number };
+    fileSize?: number; // in bytes
+    duration?: number; // in seconds
+  };
+  status: 'published' | 'pending_sync';
+  cardId?: string;
+};
+
+export type KnowledgeCard = {
+  id: string;
+  sourceEntryId: string;
+  userId: string;
+  title: string;
+  scenario?: string;
+  steps: string[];
+  materials: string[];
+  warnings: string[];
+  attachmentEntryIds: string[];
+  lexiconTermIds: string[];
+  suggestedDestination?: 'Manuals' | 'Academy' | 'Insights';
+  createdAt: string;
+  updatedAt: string;
+  status: 'draft' | 'published';
+};
+
+export type Reaction = {
+    id: string;
+    entityId: string; // entryId or cardId
+    userId: string;
+    type: 'thanks' | 'helped';
+    createdAt: string;
+};
+
+
 export interface AuthContextType {
   currentUser: User | null;
   login: (userId: string) => void;
@@ -682,4 +751,7 @@ export interface AuthContextType {
   conversations: Conversation[];
   pipDocuments: PIPDocument[];
   featureSuggestions: FeatureSuggestion[];
+  knowledgeEntries: KnowledgeEntry[];
+  knowledgeCards: KnowledgeCard[];
+  reactions: Reaction[];
 }
