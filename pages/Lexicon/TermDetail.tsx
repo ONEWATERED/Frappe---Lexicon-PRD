@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { explainTermSimply, generateRealWorldExample } from '../../services/geminiService';
 import { TermComment, TermDocument, LexiconTerm } from '../../types';
-import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon, SpeakerWaveIcon, SpeakerXMarkIcon } from '../../components/icons/Icons';
+import { DocumentTextIcon, PaperClipIcon, ChatBubbleLeftRightIcon, LightBulbIcon, GlobeAltIcon, ShareIcon, SparklesIcon, SpeakerWaveIcon, SpeakerXMarkIcon, ArchiveBoxIcon, ArrowUpTrayIcon } from '../../components/icons/Icons';
 import VideoPlayer from '../../components/VideoPlayer';
 
 function getTimeAgo(dateString: string) {
@@ -236,6 +236,27 @@ const TermDetail: React.FC = () => {
                         )}
                         <div className="space-y-6">
                             {termComments.map(comment => <Comment key={comment.id} comment={comment} onMarkInsightful={handleMarkInsightful}/>)}
+                        </div>
+                    </div>
+
+                    {/* PIP Contribution Section */}
+                    <div className="mt-12 bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl border-2 border-blue-500/30 shadow-2xl text-center relative overflow-hidden">
+                        <div className="absolute -top-10 -right-10 w-40 h-40 text-blue-500/10">
+                            <ArchiveBoxIcon className="w-full h-full" />
+                        </div>
+                        <div className="relative">
+                            <ArchiveBoxIcon className="w-16 h-16 text-blue-400 mx-auto mb-4" />
+                            <h2 className="text-2xl font-bold text-white">Help Build the Living Library</h2>
+                            <p className="mt-3 max-w-xl mx-auto text-slate-300">
+                                Your knowledge can empower the entire water sector. Contribute a relevant report, case study, or whitepaper to the Public Information Protocol (PIP) and help us reach our goal of 100,000 documents.
+                            </p>
+                            <div className="mt-6">
+                                <label htmlFor="pip-upload" className="cursor-pointer inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                    <ArrowUpTrayIcon className="w-5 h-5" />
+                                    Contribute a Document
+                                </label>
+                                <input type="file" id="pip-upload" className="hidden" />
+                            </div>
                         </div>
                     </div>
                 </main>
