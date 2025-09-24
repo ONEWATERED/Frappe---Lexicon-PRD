@@ -46,7 +46,7 @@ const EntityCard: React.FC<{ entity: EcosystemEntity }> = ({ entity }) => {
             <div className="relative bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700 h-full flex flex-col group overflow-hidden">
                 {/* Watermark */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                    <div className="transform -rotate-45 text-slate-900/80 text-5xl sm:text-6xl font-black uppercase tracking-widest select-none opacity-40">
+                    <div className="transform -rotate-45 text-white text-5xl sm:text-6xl font-black uppercase tracking-widest select-none opacity-10">
                         Unclaimed
                     </div>
                 </div>

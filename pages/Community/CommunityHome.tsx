@@ -208,6 +208,61 @@ const EventsCalendar: React.FC = () => {
     );
 };
 
+const AvatarCluster: React.FC<{ users: User[]; title: string; }> = ({ users, title }) => (
+    <div className="mb-12">
+        <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold text-white">{title}</h3>
+            <Link to="#" className="text-sm font-semibold text-blue-400 hover:underline">See All {users.length}</Link>
+        </div>
+        <div className="flex flex-wrap items-center -space-x-4">
+            {users.slice(0, 15).map((user, index) => (
+                <Link to={`/profile/${user.id}`} key={user.id} title={user.name}>
+                    <img 
+                        className="w-16 h-16 rounded-full object-cover border-4 border-slate-800 hover:border-blue-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 z-10 hover:z-20"
+                        src={user.avatarUrl} 
+                        alt={user.name}
+                        style={{ zIndex: users.length - index }} 
+                    />
+                </Link>
+            ))}
+            {users.length > 15 && (
+                 <div className="w-16 h-16 rounded-full bg-slate-700 flex items-center justify-center border-4 border-slate-800 text-sm font-bold text-slate-300">
+                    +{users.length - 15}
+                </div>
+            )}
+        </div>
+    </div>
+);
+
+const MembersExploreView: React.FC = () => {
+    const { currentUser, getAllUsers } = useAuth();
+    const allUsers = getAllUsers();
+
+    const newMembersThisWeek = useMemo(() => {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        return allUsers.filter(user => user.joinDate && new Date(user.joinDate) >= oneWeekAgo);
+    }, [allUsers]);
+
+    const membersNearYou = useMemo(() => {
+        if (!currentUser?.location) return [];
+        return allUsers.filter(user => user.id !== currentUser.id && user.location?.state === currentUser.location?.state);
+    }, [allUsers, currentUser]);
+
+    const onlineNow = useMemo(() => {
+        return allUsers.filter(user => user.isOnline);
+    }, [allUsers]);
+
+    return (
+        <div>
+            {newMembersThisWeek.length > 0 && <AvatarCluster users={newMembersThisWeek} title="New Members This Week" />}
+            {membersNearYou.length > 0 && <AvatarCluster users={membersNearYou} title="Members Near You" />}
+            {onlineNow.length > 0 && <AvatarCluster users={onlineNow} title="Online Now" />}
+        </div>
+    );
+};
+
+
 const MembersList: React.FC = () => {
     const { currentUser, getAllUsers } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
@@ -522,9 +577,56 @@ const FindMentorWidget: React.FC = () => {
     );
 };
 
+interface NewMembersWidgetProps {
+    setActiveView: (view: string) => void;
+}
+
+const NewMembersWidget: React.FC<NewMembersWidgetProps> = ({ setActiveView }) => {
+    const { getAllUsers } = useAuth();
+
+    const newMembers = useMemo(() => {
+        const allUsers = getAllUsers();
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+        return allUsers
+            .filter(user => user.joinDate && new Date(user.joinDate) >= oneWeekAgo)
+            .sort((a, b) => new Date(b.joinDate!).getTime() - new Date(a.joinDate!).getTime());
+    }, [getAllUsers]);
+
+    if (newMembers.length === 0) {
+        return null;
+    }
+
+    return (
+        <div className="glass-card p-4">
+            <h3 className="font-bold text-white mb-3">👋 Welcome New Members</h3>
+            <div className="space-y-3">
+                {newMembers.slice(0, 5).map(member => (
+                    <Link to={`/profile/${member.id}`} key={member.id} className="flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-slate-700/50 transition-colors">
+                        <img src={member.avatarUrl} alt={member.name} className="w-10 h-10 rounded-full" />
+                        <div>
+                            <p className="font-semibold text-slate-200 text-sm">{member.name}</p>
+                            <p className="text-xs text-slate-400">{getTimeAgo(member.joinDate!)}</p>
+                        </div>
+                    </Link>
+                ))}
+            </div>
+            <button 
+                onClick={() => setActiveView('members')}
+                className="w-full text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors mt-4"
+            >
+                View All Members
+            </button>
+        </div>
+    );
+};
+
+
 const CommunityHome: React.FC = () => {
     const { communityPosts } = useAuth();
     const [activeView, setActiveView] = useState<string>('labs');
+    const [memberViewTab, setMemberViewTab] = useState<'explore' | 'all'>('explore');
     
     const combinedFeed = useMemo(() => {
         const postsAsFeed = communityPosts.map(p => ({ ...p, feedType: 'post' as const, date: p.timestamp }));
@@ -578,7 +680,23 @@ const CommunityHome: React.FC = () => {
                     {activeView === 'labs' ? (
                         <OraKLESLabs />
                     ) : activeView === 'members' ? (
-                        <MembersList />
+                        <div>
+                            <div className="flex items-center gap-2 border-b border-slate-700 mb-6">
+                                <button 
+                                    onClick={() => setMemberViewTab('explore')}
+                                    className={`px-4 py-2 text-sm font-semibold rounded-t-md transition-colors ${memberViewTab === 'explore' ? 'bg-slate-800/50 text-white' : 'text-slate-400 hover:bg-slate-800/20'}`}
+                                >
+                                    Explore
+                                </button>
+                                <button 
+                                    onClick={() => setMemberViewTab('all')}
+                                    className={`px-4 py-2 text-sm font-semibold rounded-t-md transition-colors ${memberViewTab === 'all' ? 'bg-slate-800/50 text-white' : 'text-slate-400 hover:bg-slate-800/20'}`}
+                                >
+                                    All Members
+                                </button>
+                            </div>
+                            {memberViewTab === 'explore' ? <MembersExploreView /> : <MembersList />}
+                        </div>
                     ) : activeView === 'events' ? (
                         <EventsCalendar />
                     ) : (
@@ -601,6 +719,7 @@ const CommunityHome: React.FC = () => {
                 </main>
 
                 <aside className="lg:col-span-3 space-y-6">
+                    <NewMembersWidget setActiveView={setActiveView} />
                     <MyNetworkWidget />
                     <MyMessagesWidget />
                     <FindMentorWidget />

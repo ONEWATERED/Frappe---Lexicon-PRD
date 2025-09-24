@@ -360,6 +360,8 @@ export const users: User[] = [
     mentorshipStatus: 'offering',
     mentorshipTopics: ['asset_mgmt', 'utility_management'],
     knowledgeEntries: knowledgeEntries,
+    location: { city: 'Austin', state: 'TX' },
+    joinDate: '2023-01-15T00:00:00Z',
   },
   { 
     id: 'user-456', 
@@ -375,6 +377,8 @@ export const users: User[] = [
     connections: ['user-123'],
     pendingConnections: { incoming: [], outgoing: [] },
     mentorshipStatus: 'none',
+    location: { city: 'San Antonio', state: 'TX' },
+    joinDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // New member
   },
   { 
     id: 'user-789', 
@@ -391,6 +395,8 @@ export const users: User[] = [
     pendingConnections: { incoming: [], outgoing: [] },
     mentorshipStatus: 'seeking',
     mentorshipTopics: ['modeling', 'ai_blockchain'],
+    location: { city: 'Austin', state: 'TX' },
+    joinDate: '2024-03-10T00:00:00Z',
   },
   { 
     id: 'user-999', 
@@ -407,6 +413,8 @@ export const users: User[] = [
     pendingConnections: { incoming: [], outgoing: [] },
     mentorshipStatus: 'seeking',
     mentorshipTopics: ['operations'],
+    location: { city: 'Houston', state: 'TX' },
+    joinDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // New member
   },
   { 
     id: 'user-888', 
@@ -423,6 +431,8 @@ export const users: User[] = [
     pendingConnections: { incoming: [], outgoing: [] },
     mentorshipStatus: 'offering',
     mentorshipTopics: ['data', 'water_distribution'],
+    location: { city: 'San Francisco', state: 'CA' },
+    joinDate: '2022-11-20T00:00:00Z',
   }
 ];
 
@@ -707,36 +717,123 @@ export const blogAuthors: BlogAuthor[] = [
     { id: 'ba002', name: 'Dr. Jane Foster', avatarUrl: 'https://i.pravatar.cc/150?u=jane-foster', title: 'Water Reuse Practice Leader, Carollo Engineers', isGuest: true }
 ];
 
+// FIX: Completed the blogPosts array which was previously cut off, causing a syntax error.
 export const blogPosts: BlogPost[] = [
-    { id: 'post-1', title: 'The Semantic Web: Unlocking the Future of Water Infrastructure', subtitle: 'How a shared language can break down data silos and accelerate innovation across the sector.', authorId: 'ba001', publishDate: '2024-05-15T00:00:00Z', readTimeMinutes: 8, heroImageUrl: 'https://picsum.photos/seed/blog-semantic/1200/630', content: 'The water sector is at a crossroads...\n\nBy creating a universal vocabulary—a lexicon—we can enable true interoperability.', claps: 125, comments: [], vendorId: 'v003' },
-    { id: 'post-2', title: 'Direct Potable Reuse: From Sci-Fi to Reality', subtitle: 'Exploring the technologies and public outreach strategies making DPR a viable solution for water scarcity.', authorId: 'ba002', publishDate: '2024-05-20T00:00:00Z', readTimeMinutes: 12, heroImageUrl: 'https://picsum.photos/seed/blog-dpr/1200/630', content: 'For decades, the idea of turning wastewater directly into drinking water was met with skepticism...\n\nNow, with advanced purification technologies, DPR is becoming a cornerstone of sustainable water management.', claps: 250, comments: [{ user: users[0], text: 'Great article, Dr. Foster!', timestamp: '2024-05-21T00:00:00Z' }] }
-];
-
-export const conversations: Conversation[] = [
     {
-        id: 'conv-1',
-        participantIds: ['user-123', 'user-456'],
-        messages: [
-            { id: 'm1-1', fromUserId: 'user-456', content: 'Hey Alex, great question in the asset management channel. I have a report I can share with you on mobile CMMS options.', timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(), isRead: true },
-            { id: 'm1-2', fromUserId: 'user-123', content: 'That would be amazing, Maria! Thanks so much.', timestamp: new Date(Date.now() - 28 * 60 * 1000).toISOString(), isRead: true },
-        ]
+        id: 'post-1',
+        title: 'The Digital Twin Revolution: Reshaping Utility Operations',
+        subtitle: 'How virtual replicas of physical assets are enabling proactive maintenance and unprecedented efficiency.',
+        authorId: 'ba001',
+        publishDate: '2024-05-15T00:00:00Z',
+        readTimeMinutes: 8,
+        heroImageUrl: 'https://picsum.photos/seed/blog-dt/1200/600',
+        content: 'The concept of a "digital twin" has moved from science fiction to practical reality, and nowhere is its impact more profound than in the water utility sector. A digital twin is a dynamic, virtual representation of a physical asset or system, updated in real-time with data from sensors, SCADA systems, and operational logs. It\'s not just a 3D model; it\'s a living simulation.\n\nFor utilities, this means having the ability to predict failures before they happen. By running simulations on the digital twin, operators can test different operational scenarios—like a sudden main break or a power outage at a pump station—without any real-world risk. This allows for the development of more robust emergency response plans and optimized daily operations. Furthermore, digital twins are revolutionizing capital improvement planning. Instead of relying on age-based asset replacement, utilities can now use predictive analytics from their digital twins to prioritize investments based on the actual condition and risk of failure of each asset, ensuring that every dollar is spent where it\'s needed most.',
+        claps: 1200,
+        comments: [
+            { user: users[0], text: 'This is a game-changer for capital planning!', timestamp: '2024-05-16T00:00:00Z' }
+        ],
+        vendorId: 'v001'
     },
     {
-        id: 'conv-2',
-        participantIds: ['user-123', 'user-789'],
-        messages: [
-            { id: 'm2-1', fromUserId: 'user-789', content: 'Hi Alex, I saw you\'re offering mentorship in asset management. I\'d love to connect and learn more about your experience.', timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), isRead: false }
-        ]
+        id: 'post-2',
+        title: 'Unlocking the Potential of Water Reuse: A Conversation with Dr. Jane Foster',
+        subtitle: 'Exploring the technologies and public perception shifts driving the adoption of water reuse.',
+        authorId: 'ba002',
+        publishDate: '2024-05-20T00:00:00Z',
+        readTimeMinutes: 12,
+        heroImageUrl: 'https://picsum.photos/seed/blog-reuse/1200/600',
+        content: 'Water reuse, once a niche concept, is now at the forefront of ensuring water security for communities around the world. I sat down with Dr. Jane Foster, a leading expert in the field, to discuss the state of water recycling. "The technology has been solid for years," Dr. Foster explains. "Advanced treatment processes like reverse osmosis, UV disinfection, and advanced oxidation can purify wastewater to standards that are often higher than conventional drinking water sources."\n\nThe biggest hurdle, she notes, has often been public perception. "We call it the \'yuck factor,\'" she says with a smile. "But that\'s changing. Through public education, transparent communication, and rebranding efforts—like calling it \'purified water\' instead of \'recycled wastewater\'—communities are embracing it. They see the value in a resilient, locally-controlled water supply that is independent of drought or distant water sources. The future is circular, and water is no exception."',
+        claps: 850,
+        comments: [],
+        vendorId: 'v003'
     }
 ];
 
-export const pipDocuments: PIPDocument[] = [
-    { id: 'pip-1', title: 'City of Springfield Water Quality Report 2023', description: 'Annual consumer confidence report detailing water quality testing and results for the City of Springfield.', fileUrl: '#', fileType: 'Report', submittedByUserId: 'user-123', submittedByEntityId: 'e001', timestamp: new Date().toISOString(), region: 'United States', tags: ['water quality', 'ccr'], viewCount: 150, downloadCount: 45 },
-    { id: 'pip-2', title: 'Advanced Metering Infrastructure (AMI) Business Case', description: 'A comprehensive business case analysis for implementing AMI in a mid-sized utility.', fileUrl: '#', fileType: 'Whitepaper', submittedByUserId: 'user-456', submittedByEntityId: 'v003', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), region: 'United States', tags: ['ami', 'smart meter', 'finance'], viewCount: 320, downloadCount: 112 },
-    { id: 'pip-3', title: 'Lead Service Line Inventory and Replacement Plan', description: 'A template and guide for utilities developing their LSL inventory and replacement programs in accordance with new regulations.', fileUrl: '#', fileType: 'Case Study', submittedByUserId: 'user-888', submittedByEntityId: 'e003', timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), region: 'United States', tags: ['lead and copper', 'lsl', 'regulations'], viewCount: 280, downloadCount: 98 },
+// FIX: Added missing 'conversations' data export for AuthContext.
+export const conversations: Conversation[] = [
+  {
+    id: 'conv-1',
+    participantIds: ['user-123', 'user-456'],
+    messages: [
+      { id: 'msg-1', fromUserId: 'user-123', content: 'Hey Maria, saw your comment on the Asset Management term. Do you have that whitepaper on opex impact you mentioned?', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), isRead: true },
+      { id: 'msg-2', fromUserId: 'user-456', content: 'Hi Alex! Absolutely, I just uploaded it to the term page. Let me know what you think.', timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), isRead: true },
+      { id: 'msg-3', fromUserId: 'user-123', content: 'Perfect, thanks! I\'ll take a look now.', timestamp: new Date(Date.now() - 55 * 60 * 1000).toISOString(), isRead: false },
+    ]
+  },
+  {
+    id: 'conv-2',
+    participantIds: ['user-123', 'user-789'],
+    messages: [
+      { id: 'msg-4', fromUserId: 'user-789', content: 'Hi Alex, I\'m looking for a mentor in utility management. Would you be open to a quick chat sometime next week?', timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), isRead: false },
+    ]
+  }
 ];
 
+// FIX: Added missing 'pipDocuments' data export for AuthContext.
+export const pipDocuments: PIPDocument[] = [
+    {
+        id: 'pip-001',
+        title: 'City of Metropolis Water Conservation Initiative: 5-Year Report',
+        description: 'A comprehensive review of the City of Metropolis\'s water conservation programs from 2018-2023, including data on AMI rollout, customer engagement, and non-revenue water reduction.',
+        fileUrl: '#',
+        fileType: 'Report',
+        submittedByUserId: 'user-123',
+        submittedByEntityId: 'v002',
+        timestamp: '2024-05-10T00:00:00Z',
+        region: 'United States',
+        tags: ['water conservation', 'ami', 'non-revenue water', 'case study'],
+        viewCount: 1523,
+        downloadCount: 432
+    },
+    {
+        id: 'pip-002',
+        title: 'National Survey of PFAS Treatment Technologies',
+        description: 'An academic publication summarizing the efficacy and cost-effectiveness of current and emerging technologies for the treatment of per- and polyfluoroalkyl substances (PFAS) in drinking water.',
+        fileUrl: '#',
+        fileType: 'Publication',
+        submittedByUserId: 'user-789',
+        submittedByEntityId: 'v007',
+        timestamp: '2024-04-22T00:00:00Z',
+        region: 'United States',
+        tags: ['pfas', 'treatment', 'research', 'emerging contaminants'],
+        viewCount: 3488,
+        downloadCount: 1201
+    }
+];
+
+// FIX: Added missing 'featureSuggestions' data export for AuthContext.
 export const featureSuggestions: FeatureSuggestion[] = [
-    { id: 'fs-1', title: 'AI-Powered Resume Builder', description: 'Use my profile data (skills, projects, credentials) to automatically generate a professional resume tailored to specific job descriptions.', submittedBy: users[0], timestamp: '2024-05-01T00:00:00Z', upvoteUserIds: ['user-123', 'user-789'], comments: [], status: 'Planned', tags: ['profile', 'career'] },
-    { id: 'fs-2', title: 'Gamified Learning Streaks', description: 'Award badges and XP bonuses for maintaining daily and weekly study streaks in the Academy to encourage consistent learning.', submittedBy: users[2], timestamp: '2024-04-15T00:00:00Z', upvoteUserIds: ['user-123', 'user-456', 'user-789'], comments: [], status: 'Shipped', tags: ['academy', 'gamification'] }
+    {
+        id: 'feat-001',
+        title: 'AI-Powered Resume Builder',
+        description: 'It would be amazing if the platform could take my profile data (projects, skills, credentials) and automatically generate a tailored resume for specific job applications.',
+        submittedBy: users[0],
+        timestamp: '2024-05-20T00:00:00Z',
+        upvoteUserIds: ['user-123', 'user-456', 'user-789', 'user-999'],
+        comments: [],
+        status: 'Planned',
+        tags: ['profile', 'career', 'ai']
+    },
+    {
+        id: 'feat-002',
+        title: 'Interactive Knowledge Maps',
+        description: 'Instead of just seeing my knowledge map, I want to be able to click on a node (e.g., "Asset Management") and see all the related terms, videos, and people I\'ve interacted with on that topic.',
+        submittedBy: users[2],
+        timestamp: '2024-05-18T00:00:00Z',
+        upvoteUserIds: ['user-789', 'user-123'],
+        comments: [],
+        status: 'Under Consideration',
+        tags: ['knowledge-map', 'ui/ux']
+    },
+    {
+        id: 'feat-003',
+        title: 'Gamified Team Learning Challenges',
+        description: 'Allow companies to create private teams and compete in weekly challenges based on Academy decks. This would be great for internal training and engagement.',
+        submittedBy: users[1],
+        timestamp: '2024-05-15T00:00:00Z',
+        upvoteUserIds: ['user-456'],
+        comments: [],
+        status: 'In Progress',
+        tags: ['academy', 'gamification', 'teams']
+    }
 ];

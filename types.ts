@@ -40,6 +40,8 @@ export type User = {
   mentorshipStatus?: 'seeking' | 'offering' | 'none';
   mentorshipTopics?: LexiconCategory[];
   knowledgeEntries?: KnowledgeEntry[];
+  location?: { city: string; state: string; };
+  joinDate?: string; // ISO Date
 };
 
 export type IconName = 'AcademicCapIcon' | 'StarIcon' | 'ShieldCheckIcon' | 'SparklesIcon' | 'TrophyIcon';
