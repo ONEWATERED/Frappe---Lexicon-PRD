@@ -1,4 +1,6 @@
 
+
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -13,25 +15,23 @@ class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
-  // FIX: Reverted to a standard constructor for state initialization. The class field syntax, while modern, may not be correctly interpreted by the build environment, leading to `this` context issues where `setState` and `props` appear to be missing.
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
+  state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Update state so the next render will show the fallback UI.
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.setState` was not found.
+  componentDidCatch = (error: Error, errorInfo: React.ErrorInfo) => {
     // We can also log the error to an error reporting service.
     // Here we'll just update state with more details.
     this.setState({ error, errorInfo });
     console.error("Uncaught error:", error, errorInfo);
   }
 
-  render() {
+  // FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.props` was not found.
+  render = () => {
     if (this.state.hasError) {
       // Render fallback UI
       return <DiagnosticsOverlay error={this.state.error} errorInfo={this.state.errorInfo} />;

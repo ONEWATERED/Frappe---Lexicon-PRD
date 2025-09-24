@@ -252,9 +252,9 @@ export const ecosystemEntities: EcosystemEntity[] = [
             secondaryCta: { label: 'Meet Our Team', action: 'scroll:#team' }
         },
         contacts: [
-          { id: 'vc001', name: 'Samantha Carter', title: 'Lead Solutions Architect', avatarUrl: 'https://i.pravatar.cc/150?u=vc001', email: 's.carter@xylem.com', phone: '555-123-4567', online: true, calendarUrl: 'https://calendly.com/sample', role: 'Engineering' },
-          { id: 'vc002', name: 'Daniel Jackson', title: 'Director of Sales, NA', avatarUrl: 'https://i.pravatar.cc/150?u=vc002', email: 'd.jackson@xylem.com', online: false, calendarUrl: 'https://calendly.com/sample', role: 'Sales' },
-          { id: 'vc003', name: 'Janet Fraiser', title: 'Product Manager, Treatment', avatarUrl: 'https://i.pravatar.cc/150?u=vc003', email: 'j.fraiser@xylem.com', online: true, calendarUrl: undefined, role: 'Sales' },
+          { id: 'vc001', name: 'Samantha Carter', title: 'Lead Solutions Architect', avatarUrl: 'https://i.pravatar.cc/150?u=vc001', email: 's.carter@xylem.com', phone: '555-123-4567', online: true, calendarUrl: 'https://calendly.com/sample', chatUrl: '#', region: 'North America', role: 'Engineering' },
+          { id: 'vc002', name: 'Daniel Jackson', title: 'Director of Sales, NA', avatarUrl: 'https://i.pravatar.cc/150?u=vc002', email: 'd.jackson@xylem.com', phone: '555-123-4568', online: false, calendarUrl: 'https://calendly.com/sample', region: 'North America', role: 'Sales' },
+          { id: 'vc003', name: 'Janet Fraiser', title: 'Product Manager, Treatment', avatarUrl: 'https://i.pravatar.cc/150?u=vc003', email: 'j.fraiser@xylem.com', online: true, calendarUrl: undefined, region: 'EMEA', role: 'Product Management' },
         ],
         featuredVideoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
         longDescription: 'Xylem is a leading global water technology company committed to developing innovative technology solutions to the world’s water challenges. The Company’s products and services move, treat, analyze, monitor and return water to the environment in public utility, industrial, residential and commercial building services settings. Xylem also provides a leading portfolio of smart metering, network technologies and advanced infrastructure analytics solutions for water, electric and gas utilities.',
@@ -272,6 +272,40 @@ export const ecosystemEntities: EcosystemEntity[] = [
                 description: 'Proudly sponsoring the development and hosting of the Hardeep Knowledge Avatar to democratize water utility expertise.'
             }
         ],
+        projects: [
+          {
+            id: 'proj001',
+            title: 'Digital Twin for City of South Bend',
+            summary: 'Implementation of a real-time modeling solution that reduced combined sewer overflows (CSOs) by 70%.',
+            coverImageUrl: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            tags: ['Digital Twin', 'CSO Reduction', 'Smart Water'],
+            caseStudyUrl: '#'
+          },
+          {
+            id: 'proj002',
+            title: 'Flygt Concertor Pumping System Installation',
+            summary: 'The world\'s first wastewater pumping system with integrated intelligence, reducing energy consumption by up to 50%.',
+            coverVideoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+            tags: ['Wastewater Pumping', 'Energy Efficiency', 'Smart Pumping'],
+            caseStudyUrl: '#'
+          },
+          {
+            id: 'proj003',
+            title: 'Sensus AMI Network Deployment',
+            summary: 'Large-scale deployment of the FlexNet communication network for advanced metering infrastructure across a major metropolitan area.',
+            coverImageUrl: 'https://images.pexels.com/photos/3184430/pexels-photo-3184430.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+            tags: ['AMI', 'Metering', 'Network Management'],
+            caseStudyUrl: '#'
+          },
+          {
+            id: 'proj004',
+            title: 'Advanced Oxidation Process for PFAS Removal',
+            summary: 'Pilot project demonstrating a novel AOP technology for the destruction of "forever chemicals" in drinking water sources.',
+            coverImageUrl: undefined, // Test fallback
+            tags: ['PFAS', 'Water Treatment', 'Innovation'],
+            caseStudyUrl: undefined // Test fallback
+          }
+        ],
         resources: [
           { id: 'vr001', title: 'Flygt Concertor Pumping System', description: 'The world\'s first wastewater pumping system with integrated intelligence.', fileUrl: '#', type: 'Brochure', category: 'Pumping Systems', views: 1204, downloads: 312 },
           { id: 'vr002', title: 'Case Study: Digital Twin for City of South Bend', description: 'How real-time modeling reduced CSOs by 70%.', fileUrl: '#', type: 'Case Study', category: 'Digital Solutions', views: 855, downloads: 150 },
@@ -286,6 +320,70 @@ export const ecosystemEntities: EcosystemEntity[] = [
         visitorLogs: [
           { userId: 'user-456', firstVisit: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), lastVisit: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), totalVisits: 5, downloads: 2, views: 8 },
           { userId: 'user-789', firstVisit: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), lastVisit: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), totalVisits: 1, downloads: 0, views: 2 }
+        ],
+        academyContribution: {
+          show: true,
+          badgeUrl: 'https://picsum.photos/seed/academy-badge/100/100',
+          blurb: "Xylem contributes expert lessons to our Academy.",
+          academyUrl: '#'
+        },
+        sponsorshipDetails: {
+          show: true,
+          badgeUrl: 'https://picsum.photos/seed/sponsor-badge/100/100',
+          text: 'Proudly supporting the oraKLES AI Co-pilots initiative to help drive intelligent water infrastructure.',
+          linkUrl: '/ai-agents'
+        },
+        highlights: [
+          { icon: 'chat', label: 'Live Chat & Real-Time Engagement' },
+          { icon: 'calendar', label: 'Meet the Team via Scheduling' },
+          { icon: 'book', label: 'Academy Knowledge Contributor' },
+          { icon: 'blog', label: 'Active Blog & Insights' },
+          { icon: 'projects', label: 'Global Impact Projects' },
+          { icon: 'sponsor', label: 'Innovation Sponsor' }
+        ],
+        newsletter: {
+          show: true,
+          successMessage: "Thanks! We’ll be in touch soon."
+        },
+        social: {
+          linkedin: "https://linkedin.com/company/xylem",
+          twitter: "https://twitter.com/xyleminc",
+          youtube: "https://youtube.com/@xylem",
+          shareEnabled: true
+        },
+        conferenceBooth: [
+          {
+            id: 'cb001',
+            title: 'Xylem Vue: Smart Water Solutions',
+            description: 'Our comprehensive brochure detailing the entire suite of Xylem Vue digital solutions for utilities.',
+            thumbnailUrl: 'https://picsum.photos/seed/xylem-brochure/400/300',
+            actionUrl: '#',
+            type: 'Brochure',
+          },
+          {
+            id: 'cb002',
+            title: 'Flygt Concertor - Cut Sheet',
+            description: 'Technical specifications and performance data for the world\'s first wastewater pumping system with integrated intelligence.',
+            thumbnailUrl: 'https://picsum.photos/seed/flygt-pump/400/300',
+            actionUrl: '#',
+            type: 'Cut Sheet',
+          },
+          {
+            id: 'cb003',
+            title: 'Sensus iPERL Meter - Video Demo',
+            description: 'Watch a hands-on demonstration of the Sensus iPERL smart water meter, highlighting its accuracy and IoT capabilities.',
+            thumbnailUrl: 'https://picsum.photos/seed/sensus-demo/400/300',
+            actionUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+            type: 'Video Demo',
+          },
+          {
+            id: 'cb004',
+            title: 'Win a YETI Cooler!',
+            description: 'Enter our conference giveaway! Fill out a short survey for your chance to win a YETI Tundra Haul Hard Cooler.',
+            thumbnailUrl: 'https://picsum.photos/seed/yeti-giveaway/400/300',
+            actionUrl: '#',
+            type: 'Giveaway',
+          },
         ]
     },
     { id: 'v002', name: 'Badger Meter', logoUrl: 'https://logo.clearbit.com/badgermeter.com', type: 'Vendor', tagline: 'Innovator in flow measurement, control, and communications solutions.', location: 'Milwaukee, WI', domain: 'badgermeter.com', isClaimed: false },

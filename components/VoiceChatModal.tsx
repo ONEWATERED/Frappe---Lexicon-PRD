@@ -95,59 +95,66 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
         if (isListening) {
             recognition?.stop();
         } else {
-            recognition?.start();
-            setIsListening(true);
+            // FIX: Implemented logic to start speech recognition.
+            if (recognition) {
+                try {
+                    recognition.start();
+                    setIsListening(true);
+                } catch (error) {
+                    console.error("Speech recognition could not start: ", error);
+                }
+            }
         }
     };
-    
-    if (!isOpen) return null;
 
-    const getStatusText = () => {
-        if (isListening) return "Listening...";
-        if (isThinking) return "Hardeep is thinking...";
-        if (isSpeaking) return "Hardeep is speaking...";
-        return "Tap the mic and start talking";
-    };
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl h-[90vh] flex flex-col shadow-2xl">
-                <header className="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md h-[70vh] flex flex-col shadow-2xl">
+                <header className="flex items-center justify-between p-4 border-b border-slate-700">
                     <div className="flex items-center gap-3">
                         <img src="https://i.pravatar.cc/150?u=hardeep" alt="Hardeep" className="w-10 h-10 rounded-full" />
                         <div>
-                            <h2 className="text-xl font-bold text-white">Talk to Hardeep</h2>
-                            <p className="text-sm text-slate-400">Knowledge Avatar</p>
+                            <h2 className="text-xl font-bold text-white">Hardeep</h2>
+                            <p className="text-sm text-green-400">Live</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="text-slate-400 hover:text-white p-2 rounded-full bg-slate-700 hover:bg-slate-600">
-                        <XIcon className="w-6 h-6" />
-                    </button>
+                    <button onClick={onClose} className="text-slate-400 hover:text-white"><XIcon className="w-6 h-6"/></button>
                 </header>
                 <div className="flex-grow p-4 overflow-y-auto space-y-4">
+                    {chatHistory.length === 0 && (
+                        <div className="text-center text-slate-400 h-full flex flex-col items-center justify-center">
+                            <p>Press the microphone to start talking to Hardeep.</p>
+                        </div>
+                    )}
                     {chatHistory.map((msg, index) => (
-                         <div key={index} className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
-                             {msg.sender === 'ai' && <div className="w-8 h-8 bg-blue-500 rounded-full flex-shrink-0 flex items-center justify-center"><SparklesIcon className="w-5 h-5 text-white" /></div>}
-                             <div className={`max-w-[80%] p-3 rounded-lg ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-200'}`}>
-                                 <p className="text-sm">{msg.text}</p>
-                             </div>
-                         </div>
+                        <div key={index} className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
+                            {msg.sender === 'ai' && <div className="w-8 h-8 bg-blue-500 rounded-full flex-shrink-0 flex items-center justify-center"><SparklesIcon className="w-5 h-5 text-white" /></div>}
+                            <div className={`max-w-[80%] p-3 rounded-lg ${msg.sender === 'user' ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                                <p className="text-sm">{msg.text}</p>
+                            </div>
+                        </div>
                     ))}
-                    <div ref={messagesEndRef} />
+                    {isThinking && <div>...</div>}
+                    <div ref={messagesEndRef}></div>
                 </div>
-                <footer className="p-4 border-t border-slate-700 flex flex-col items-center gap-4 flex-shrink-0">
-                    <p className="text-slate-400 h-5">{getStatusText()}</p>
+                <footer className="p-4 border-t border-slate-700 flex flex-col items-center justify-center">
                     <button 
                         onClick={handleMicClick}
-                        disabled={!recognition || isThinking || isSpeaking}
-                        className={`w-20 h-20 rounded-full flex items-center justify-center transition-colors duration-300 disabled:opacity-50 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-blue-500 hover:bg-blue-600'}`}
+                        disabled={!recognition}
+                        className={`w-20 h-20 rounded-full flex items-center justify-center transition-colors duration-300 ${isListening ? 'bg-red-500 animate-pulse' : 'bg-blue-500 hover:bg-blue-600'}`}
                     >
-                        <MicrophoneIcon className="w-10 h-10 text-white" />
+                        <MicrophoneIcon className="w-10 h-10 text-white"/>
                     </button>
+                    <p className="text-xs text-slate-400 mt-2 h-4">
+                        {isListening ? "Listening..." : (isThinking ? "Thinking..." : (isSpeaking ? "Speaking..." : "Tap to speak"))}
+                    </p>
                 </footer>
             </div>
         </div>
     );
 };
 
+// FIX: Added default export to resolve module import error.
 export default VoiceChatModal;

@@ -230,6 +230,55 @@ export type VisitorLog = {
   views: number;
 };
 
+export type Project = {
+  id: string;
+  title: string;
+  summary: string;
+  coverImageUrl?: string;
+  coverVideoUrl?: string;
+  tags: string[];
+  caseStudyUrl?: string;
+};
+
+export type AcademyContribution = {
+  show: boolean;
+  badgeUrl?: string;
+  blurb?: string;
+  academyUrl?: string;
+};
+
+export type SponsorshipDetails = {
+  show: boolean;
+  badgeUrl?: string;
+  text: string;
+  linkUrl?: string;
+};
+
+export type ValueHighlight = {
+  icon: 'chat' | 'calendar' | 'book' | 'blog' | 'projects' | 'sponsor';
+  label: string;
+};
+
+export type NewsletterSettings = {
+  show: boolean;
+  successMessage: string;
+};
+
+export type SocialLinks = {
+  linkedin?: string;
+  twitter?: string;
+  youtube?: string;
+  shareEnabled?: boolean;
+};
+
+export type ConferenceMaterial = {
+  id: string;
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  actionUrl: string;
+  type: 'Brochure' | 'Cut Sheet' | 'Whitepaper' | 'Case Study' | 'Giveaway' | 'Video Demo';
+};
 
 export type EcosystemEntity = {
   id: string;
@@ -255,7 +304,16 @@ export type EcosystemEntity = {
   futureOfferings?: { title: string; description: string }[];
   resources?: VendorResource[];
   jobPostings?: JobPosting[];
+  projects?: Project[];
   visitorLogs?: VisitorLog[];
+  // Phase 5 additions
+  academyContribution?: AcademyContribution;
+  sponsorshipDetails?: SponsorshipDetails;
+  highlights?: ValueHighlight[];
+  // Phase 6 & 7 additions
+  newsletter?: NewsletterSettings;
+  social?: SocialLinks;
+  conferenceBooth?: ConferenceMaterial[];
 };
 
 

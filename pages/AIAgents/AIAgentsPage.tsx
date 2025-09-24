@@ -1,7 +1,5 @@
 
 
-
-
 import React, { useState } from 'react';
 // FIX: Added MicrophoneIcon to imports to resolve usage error.
 import { PhoneIcon, ChatBubbleLeftRightIcon, CpuChipIcon, SparklesIcon, MicrophoneIcon } from '../../components/icons/Icons';
