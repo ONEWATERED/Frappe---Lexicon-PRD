@@ -9,15 +9,12 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
-// FIX: Refactored ErrorBoundary to use a constructor for state initialization, ensuring correct `this` context.
+// FIX: Refactored ErrorBoundary to use a property initializer for state, a more modern syntax that resolves issues with properties like 'state' and 'props' not being recognized.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
+  state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Update state so the next render will show the fallback UI.

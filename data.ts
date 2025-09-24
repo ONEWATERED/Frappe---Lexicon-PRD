@@ -516,7 +516,6 @@ export const vendors: Vendor[] = [
 
 export const ecosystemEntities: EcosystemEntity[] = [
   ...vendors,
-  // FIX: Moved these non-vendor entities here from the `vendors` array to satisfy type constraints.
   { id: 'v003', name: 'Carollo Engineers', logoUrl: 'https://www.carollo.com/img/logo-dark.svg', type: 'Consultant', tagline: "Working Wonders With Water®", location: "Walnut Creek, CA", domain: "carollo.com", isClaimed: true, isFeatured: true },
   { id: 'v004', name: 'USEPA', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/US_EPA_logo.svg/1200px-US_EPA_logo.svg.png', type: 'Government', tagline: "United States Environmental Protection Agency", location: "Washington, D.C.", domain: "epa.gov", isClaimed: true },
   { id: 'v006', name: 'AWWA', logoUrl: 'https://www.awwa.org/Portals/0/AWWA-2C-Tagline-Logo-Horizontal-RGB.jpg?ver=2019-10-09-152207-750', type: 'Non-Profit', tagline: "American Water Works Association", location: "Denver, CO", domain: "awwa.org", isClaimed: true },
@@ -524,316 +523,165 @@ export const ecosystemEntities: EcosystemEntity[] = [
   { id: 'e001', name: 'Hazen and Sawyer', logoUrl: 'https://www.hazenandsawyer.com/assets/hazen-logo-sm.png', type: 'Consultant', tagline: 'A firm of engineers and scientists, helping clients protect public health and the environment.', location: 'New York, NY', domain: 'hazenandsawyer.com', isClaimed: false },
   { id: 'e002', name: 'Black & Veatch', logoUrl: 'https://www.bv.com/sites/default/files/2022-09/bv-logo.png', type: 'Consultant', tagline: 'Building a World of Difference®.', location: 'Overland Park, KS', domain: 'bv.com', isClaimed: true },
   { id: 'e003', name: 'Xylem', logoUrl: 'https://www.xylem.com/siteassets/brand/xylem-logo-2022.svg', type: 'Vendor', tagline: 'Let\'s Solve Water.', location: 'Rye Brook, NY', domain: 'xylem.com', isClaimed: true, isFeatured: true, claimedByUserId: 'user-888',
-    longDescription: 'Xylem is a leading global water technology company committed to developing innovative technology solutions to the world’s water challenges. The Company’s products and services move, treat, analyze, monitor and return water to the environment in public utility, industrial, residential and commercial building services settings.',
-    hero: { videoUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", primaryCta: { label: "Explore Our Solutions", action: 'scroll:#content' } },
+    longDescription: 'Xylem is a leading global water technology company committed to developing innovative technology solutions to the world’s water challenges. The Company’s products and services move, treat, analyze, monitor and return water to the environment in public utility, industrial, residential and commercial building services settings. Our passion for water is reflected in our portfolio of industry-leading product brands and application expertise, with a strong focus on developing comprehensive, sustainable solutions.',
+    hero: { videoUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", posterImage: "https://picsum.photos/seed/xylem-hero/1920/1080", primaryCta: { label: "Explore Our Solutions", action: 'scroll:#content' }, secondaryCta: { label: "Contact Us", action: 'scroll:#team' } },
     contacts: [
       { id: 'c1', name: 'John Smith', title: 'Director of Sales, North America', avatarUrl: 'https://i.pravatar.cc/150?u=contact1', email: 'john.s@xylem.com', phone: '123-456-7890', online: true, calendarUrl: '#', chatUrl: '#', region: 'North America', role: 'Sales' },
-      { id: 'c2', name: 'Emily White', title: 'Smart Water Specialist', avatarUrl: 'https://i.pravatar.cc/150?u=contact2', email: 'emily.w@xylem.com', online: false },
-      { id: 'c3', name: 'David Chen', title: 'Treatment Technology Expert', avatarUrl: 'https://i.pravatar.cc/150?u=contact3', email: 'david.c@xylem.com', online: true, chatUrl: '#' }
+      { id: 'c2', name: 'Emily White', title: 'Smart Water Specialist', avatarUrl: 'https://i.pravatar.cc/150?u=contact2', email: 'emily.w@xylem.com', online: false, calendarUrl: '#', region: 'West Coast', role: 'Technical Expert' },
+      { id: 'c3', name: 'David Chen', title: 'Treatment Technology Expert', avatarUrl: 'https://i.pravatar.cc/150?u=contact3', email: 'david.c@xylem.com', online: true, chatUrl: '#', region: 'East Coast', role: 'Technical Expert' }
     ],
     resources: [
       { id: 'r1', title: 'Digital Solutions Brochure', description: 'Explore our suite of digital tools for utility management.', fileUrl: '#', type: 'Brochure', category: 'Digital Water', views: 1024, downloads: 345 },
       { id: 'r2', title: 'Case Study: Smart Metering in Cityville', description: 'How our AMI technology reduced non-revenue water by 15%.', fileUrl: '#', type: 'Case Study', category: 'Smart Metering', views: 876, downloads: 210 }
     ],
     jobPostings: [
-        {id: 'j1', title: 'Field Service Technician', location: 'Dallas, TX', type: 'Full-time', description: 'Provide on-site technical support for Xylem\'s advanced sensor and analytics equipment.', applyUrl: '#'},
-        {id: 'j2', title: 'Software Engineer, Digital Twin', location: 'Remote', type: 'Full-time', description: 'Join our innovative team building the next generation of hydraulic modeling and digital twin software.', applyUrl: '#'}
+        {id: 'j1', title: 'Field Service Technician', location: 'Dallas, TX', type: 'Full-time', description: 'Provide on-site technical support for Xylem\'s advanced water infrastructure solutions. Requires travel and hands-on experience with pumps, sensors, and telemetry.', applyUrl: '#'},
+        {id: 'j2', title: 'Software Engineer, Digital Water', location: 'Remote', type: 'Full-time', description: 'Develop and maintain software for our cloud-based analytics platform. Experience with IoT, big data, and cloud services preferred.', applyUrl: '#'}
     ],
     projects: [
-        { id: 'p1', title: 'City of Springfield Digital Twin Implementation', summary: 'Developed a comprehensive digital twin for the city\'s water distribution network, enabling proactive maintenance and operational optimization.', coverImageUrl: 'https://picsum.photos/seed/project-xylem1/800/600', tags: ['Digital Twin', 'Smart Water', 'Modeling'], caseStudyUrl: '#' }
+      { id: 'p1', title: 'Smart Water Network for City of Lakeside', summary: 'Deployed a city-wide AMI and acoustic leak detection network, reducing non-revenue water by 20% and improving operational visibility through a digital twin.', coverImageUrl: 'https://picsum.photos/seed/project-xylem1/800/600', tags: ['Digital Water', 'AMI', 'Leak Detection', 'Digital Twin'], caseStudyUrl: '#' },
+      { id: 'p2', title: 'Wastewater Treatment Optimization', summary: 'Upgraded a major wastewater treatment plant with advanced process control technology, resulting in a 30% reduction in energy consumption and improved effluent quality.', coverVideoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', tags: ['Wastewater', 'Process Control', 'Energy Efficiency'], caseStudyUrl: '#' }
     ],
-    visitorLogs: [
-        { userId: 'user-123', firstVisit: '2024-05-01T10:00:00Z', lastVisit: '2024-05-20T14:00:00Z', totalVisits: 8, downloads: 2, views: 15 }
-    ]
+    academyContribution: {
+      show: true,
+      blurb: 'Xylem is proud to sponsor several flashcard decks in the ORAKLES Academy, sharing our deep expertise in water technology to empower the next generation of industry leaders.',
+      academyUrl: '/academy'
+    },
+    sponsorshipDetails: {
+      show: true,
+      text: 'Xylem is a premier sponsor of the ORAKLES Job Board, helping connect talented professionals with rewarding careers in the water sector.',
+      linkUrl: '/jobs'
+    },
+    highlights: [
+      { icon: 'chat', label: 'Connect with technical experts' },
+      { icon: 'projects', label: 'Explore real-world case studies' },
+      { icon: 'blog', label: 'Read insights from industry leaders' },
+      { icon: 'book', label: 'Learn from sponsored Academy content' },
+      { icon: 'sponsor', label: 'Premier Job Board Sponsor' }
+    ],
+    newsletter: {
+      show: true,
+      successMessage: "Thanks for subscribing! You'll now receive the latest updates from Xylem."
+    },
+    social: {
+      linkedin: 'https://www.linkedin.com/company/xylem',
+      twitter: 'https://twitter.com/xylem',
+      youtube: 'https://www.youtube.com/user/XylemInc',
+      shareEnabled: true
+    },
+    conferenceBooth: [
+      { id: 'cb1', title: 'SensaScope Real-time Monitoring', description: 'Download the complete technical specifications for our flagship water quality sensor.', thumbnailUrl: 'https://picsum.photos/seed/booth1/400/300', actionUrl: '#', type: 'Cut Sheet' },
+      { id: 'cb2', title: 'AquaWave Smart Pump Systems', description: 'Our latest brochure on energy-efficient pump solutions for modern utilities.', thumbnailUrl: 'https://picsum.photos/seed/booth2/400/300', actionUrl: '#', type: 'Brochure' },
+      { id: 'cb3', title: 'Video Demo: Digital Twin in Action', description: 'See how our digital twin platform helped a major city predict and prevent main breaks.', thumbnailUrl: 'https://picsum.photos/seed/booth3/400/300', actionUrl: '#', type: 'Video Demo' },
+      { id: 'cb4', title: 'The Future of Water Reuse', description: 'A comprehensive whitepaper on advanced treatment technologies and regulatory landscapes.', thumbnailUrl: 'https://picsum.photos/seed/booth4/400/300', actionUrl: '#', type: 'Whitepaper' },
+      { id: 'cb5', title: 'Case Study: Non-Revenue Water Reduction', description: 'Discover how our solutions helped a utility save millions in lost water.', thumbnailUrl: 'https://picsum.photos/seed/booth5/400/300', actionUrl: '#', type: 'Case Study' },
+      { id: 'cb6', title: 'Sustainable Swag Giveaway', description: 'Enter to win a reusable water bottle and smart water monitor for your home.', thumbnailUrl: 'https://picsum.photos/seed/booth6/400/300', actionUrl: '#', type: 'Giveaway' }
+    ],
   },
 ];
 
 export const droobiVideos: DroobiVideo[] = [
-    { id: 'vid001', title: 'The Future of AI in Water Management', description: 'A deep dive into how artificial intelligence is revolutionizing utility operations, from predictive maintenance to demand forecasting.', thumbnailUrl: 'https://picsum.photos/seed/droobi-ai/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Digital Transformation', durationMinutes: 28, airDate: '2023-10-15', vendorId: 'v001' },
-    { id: 'vid002', title: 'Non-Revenue Water: Finding the Leaks', description: 'Experts from leading utilities share their strategies for detecting and reducing NRW using modern technology and field techniques.', thumbnailUrl: 'https://picsum.photos/seed/droobi-nrw/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Utility Management', durationMinutes: 45, airDate: '2023-11-02' },
-    { id: 'vid003', title: 'Navigating the New PFAS Regulations', description: 'A panel of regulatory experts and utility managers discuss the challenges and solutions for PFAS treatment and compliance.', thumbnailUrl: 'https://picsum.photos/seed/droobi-pfas/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Regulations', durationMinutes: 52, airDate: '2023-11-20' },
-    { id: 'vid004', title: 'Asset Management Masterclass', description: 'Learn the fundamentals of asset management, from inventory and condition assessment to risk-based capital planning.', thumbnailUrl: 'https://picsum.photos/seed/droobi-am/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: 'Asset Management', durationMinutes: 35, airDate: '2023-09-05', vendorId: 'v003' },
+    { id: 'vid001', title: 'The Future of Digital Water', description: "A deep dive into how AI and Digital Twins are revolutionizing utility operations.", thumbnailUrl: 'https://picsum.photos/seed/vid001/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: "Digital Transformation", durationMinutes: 28, airDate: "2024-05-15", vendorId: 'v001' },
+    { id: 'vid002', title: 'Navigating the New PFAS Regulations', description: "Experts from the EPA and leading consultants discuss compliance strategies.", thumbnailUrl: 'https://picsum.photos/seed/vid002/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: "Regulations", durationMinutes: 45, airDate: "2024-05-10" },
+    { id: 'vid003', title: 'Advanced Metering Infrastructure (AMI) Explained', description: "Learn the fundamentals of AMI and how it helps reduce non-revenue water.", thumbnailUrl: 'https://picsum.photos/seed/vid003/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: "Water Distribution", durationMinutes: 18, airDate: "2024-05-01", vendorId: 'v002' },
+    { id: 'vid004', title: 'Asset Management Masterclass', description: "A comprehensive guide to developing and implementing a robust asset management plan.", thumbnailUrl: 'https://picsum.photos/seed/vid004/800/450', videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', category: "Utility Management", durationMinutes: 55, airDate: "2024-04-22" },
 ];
-
-const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(tomorrow.getDate() + 1);
-const nextWeek = new Date(today);
-nextWeek.setDate(nextWeek.getDate() + 7);
-const nextMonth = new Date(today);
-nextMonth.setMonth(nextMonth.getMonth() + 1);
-
-
-export const communityEvents: CommunityEvent[] = [
-  {
-    id: 'evt001',
-    title: 'Webinar: AI in Leak Detection',
-    description: 'Join experts from Innovyze and Carollo to discuss the latest advancements in AI-powered acoustic leak detection.',
-    type: 'Webinar',
-    submittedBy: users[1],
-    timestamp: '2024-05-15T12:00:00Z',
-    eventDate: tomorrow.toISOString(),
-    location: 'Online',
-    url: '#',
-    attendeeIds: ['user-123', 'user-789'],
-    registeredUserIds: ['user-123'],
-    isLive: false,
-    joinUrl: '#'
-  },
-  {
-    id: 'evt002',
-    title: 'ACE24 Annual Conference',
-    description: 'The premier event for the water community to learn, connect, and be inspired to solve global water challenges.',
-    type: 'Conference',
-    submittedBy: users[0],
-    timestamp: '2024-04-01T10:00:00Z',
-    eventDate: nextWeek.toISOString(),
-    location: 'Anaheim, CA',
-    url: '#',
-    attendeeIds: ['user-123', 'user-456', 'user-789'],
-    registeredUserIds: ['user-123', 'user-456'],
-    isLive: false,
-    joinUrl: '#'
-  },
-  {
-    id: 'evt003',
-    title: 'Local Meetup: Digital Water Professionals',
-    description: 'A casual get-together for professionals in the Austin area working with digital water technologies.',
-    type: 'Meetup',
-    submittedBy: users[2],
-    timestamp: '2024-05-20T09:00:00Z',
-    eventDate: nextMonth.toISOString(),
-    location: 'Austin, TX',
-    attendeeIds: [],
-    registeredUserIds: [],
-    isLive: false
-  },
-  {
-    id: 'evt004',
-    title: 'Live Now: Ask Me Anything with Hardeep',
-    description: 'Hardeep, a Knowledge Avatar and expert in utility management, answers your questions live.',
-    type: 'Webinar',
-    submittedBy: users[0],
-    timestamp: new Date().toISOString(),
-    eventDate: new Date().toISOString(),
-    location: 'Online',
-    url: '#',
-    attendeeIds: ['user-456', 'user-789'],
-    registeredUserIds: ['user-123', 'user-456', 'user-789'],
-    isLive: true,
-    joinUrl: '#'
-  },
-  {
-    id: 'evt005',
-    title: 'Today: SCADA Security Workshop',
-    description: 'A hands-on workshop covering the fundamentals of securing your SCADA systems from cyber threats.',
-    type: 'Workshop',
-    submittedBy: users[1],
-    timestamp: new Date().toISOString(),
-    eventDate: new Date().toISOString(),
-    location: 'Online',
-    url: '#',
-    attendeeIds: ['user-123'],
-    registeredUserIds: [],
-    isLive: true,
-    joinUrl: '#'
-  }
-];
-
 
 export const droobiSessions: Session[] = [
-    { id: 's001', title: 'Fireside Chat with George Hawkins', speaker: { name: 'George Hawkins', title: 'Founder, Moonshot Missions', avatarUrl: 'https://i.pravatar.cc/150?u=hawkins' }, dateTime: '2024-06-15T14:00:00Z', durationMinutes: 45, registeredAttendees: 1254, attendees: null, description: 'An intimate conversation with former DC Water CEO George Hawkins about leadership, innovation, and the future of water.', category: 'Leadership', tags: ['Innovation', 'Utility Management'], isLive: true, isPremium: true, joinUrl: '#' },
-    { id: 's002', title: 'Live Demo: Innovyze InfoWater Pro', speaker: { name: 'Jane Smith', title: 'Product Manager, Innovyze', avatarUrl: 'https://i.pravatar.cc/150?u=janesmith' }, dateTime: '2024-06-20T11:00:00Z', registeredAttendees: 832, attendees: null, description: 'See the latest features of InfoWater Pro in action, including new AI-powered pipe failure prediction models.', category: 'Modeling', tags: ['Digital Twin', 'Software'], isLive: false, isPremium: false, joinUrl: '#' }
+    { id: 's001', title: 'Live Q&A: AI in Water Treatment', speaker: { name: 'Dr. Emily Carter', title: 'Chief Scientist, AquaAI', avatarUrl: 'https://i.pravatar.cc/150?u=speaker1' }, dateTime: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), registeredAttendees: 128, attendees: null, description: 'Join us for a live session with Dr. Carter to discuss the latest advancements in AI for process optimization.', category: 'AI & Blockchain', isLive: true, isPremium: true, joinUrl: '#' },
+    { id: 's002', title: 'Panel: The Future of Utility Resilience', speaker: { name: 'Multiple Speakers', title: 'Industry Experts', avatarUrl: 'https://i.pravatar.cc/150?u=speaker2' }, dateTime: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), registeredAttendees: 345, attendees: null, description: 'A panel of experts from utilities, consulting, and academia discuss strategies for building resilient water systems.', category: 'Resiliency', isLive: false, isPremium: false, joinUrl: '#' },
 ];
 
 export const onDemandSessions: OnDemandSession[] = [
-    { ...droobiSessions[0], id: 'od001', isLive: false, attendees: 2345 },
-    { ...droobiSessions[1], id: 'od002', isLive: false, attendees: 1542 },
+    { ...droobiSessions[0], id: 'od001', isLive: false, attendees: 450, dateTime: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString() },
+    { ...droobiSessions[1], id: 'od002', isLive: false, attendees: 876, dateTime: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString() },
 ];
 
 export const manuals: Manual[] = [
-    { id: 'm001', title: 'Series 5400 Submersible Pump O&M', vendorId: 'v002', assetType: 'Pump', modelNumber: '5400-A', summary: 'Complete operation and maintenance guide for the Series 5400 submersible non-clog pumps.', coverImageUrl: 'https://picsum.photos/seed/manual-pump/400/600', fileUrl: '#', uploadedAt: '2023-01-15T00:00:00Z' },
-    { id: 'm002', title: 'AquaSense pH Sensor Calibration', vendorId: 'v001', assetType: 'Sensor', modelNumber: 'AS-PH-2', summary: 'Step-by-step instructions for calibrating the AquaSense pH sensor for accurate readings.', coverImageUrl: 'https://picsum.photos/seed/manual-sensor/400/600', fileUrl: '#', uploadedAt: '2022-11-30T00:00:00Z' },
-    { id: 'm003', title: 'IronHorse 500 Resilient Wedge Gate Valve', vendorId: 'v005', assetType: 'Valve', modelNumber: 'IH-500', summary: 'Installation, operation, and maintenance manual for the IronHorse 500 series gate valves.', coverImageUrl: 'https://picsum.photos/seed/manual-valve/400/600', fileUrl: '#', uploadedAt: '2023-03-20T00:00:00Z' },
+    { id: 'm001', title: 'Aqua-Pure 5000 Pump O&M Manual', vendorId: 'v001', assetType: 'Pump', modelNumber: 'AP-5000', summary: 'Complete guide to operating and maintaining the Aqua-Pure 5000 series centrifugal pump.', coverImageUrl: 'https://picsum.photos/seed/m001/400/600', fileUrl: '#', uploadedAt: '2024-01-15' },
+    { id: 'm002', title: 'Sensa-Flow Ultrasonic Sensor Guide', vendorId: 'v002', assetType: 'Sensor', modelNumber: 'SF-US-2024', summary: 'Installation and calibration guide for the Sensa-Flow ultrasonic flow meter.', coverImageUrl: 'https://picsum.photos/seed/m002/400/600', fileUrl: '#', uploadedAt: '2024-02-20' },
 ];
 
 export const flashcardDecks: FlashcardDeck[] = [
-    { id: 'd001', title: 'Asset Management Fundamentals', description: 'Key concepts and terminology for utility asset management programs.', thumbnail_url: 'https://picsum.photos/seed/deck-am/400/300', category_id: 'asset_mgmt', vendor_ids: ['v001', 'v003'], sponsorship: { sponsor_id: 'e003'}, cardCount: 25 },
-    { id: 'd002', title: 'Key Regulatory Frameworks', description: 'An overview of the Clean Water Act, Safe Drinking Water Act, and more.', thumbnail_url: 'https://picsum.photos/seed/deck-regs/400/300', category_id: 'regulations', cardCount: 30 },
-    { id: 'd-cat-utility_management', title: 'Utility Management Concepts', description: 'Learn the basics of running a water utility.', thumbnail_url: 'https://picsum.photos/seed/deck-um/400/300', category_id: 'utility_management', cardCount: 15 },
-    { id: 'd-cat-data', title: 'Data & Analytics in Water', description: 'From SCADA to AI, understand how data drives decisions.', thumbnail_url: 'https://picsum.photos/seed/deck-data/400/300', category_id: 'data', cardCount: 20 },
+    { id: 'd001', title: 'Asset Management Fundamentals', description: 'Key concepts and terminology for water asset management.', thumbnail_url: 'https://picsum.photos/seed/d001/400/225', category_id: 'asset_mgmt', cardCount: 25 },
+    { id: 'd002', title: 'Key Regulatory Frameworks', description: 'Understand the Clean Water Act, Safe Drinking Water Act, and more.', thumbnail_url: 'https://picsum.photos/seed/d002/400/225', category_id: 'regulations', cardCount: 30, sponsorship: { sponsor_id: 'e003' } },
+    { id: 'd003', title: 'Wastewater Treatment Processes', description: 'From preliminary screening to disinfection.', thumbnail_url: 'https://picsum.photos/seed/d003/400/225', category_id: 'wastewater_treatment', cardCount: 40 },
+    { id: 'd-cat-utility_management', title: 'Utility Management', description: 'All about utility management.', thumbnail_url: 'https://picsum.photos/seed/d-cat-um/400/225', category_id: 'utility_management', cardCount: 10 },
 ];
 
 export const flashcards: Flashcard[] = [
-  // Deck d001: Asset Management
-  { id: 'f001', deck_id: 'd001', category_id: 'asset_mgmt', front: { content: 'What is the "Triple Bottom Line" in asset management?' }, back: { content: 'A framework that considers three performance areas: social, environmental, and financial.', bullets: ['Social: Public health, customer service', 'Environmental: Sustainability, compliance', 'Financial: Cost-effectiveness, ROI'] }, media: {} },
-  { id: 'f002', deck_id: 'd001', category_id: 'asset_mgmt', front: { content: 'Define "Level of Service" (LoS).' }, back: { content: 'The outcomes customers and stakeholders experience, which are used to define performance targets for the utility.' }, media: {} },
-  // Deck d002: Regulations
-  { id: 'f003', deck_id: 'd002', category_id: 'regulations', front: { content: 'What is the primary goal of the Safe Drinking Water Act (SDWA)?' }, back: { content: 'To protect public health by regulating the nation\'s public drinking water supply.', bullets: ['Sets standards for drinking water quality', 'Oversees water suppliers who implement these standards'] }, media: {} },
-  { id: 'f004', deck_id: 'd002', category_id: 'regulations', front: { content: 'What does NPDES stand for?' }, back: { content: 'National Pollutant Discharge Elimination System.', bullets: ['A permit program that controls water pollution', 'Requires facilities to obtain a permit before discharging pollutants into navigable waters'] }, media: {} },
+    { id: 'f001', deck_id: 'd001', category_id: 'asset_mgmt', front: { content: 'What is the primary goal of asset management?' }, back: { content: 'To minimize the total cost of owning, operating, and maintaining assets over their entire lifecycle.', bullets: ['Balances cost, risk, and performance', 'Ensures sustainable service delivery'] }, media: {} },
+    { id: 'f002', deck_id: 'd001', category_id: 'asset_mgmt', front: { content: 'Define "Level of Service" (LoS).' }, back: { content: 'A measure of the quality, quantity, reliability, and responsiveness of services provided to customers.', bullets: ['Directly impacts customer satisfaction', 'Helps prioritize investments'] }, media: {} },
 ];
 
 export const learningPathways: LearningPathway[] = [
-    { id: 'lp001', title: 'Utility Manager Certification', description: 'Master the core competencies of modern utility leadership, from asset management to digital transformation.', thumbnail_url: 'https://picsum.photos/seed/path-um/800/600', steps: [{ deck_id: 'd-cat-utility_management' }, { deck_id: 'd001' }], badge_id: 'B05', badge_name: 'Utility Management Steward' },
-    { id: 'lp002', title: 'Digital Water Professional', description: 'Gain expertise in the technologies shaping the future of water, including smart sensors, hydraulic modeling, and AI.', thumbnail_url: 'https://picsum.photos/seed/path-dw/800/600', steps: [{ deck_id: 'd-cat-data' }], badge_id: 'B06', badge_name: 'Digital Water Pro' }
+    { id: 'lp001', title: 'Utility Manager Certification', description: 'Master the core competencies of modern utility management.', thumbnail_url: 'https://picsum.photos/seed/lp001/600/400', steps: [{ deck_id: 'd001' }, { deck_id: 'd002' }], badge_id: 'B05', badge_name: 'Utility Steward' },
+    { id: 'lp002', title: 'Digital Water Professional', description: 'Become an expert in the digital transformation of water.', thumbnail_url: 'https://picsum.photos/seed/lp002/600/400', steps: [{ deck_id: 'd001' }], badge_id: 'B06', badge_name: 'Digital Pro' },
 ];
 
 export const oneWaterMinute: OneWaterMinute = {
-  dailyTopic: 'Understanding the Triple Bottom Line',
-  description: "It's not just about the money. Learn how modern utilities balance financial, social, and environmental performance for sustainable success.",
-  deckId: 'd001',
+    dailyTopic: "Understanding Asset Criticality",
+    description: "Learn why assessing asset criticality is the first step towards a proactive maintenance strategy. This deck covers the basics of risk and consequence of failure.",
+    deckId: "d001",
 };
 
 export const userProgress: UserProgress = {
-  dailyFlips: { current: 34, goal: 50 },
+  dailyFlips: { current: 12, goal: 50 },
   weeklyChallenges: { current: 2, goal: 5 },
-  currentStreak: 14,
+  currentStreak: 14
 };
 
 export const communityPosts: CommunityPost[] = [
-  { id: 'p001', author: users[0], timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), type: 'question', channel: 'asset_mgmt', content: 'What is everyone using for mobile CMMS these days? Looking for something with good GIS integration.', likes: 15, comments: [{ user: users[1], text: 'We just switched to Cityworks and have been really happy with it.' }], tags: ['cmms', 'gis', 'software'] },
-  { id: 'p002', author: users[2], timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), type: 'discussion', channel: 'modeling', content: "Just read a fascinating paper on using ML for real-time pump optimization. Seems promising but also complex to implement. Anyone have experience with this?", likes: 28, comments: [], tags: ['machine-learning', 'pumps', 'optimization'] },
+    { id: 'cp001', author: users[1], timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), type: 'question', channel: 'asset_mgmt', content: "What software are you all using for your vertical asset condition assessments? We're looking to upgrade from our current system.", likes: 15, comments: [], tags: ['software', 'asset management', 'condition assessment'] },
+    { id: 'cp002', author: users[2], timestamp: new Date(Date.now() - 22 * 60 * 60 * 1000).toISOString(), type: 'discussion', channel: 'modeling', content: "Fascinating new paper on using satellite imagery for early leak detection in large-diameter transmission mains. Has anyone tried implementing something similar?", likes: 32, comments: [], tags: ['leak detection', 'ai', 'research'] },
+];
+
+export const communityEvents: CommunityEvent[] = [
+    { id: 'ce001', title: 'AWWA ACE24 Annual Conference', description: 'The premier event for water professionals.', type: 'Conference', submittedBy: users[0], timestamp: '2024-04-15T00:00:00Z', eventDate: '2024-06-10T00:00:00Z', location: 'Anaheim, CA', url: '#', attendeeIds: [], registeredUserIds: [users[0].id, users[1].id], isLive: false },
+    { id: 'ce002', title: 'Webinar: The Future of Digital Twins', description: 'Explore how digital twins are changing utility operations.', type: 'Webinar', submittedBy: users[1], timestamp: '2024-05-10T00:00:00Z', eventDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), location: 'Online', url: '#', attendeeIds: [], registeredUserIds: [users[0].id], isLive: false },
 ];
 
 export const researcherProfiles: ResearcherProfile[] = [
-  { id: 'res001', name: 'Dr. Evelyn Reed', avatarUrl: 'https://i.pravatar.cc/150?u=res001', title: 'Professor of Environmental Engineering', university: 'Stanford University', universityLogoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/Stanford_University_seal_2003.svg/1200px-Stanford_University_seal_2003.svg.png', bio: 'Dr. Reed\'s research focuses on the fate and transport of emerging contaminants, with a specific interest in developing novel treatment technologies for PFAS.', expertiseTags: ['PFAS', 'Contaminants', 'Water Treatment', 'Nanotechnology'], publications: [
-      {id: 'pub1', title: 'Novel Sorbents for PFAS Removal', journal: 'Environmental Science & Technology', year: 2023, url: '#', doi: '10.1021/acs.est.3c01234'}
-  ], patents: [], projects: [] },
-  { id: 'res002', name: 'Dr. Kenji Tanaka', avatarUrl: 'https://i.pravatar.cc/150?u=res002', title: 'Associate Professor, Civil Engineering', university: 'University of Illinois Urbana-Champaign', universityLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/University_of_Illinois_Block_I.svg/1200px-University_of_Illinois_Block_I.svg.png', bio: 'Specializing in hydraulic modeling and computational fluid dynamics, Dr. Tanaka develops advanced digital twin frameworks for urban water systems to improve resilience against climate change.', expertiseTags: ['Hydraulic Modeling', 'Digital Twin', 'Resilience', 'CFD'], publications: [], patents: [], projects: [] },
+    { id: 'rp001', name: 'Dr. Evelyn Reed', avatarUrl: 'https://i.pravatar.cc/150?u=researcher1', title: 'Professor of Environmental Engineering', university: 'MIT', universityLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/MIT_logo.svg/1024px-MIT_logo.svg.png', bio: 'Dr. Reed\'s research focuses on the fate and transport of emerging contaminants, particularly PFAS, and the development of novel adsorbent technologies for water purification.', expertiseTags: ['PFAS', 'Water Quality', 'Adsorption', 'Contaminant Transport'], publications: [{ id: 'pub1', title: 'A New Graphene-Based Adsorbent for Rapid PFAS Removal', journal: 'Environmental Science & Technology', year: 2023, url: '#', doi: '10.1021/acs.est.3c01234' }], patents: [], projects: [] },
+    { id: 'rp002', name: 'Dr. Kenji Tanaka', avatarUrl: 'https://i.pravatar.cc/150?u=researcher2', title: 'Associate Professor, Civil Engineering', university: 'Stanford University', universityLogoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/Stanford_University_seal_2003.svg/1200px-Stanford_University_seal_2003.svg.png', bio: 'Specializing in urban hydrology and smart water systems, Dr. Tanaka develops machine learning models to predict water demand, detect leaks, and optimize distribution system operations.', expertiseTags: ['Machine Learning', 'Hydraulic Modeling', 'Smart Water Grids', 'Urban Hydrology'], publications: [], patents: [{id: 'pat1', title: 'System for Real-Time Anomaly Detection in Water Distribution Networks', patentNumber: 'US 11,234,567 B2', dateGranted: '2022-08-16T00:00:00Z', url: '#'}], projects: [{id: 'proj1', title: 'AI-Powered Leak Prediction for Aging Infrastructure', description: 'A multi-utility collaboration to develop a predictive model for water main breaks.', status: 'Ongoing'}]},
 ];
 
 export const researchOpportunities: ResearchOpportunity[] = [
-  { id: 'opp001', title: 'Real-Time CSO Prediction Model', submittedBy: users[0], organization: ecosystemEntities[2], timestamp: new Date().toISOString(), problemStatement: 'Develop a machine learning model that can predict combined sewer overflow (CSO) events with high accuracy at least 6 hours in advance, using rainfall data and sensor inputs.', desiredOutcomes: 'A validated model with >90% accuracy, and a paper co-authored with our data science team.', domain: 'modeling', relatedDocuments: [], interestedResearcherIds: ['res002'] },
-  { id: 'opp002', title: 'Cost-Effective Biosolids-to-Energy Solution', submittedBy: users[1], organization: ecosystemEntities[0], timestamp: new Date().toISOString(), problemStatement: 'Seeking innovative, scalable technologies to improve the energy yield from anaerobic digestion of wastewater biosolids, focusing on co-digestion strategies.', desiredOutcomes: 'A pilot-scale study proposal and a techno-economic analysis comparing at least three different approaches.', domain: 'wastewater_treatment', relatedDocuments: [], interestedResearcherIds: [] },
+    { id: 'ro001', title: 'Develop Low-Cost, Real-Time Nutrient Sensor', submittedBy: users[0], organization: ecosystemEntities[2], timestamp: '2024-05-01T00:00:00Z', problemStatement: 'Current nutrient monitoring is lab-based and slow. We need a cost-effective sensor for real-time monitoring of nitrogen and phosphorus in wastewater effluent.', desiredOutcomes: 'A field-deployable sensor with a target cost under $500 per unit.', domain: 'wastewater_treatment', relatedDocuments: [], interestedResearcherIds: [] },
 ];
 
 export const topicSuggestions: TopicSuggestion[] = [
-    { id: 'ts001', title: 'AI for Satellite-Based Leak Detection', description: 'This seems like a game-changing technology for non-revenue water. I would love to see a presentation from a company that has successfully deployed this.', submittedBy: users[0], timestamp: '2024-05-10T00:00:00Z', upvoteUserIds: ['user-123', 'user-456', 'user-789'], recommendedSpeaker: 'AquaAI Corp', comments: [], tags: ['ai', 'leak-detection', 'non-revenue-water'] },
-    { id: 'ts002', title: 'The Business Case for One Water', description: 'How do we effectively communicate the long-term value of integrated water management to policymakers and the public?', submittedBy: users[1], timestamp: '2024-05-18T00:00:00Z', upvoteUserIds: ['user-456', 'user-123'], comments: [], tags: ['one-water', 'governance', 'finance'] }
+    { id: 'ts001', title: 'AI for Satellite-Based Leak Detection', description: 'There is emerging research on using satellite imagery to detect large-scale leaks. A presentation from a company in this space would be incredible.', submittedBy: users[2], timestamp: '2024-05-18T00:00:00Z', upvoteUserIds: ['user-123', 'user-456'], comments: [], tags: ['AI', 'Leak Detection'] },
+    { id: 'ts002', title: 'Practical Guide to Developing a Lead Service Line Inventory', description: 'With the new LCRR, many utilities are struggling with this. A step-by-step guide from a utility that has successfully completed theirs would be highly valuable.', submittedBy: users[0], timestamp: '2024-05-20T00:00:00Z', upvoteUserIds: ['user-456'], comments: [], tags: ['Regulations', 'LCRR', 'Lead & Copper'] },
 ];
 
 export const blogAuthors: BlogAuthor[] = [
-    { id: 'ba001', name: 'Hardeep Anand', avatarUrl: 'https://i.pravatar.cc/150?u=hardeep', title: 'Founder, ORAKLES', isGuest: false },
-    { id: 'ba002', name: 'Dr. Jane Foster', avatarUrl: 'https://i.pravatar.cc/150?u=jane-foster', title: 'Water Reuse Practice Leader, Carollo Engineers', isGuest: true }
+    { id: 'ba001', name: 'Hardeep Anand', avatarUrl: 'https://i.pravatar.cc/150?u=hardeep', title: 'ORAKLES Visionary', isGuest: false },
+    { id: 'ba002', name: 'Jane Doe', avatarUrl: 'https://i.pravatar.cc/150?u=user-888', title: 'Digital Water Expert, Xylem', isGuest: true },
 ];
 
-// FIX: Completed the blogPosts array which was previously cut off, causing a syntax error.
 export const blogPosts: BlogPost[] = [
-    {
-        id: 'post-1',
-        title: 'The Digital Twin Revolution: Reshaping Utility Operations',
-        subtitle: 'How virtual replicas of physical assets are enabling proactive maintenance and unprecedented efficiency.',
-        authorId: 'ba001',
-        publishDate: '2024-05-15T00:00:00Z',
-        readTimeMinutes: 8,
-        heroImageUrl: 'https://picsum.photos/seed/blog-dt/1200/600',
-        content: 'The concept of a "digital twin" has moved from science fiction to practical reality, and nowhere is its impact more profound than in the water utility sector. A digital twin is a dynamic, virtual representation of a physical asset or system, updated in real-time with data from sensors, SCADA systems, and operational logs. It\'s not just a 3D model; it\'s a living simulation.\n\nFor utilities, this means having the ability to predict failures before they happen. By running simulations on the digital twin, operators can test different operational scenarios—like a sudden main break or a power outage at a pump station—without any real-world risk. This allows for the development of more robust emergency response plans and optimized daily operations. Furthermore, digital twins are revolutionizing capital improvement planning. Instead of relying on age-based asset replacement, utilities can now use predictive analytics from their digital twins to prioritize investments based on the actual condition and risk of failure of each asset, ensuring that every dollar is spent where it\'s needed most.',
-        claps: 1200,
-        comments: [
-            { user: users[0], text: 'This is a game-changer for capital planning!', timestamp: '2024-05-16T00:00:00Z' }
-        ],
-        vendorId: 'v001'
-    },
-    {
-        id: 'post-2',
-        title: 'Unlocking the Potential of Water Reuse: A Conversation with Dr. Jane Foster',
-        subtitle: 'Exploring the technologies and public perception shifts driving the adoption of water reuse.',
-        authorId: 'ba002',
-        publishDate: '2024-05-20T00:00:00Z',
-        readTimeMinutes: 12,
-        heroImageUrl: 'https://picsum.photos/seed/blog-reuse/1200/600',
-        content: 'Water reuse, once a niche concept, is now at the forefront of ensuring water security for communities around the world. I sat down with Dr. Jane Foster, a leading expert in the field, to discuss the state of water recycling. "The technology has been solid for years," Dr. Foster explains. "Advanced treatment processes like reverse osmosis, UV disinfection, and advanced oxidation can purify wastewater to standards that are often higher than conventional drinking water sources."\n\nThe biggest hurdle, she notes, has often been public perception. "We call it the \'yuck factor,\'" she says with a smile. "But that\'s changing. Through public education, transparent communication, and rebranding efforts—like calling it \'purified water\' instead of \'recycled wastewater\'—communities are embracing it. They see the value in a resilient, locally-controlled water supply that is independent of drought or distant water sources. The future is circular, and water is no exception."',
-        claps: 850,
-        comments: [],
-        vendorId: 'v003'
-    }
+    { id: 'post-1', title: 'The Semantic Web: Unlocking the Future of Water Data', subtitle: 'How standardized data and interconnected knowledge graphs will revolutionize utility management.', authorId: 'ba001', publishDate: '2024-05-20T00:00:00Z', readTimeMinutes: 8, heroImageUrl: 'https://picsum.photos/seed/post1/1200/600', content: 'The water industry is on the cusp of a data revolution. For decades, we have collected vast amounts of information... (rest of content)', claps: 125, comments: [], vendorId: 'e003' },
+    { id: 'post-2', title: '5 Steps to a Successful Digital Twin Implementation', subtitle: 'A practical guide for utilities starting their digital twin journey.', authorId: 'ba002', publishDate: '2024-05-15T00:00:00Z', readTimeMinutes: 12, heroImageUrl: 'https://picsum.photos/seed/post2/1200/600', content: 'Digital twins are no longer a futuristic concept; they are a powerful tool available to utilities today... (rest of content)', claps: 250, comments: [] },
 ];
 
-// FIX: Added missing 'conversations' data export for AuthContext.
 export const conversations: Conversation[] = [
-  {
-    id: 'conv-1',
-    participantIds: ['user-123', 'user-456'],
-    messages: [
-      { id: 'msg-1', fromUserId: 'user-123', content: 'Hey Maria, saw your comment on the Asset Management term. Do you have that whitepaper on opex impact you mentioned?', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), isRead: true },
-      { id: 'msg-2', fromUserId: 'user-456', content: 'Hi Alex! Absolutely, I just uploaded it to the term page. Let me know what you think.', timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), isRead: true },
-      { id: 'msg-3', fromUserId: 'user-123', content: 'Perfect, thanks! I\'ll take a look now.', timestamp: new Date(Date.now() - 55 * 60 * 1000).toISOString(), isRead: false },
-    ]
-  },
-  {
-    id: 'conv-2',
-    participantIds: ['user-123', 'user-789'],
-    messages: [
-      { id: 'msg-4', fromUserId: 'user-789', content: 'Hi Alex, I\'m looking for a mentor in utility management. Would you be open to a quick chat sometime next week?', timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), isRead: false },
-    ]
-  }
+    { id: 'conv1', participantIds: ['user-123', 'user-456'], messages: [
+        { id: 'msg1', fromUserId: 'user-456', content: 'Hey Alex, saw your comment on the asset management term. Great point about the opex impact. Do you have that whitepaper handy?', timestamp: '2024-05-21T14:00:00Z', isRead: true },
+        { id: 'msg2', fromUserId: 'user-123', content: 'Absolutely, Maria. Just uploaded it to the term page. Let me know what you think!', timestamp: '2024-05-21T14:05:00Z', isRead: false },
+    ] },
+    { id: 'conv2', participantIds: ['user-123', 'user-789'], messages: [
+        { id: 'msg3', fromUserId: 'user-789', content: 'Hi Alex, I saw you\'re offering mentorship in utility management. I\'m a student and would love to connect if you have time.', timestamp: '2024-05-20T10:00:00Z', isRead: true },
+    ] },
 ];
 
-// FIX: Added missing 'pipDocuments' data export for AuthContext.
 export const pipDocuments: PIPDocument[] = [
-    {
-        id: 'pip-001',
-        title: 'City of Metropolis Water Conservation Initiative: 5-Year Report',
-        description: 'A comprehensive review of the City of Metropolis\'s water conservation programs from 2018-2023, including data on AMI rollout, customer engagement, and non-revenue water reduction.',
-        fileUrl: '#',
-        fileType: 'Report',
-        submittedByUserId: 'user-123',
-        submittedByEntityId: 'v002',
-        timestamp: '2024-05-10T00:00:00Z',
-        region: 'United States',
-        tags: ['water conservation', 'ami', 'non-revenue water', 'case study'],
-        viewCount: 1523,
-        downloadCount: 432
-    },
-    {
-        id: 'pip-002',
-        title: 'National Survey of PFAS Treatment Technologies',
-        description: 'An academic publication summarizing the efficacy and cost-effectiveness of current and emerging technologies for the treatment of per- and polyfluoroalkyl substances (PFAS) in drinking water.',
-        fileUrl: '#',
-        fileType: 'Publication',
-        submittedByUserId: 'user-789',
-        submittedByEntityId: 'v007',
-        timestamp: '2024-04-22T00:00:00Z',
-        region: 'United States',
-        tags: ['pfas', 'treatment', 'research', 'emerging contaminants'],
-        viewCount: 3488,
-        downloadCount: 1201
-    }
+    { id: 'pip1', title: 'City of Waterdeep - 2023 Annual Water Quality Report', description: 'The official Consumer Confidence Report (CCR) detailing water quality data for the City of Waterdeep in 2023.', fileUrl: '#', fileType: 'Report', submittedByUserId: 'user-123', submittedByEntityId: 'e002', timestamp: '2024-05-10T00:00:00Z', region: 'United States', tags: ['CCR', 'Water Quality', 'Compliance'], viewCount: 1024, downloadCount: 256 },
+    { id: 'pip2', title: 'A Comparative Study of AMI Network Architectures', description: 'This whitepaper from Innovyze compares the pros and cons of cellular vs. mesh network AMI systems.', fileUrl: '#', fileType: 'Whitepaper', submittedByUserId: 'user-888', submittedByEntityId: 'v001', timestamp: '2024-04-22T00:00:00Z', region: 'United States', tags: ['AMI', 'Digital Water', 'Networks'], viewCount: 2345, downloadCount: 812 },
 ];
 
-// FIX: Added missing 'featureSuggestions' data export for AuthContext.
 export const featureSuggestions: FeatureSuggestion[] = [
-    {
-        id: 'feat-001',
-        title: 'AI-Powered Resume Builder',
-        description: 'It would be amazing if the platform could take my profile data (projects, skills, credentials) and automatically generate a tailored resume for specific job applications.',
-        submittedBy: users[0],
-        timestamp: '2024-05-20T00:00:00Z',
-        upvoteUserIds: ['user-123', 'user-456', 'user-789', 'user-999'],
-        comments: [],
-        status: 'Planned',
-        tags: ['profile', 'career', 'ai']
-    },
-    {
-        id: 'feat-002',
-        title: 'Interactive Knowledge Maps',
-        description: 'Instead of just seeing my knowledge map, I want to be able to click on a node (e.g., "Asset Management") and see all the related terms, videos, and people I\'ve interacted with on that topic.',
-        submittedBy: users[2],
-        timestamp: '2024-05-18T00:00:00Z',
-        upvoteUserIds: ['user-789', 'user-123'],
-        comments: [],
-        status: 'Under Consideration',
-        tags: ['knowledge-map', 'ui/ux']
-    },
-    {
-        id: 'feat-003',
-        title: 'Gamified Team Learning Challenges',
-        description: 'Allow companies to create private teams and compete in weekly challenges based on Academy decks. This would be great for internal training and engagement.',
-        submittedBy: users[1],
-        timestamp: '2024-05-15T00:00:00Z',
-        upvoteUserIds: ['user-456'],
-        comments: [],
-        status: 'In Progress',
-        tags: ['academy', 'gamification', 'teams']
-    }
+    { id: 'feat1', title: 'AI-Powered Resume Builder from Profile Data', description: 'It would be amazing if ORAKLES could auto-generate a formatted resume using the data from our profile (projects, skills, credentials).', submittedBy: users[0], timestamp: '2024-05-21T00:00:00Z', upvoteUserIds: ['user-456', 'user-789'], comments: [], status: 'In Progress', tags: ['Profile', 'AI', 'Career'] },
+    { id: 'feat2', title: 'Gamified CEU/PDH Tracking', description: 'Add a feature to track our continuing education credits towards our licenses, maybe with reminders and suggestions for relevant content on the platform.', submittedBy: users[3], timestamp: '2024-05-19T00:00:00Z', upvoteUserIds: [], comments: [], status: 'Under Consideration', tags: ['Profile', 'Credentials'] },
+    { id: 'feat3', title: 'Integrated Chat in Live Sessions', description: 'When watching a live Droobi TV session, it would be great to have a live chat on the side to interact with other viewers and the speaker.', submittedBy: users[1], timestamp: '2024-04-15T00:00:00Z', upvoteUserIds: ['user-123', 'user-789', 'user-999'], comments: [], status: 'Shipped', tags: ['Droobi TV', 'Community'] },
 ];
