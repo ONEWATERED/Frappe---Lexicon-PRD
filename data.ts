@@ -30,6 +30,9 @@ import {
   ProjectPortfolioItem,
   UserSkill,
   ResumeDocument,
+  LibraryCollection,
+  LearningActivity,
+  KnowledgeMapData,
 } from './types';
 
 // --- CAREER GOALS DATA ---
@@ -150,6 +153,65 @@ const userCredentials_Alex: UserCredential[] = [
   }
 ];
 
+// --- MY LIBRARY DATA ---
+const myLibrary_Alex: LibraryCollection[] = [
+  {
+    id: 'lib-col-1',
+    name: 'PFAS Research',
+    items: [
+      { id: 'li-1', type: 'post', contentId: 'post-1', addedAt: '2024-05-20T10:00:00Z' },
+      { id: 'li-2', type: 'term', contentId: 't009', addedAt: '2024-05-18T14:30:00Z' },
+      { id: 'li-3', type: 'deck', contentId: 'd002', addedAt: '2024-05-15T09:00:00Z' },
+    ],
+  },
+  {
+    id: 'lib-col-2',
+    name: 'Asset Management Study Prep',
+    items: [
+      { id: 'li-4', type: 'term', contentId: 't008', addedAt: '2024-04-10T11:00:00Z' },
+      { id: 'li-5', type: 'video', contentId: 'vid004', addedAt: '2024-04-09T16:00:00Z' },
+      { id: 'li-6', type: 'deck', contentId: 'd001', addedAt: '2024-04-08T12:00:00Z' },
+      { id: 'li-7', type: 'manual', contentId: 'm001', addedAt: '2024-04-05T18:00:00Z' },
+    ],
+  },
+];
+
+// --- LEARNING TRANSCRIPT DATA ---
+const learningTranscript_Alex: LearningActivity[] = [
+    { id: 'lt-1', type: 'pathway_achieved', contentId: 'lp001', contentTitle: 'Utility Manager Certification', completedAt: '2024-05-10T00:00:00Z' },
+    { id: 'lt-2', type: 'deck_completed', contentId: 'd001', contentTitle: 'Asset Management Fundamentals', completedAt: '2024-05-08T00:00:00Z' },
+    { id: 'lt-3', type: 'video_watched', contentId: 'vid004', contentTitle: 'Asset Management Masterclass', completedAt: '2024-04-22T00:00:00Z' },
+    { id: 'lt-4', type: 'deck_completed', contentId: 'd002', contentTitle: 'Key Regulatory Frameworks', completedAt: '2024-03-15T00:00:00Z' },
+];
+
+// --- KNOWLEDGE MAP DATA ---
+const knowledgeMap_Alex: KnowledgeMapData = {
+    nodes: [
+        { id: 'asset_mgmt', label: 'Asset Mgmt', activityCount: 28 },
+        { id: 'utility_management', label: 'Utility Mgmt', activityCount: 22 },
+        { id: 'modeling', label: 'Modeling', activityCount: 15 },
+        { id: 'water_distribution', label: 'Distribution', activityCount: 18 },
+        { id: 'wastewater_treatment', label: 'Wastewater', activityCount: 9 },
+        { id: 'regulations', label: 'Regulations', activityCount: 12 },
+        // Suggested nodes
+        { id: 'resiliency', label: 'Resiliency', activityCount: 0, isSuggested: true },
+        { id: 'climate_impacts', label: 'Climate', activityCount: 0, isSuggested: true },
+    ],
+    links: [
+        { source: 'asset_mgmt', target: 'utility_management' },
+        { source: 'asset_mgmt', target: 'water_distribution' },
+        { source: 'utility_management', target: 'regulations' },
+        { source: 'modeling', target: 'water_distribution' },
+        { source: 'asset_mgmt', target: 'modeling' },
+        { source: 'wastewater_treatment', target: 'utility_management' },
+        // Links to suggested
+        { source: 'asset_mgmt', target: 'resiliency' },
+        { source: 'utility_management', target: 'climate_impacts' },
+        { source: 'resiliency', target: 'climate_impacts' },
+    ],
+};
+
+
 export const users: User[] = [
   {
     id: 'user-123',
@@ -166,6 +228,9 @@ export const users: User[] = [
     projectPortfolio: projectPortfolio_Alex,
     skills: skills_Alex,
     resumeVault: resumeVault_Alex,
+    myLibrary: myLibrary_Alex,
+    learningTranscript: learningTranscript_Alex,
+    knowledgeMap: knowledgeMap_Alex,
   },
   {
     id: 'user-456',

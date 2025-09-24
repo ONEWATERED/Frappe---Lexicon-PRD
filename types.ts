@@ -19,6 +19,9 @@ export type User = {
   projectPortfolio?: ProjectPortfolioItem[];
   skills?: UserSkill[];
   resumeVault?: ResumeDocument[];
+  myLibrary?: LibraryCollection[];
+  learningTranscript?: LearningActivity[];
+  knowledgeMap?: KnowledgeMapData;
 };
 
 export type IconName = 'AcademicCapIcon' | 'StarIcon' | 'ShieldCheckIcon' | 'SparklesIcon' | 'TrophyIcon';
@@ -111,6 +114,52 @@ export type UserCredential = {
   renewalDate: string; // ISO Date string
   fileUrl: string;
   ceuRequirements?: CEUProgress;
+};
+
+
+// --- MY LIBRARY TYPES ---
+export type LibraryItemType = 'term' | 'video' | 'deck' | 'manual' | 'post';
+
+export type LibraryItem = {
+  id: string;
+  type: LibraryItemType;
+  contentId: string; // ID of the term, video, deck etc.
+  addedAt: string; // ISO Date
+};
+
+export type LibraryCollection = {
+  id: string;
+  name: string;
+  items: LibraryItem[];
+};
+
+// --- LEARNING TRANSCRIPT TYPES ---
+export type LearningActivityType = 'deck_completed' | 'pathway_achieved' | 'video_watched';
+
+export type LearningActivity = {
+  id: string;
+  type: LearningActivityType;
+  contentId: string;
+  contentTitle: string;
+  completedAt: string; // ISO Date
+};
+
+// --- KNOWLEDGE MAP TYPES ---
+export type KnowledgeMapNode = {
+  id: string; // e.g., 'asset_mgmt'
+  label: string;
+  activityCount: number;
+  isSuggested?: boolean;
+};
+
+export type KnowledgeMapLink = {
+  source: string; // id of source node
+  target: string; // id of target node
+};
+
+export type KnowledgeMapData = {
+  nodes: KnowledgeMapNode[];
+  links: KnowledgeMapLink[];
 };
 
 

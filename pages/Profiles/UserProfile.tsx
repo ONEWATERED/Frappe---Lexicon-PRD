@@ -6,11 +6,12 @@ import {
     TierIcon, IdentificationIcon, ArrowUpTrayIcon, DocumentDuplicateIcon, CalendarDaysIcon, BellIcon,
     RocketLaunchIcon, CheckBadgeIcon, PlayCircleIcon, BookOpenIcon, UsersIcon, AcademicCapIcon,
     RectangleStackIcon, WrenchScrewdriverIcon, HandThumbUpIcon, DocumentArrowDownIcon, StarIcon, DocumentTextIcon,
-    ShareIcon, TrophyIcon,
+    ShareIcon, TrophyIcon, BookmarkSquareIcon, ClipboardDocumentListIcon, CpuChipIcon
 } from '../../components/icons/Icons';
-import { UserCredential, UserSkill, ResumeDocument, ProjectPortfolioItem, CareerGoal, CareerPathway, CareerPathwayStep } from '../../types';
+import { UserCredential, UserSkill, ResumeDocument, ProjectPortfolioItem, CareerGoal, CareerPathway, CareerPathwayStep, LibraryCollection, LibraryItem, LearningActivity, KnowledgeMapData } from '../../types';
 import VideoPlayer from '../../components/VideoPlayer';
 import { DigitalWaterProBadge, UtilityManagementStewardBadge } from '../../components/Badges';
+import KnowledgeMap from '../../components/KnowledgeMap';
 
 const getCredentialStatus = (renewalDate: string): { text: string, color: string, daysLeft: number } => {
   const now = new Date();
@@ -337,6 +338,137 @@ const AchievementsSection: React.FC<{ badgeIds: string[] }> = ({ badgeIds }) => 
     );
 };
 
+const useLibraryItemDetails = () => {
+    const { terms, droobiVideos, flashcardDecks, manuals, blogPosts } = useAuth();
+
+    return (item: LibraryItem) => {
+        switch (item.type) {
+            case 'term':
+                const term = terms.find(t => t.id === item.contentId);
+                return { title: term?.term, link: `/term/${item.contentId}`, Icon: DocumentTextIcon };
+            case 'video':
+                const video = droobiVideos.find(v => v.id === item.contentId);
+                return { title: video?.title, link: `/video/${item.contentId}`, Icon: PlayCircleIcon };
+            case 'deck':
+                 const deck = flashcardDecks.find(d => d.id === item.contentId);
+                return { title: deck?.title, link: `/academy/deck/${item.contentId}`, Icon: AcademicCapIcon };
+            case 'manual':
+                 const manual = manuals.find(m => m.id === item.contentId);
+                return { title: manual?.title, link: `/manual/${item.contentId}`, Icon: BookOpenIcon };
+            case 'post':
+                 const post = blogPosts.find(p => p.id === item.contentId);
+                return { title: post?.title, link: `/insights/${item.contentId}`, Icon: BookOpenIcon };
+            default:
+                return { title: 'Unknown Item', link: '#', Icon: DocumentTextIcon };
+        }
+    };
+};
+
+const MyLibrarySection: React.FC<{ collections: LibraryCollection[] }> = ({ collections }) => {
+    const [activeTab, setActiveTab] = useState(0);
+    const getItemDetails = useLibraryItemDetails();
+
+    return (
+        <div className="mt-12">
+            <div className="flex items-center gap-3 mb-6">
+                <BookmarkSquareIcon className="w-8 h-8 text-blue-400"/>
+                <h2 className="text-2xl font-bold text-white">My Library (Private)</h2>
+            </div>
+            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+                <div className="border-b border-slate-700">
+                    <nav className="-mb-px flex space-x-6" aria-label="Tabs">
+                        {collections.map((collection, index) => (
+                            <button
+                                key={collection.id}
+                                onClick={() => setActiveTab(index)}
+                                className={`${
+                                    activeTab === index
+                                        ? 'border-blue-500 text-blue-400'
+                                        : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500'
+                                } whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors`}
+                            >
+                                {collection.name} ({collection.items.length})
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+                <div className="mt-6">
+                    {collections[activeTab]?.items.map(item => {
+                        const details = getItemDetails(item);
+                        return (
+                             <Link to={details.link} key={item.id} className="flex items-center gap-4 p-3 -m-3 rounded-lg hover:bg-slate-700/50 transition-colors">
+                                <details.Icon className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                                <div className="flex-grow">
+                                    <p className="text-sm font-semibold text-slate-200">{details.title}</p>
+                                    <p className="text-xs text-slate-500">Bookmarked on {new Date(item.addedAt).toLocaleDateString()}</p>
+                                </div>
+                            </Link>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const LearningTranscriptSection: React.FC<{ activities: LearningActivity[] }> = ({ activities }) => {
+    const activityConfig = {
+        pathway_achieved: { Icon: TrophyIcon, color: 'text-yellow-400' },
+        deck_completed: { Icon: AcademicCapIcon, color: 'text-blue-400' },
+        video_watched: { Icon: PlayCircleIcon, color: 'text-rose-400' },
+    };
+
+    return (
+        <div className="mt-12">
+             <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                    <ClipboardDocumentListIcon className="w-8 h-8 text-blue-400"/>
+                    <h2 className="text-2xl font-bold text-white">Learning Transcript (Private)</h2>
+                </div>
+                <button 
+                    onClick={() => alert('Transcript download coming soon!')}
+                    className="flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm"
+                >
+                    <DocumentArrowDownIcon className="w-4 h-4" /> Download Transcript
+                </button>
+            </div>
+            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+                <div className="space-y-4">
+                    {activities.map(activity => {
+                        const { Icon, color } = activityConfig[activity.type];
+                        return (
+                            <div key={activity.id} className="flex items-center gap-4">
+                                <div className={`flex-shrink-0 w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center`}>
+                                    <Icon className={`w-6 h-6 ${color}`} />
+                                </div>
+                                <div className="flex-grow">
+                                    <p className="font-semibold text-slate-200">{activity.contentTitle}</p>
+                                    <p className="text-xs text-slate-400">Completed on {new Date(activity.completedAt).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const KnowledgeMapSection: React.FC<{ mapData: KnowledgeMapData }> = ({ mapData }) => {
+    return (
+        <div className="mt-12">
+             <div className="flex items-center gap-3 mb-6">
+                <CpuChipIcon className="w-8 h-8 text-blue-400"/>
+                <h2 className="text-2xl font-bold text-white">Interactive Knowledge Map</h2>
+            </div>
+            <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+                <p className="text-sm text-slate-400 mb-4">This map visualizes your areas of expertise based on your activity across oraKLES. Larger nodes indicate more activity. Dashed nodes are suggested topics for you to explore next.</p>
+                <KnowledgeMap data={mapData} />
+            </div>
+        </div>
+    );
+};
+
 
 const UserProfile: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -403,6 +535,8 @@ const UserProfile: React.FC = () => {
           <p className="text-4xl font-bold text-white mt-2">{user.stats.insightfulMarks}</p>
         </div>
       </div>
+      
+      {user.knowledgeMap && <KnowledgeMapSection mapData={user.knowledgeMap} />}
 
       <AchievementsSection badgeIds={user.badges} />
 
@@ -417,6 +551,10 @@ const UserProfile: React.FC = () => {
       {user.skills && user.skills.length > 0 && currentUser && (
         <SkillsSection skills={user.skills} currentUserId={currentUser.id} viewingOwnProfile={viewingOwnProfile} />
       )}
+      
+      {viewingOwnProfile && user.myLibrary && user.myLibrary.length > 0 && <MyLibrarySection collections={user.myLibrary} />}
+      
+      {viewingOwnProfile && user.learningTranscript && user.learningTranscript.length > 0 && <LearningTranscriptSection activities={user.learningTranscript} />}
 
       {viewingOwnProfile && user.resumeVault && user.resumeVault.length > 0 && <ResumeVaultSection resumes={user.resumeVault} />}
 
