@@ -1,9 +1,4 @@
 
-
-
-
-
-
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -25,7 +20,7 @@ class ErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
 
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.setState` was not found.
+// FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.setState` was not found.
   componentDidCatch = (error: Error, errorInfo: React.ErrorInfo) => {
     // We can also log the error to an error reporting service.
     // Here we'll just update state with more details.
@@ -33,7 +28,7 @@ class ErrorBoundary extends React.Component<
     console.error("Uncaught error:", error, errorInfo);
   }
 
-  // FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.props` was not found.
+// FIX: Converted to an arrow function to ensure `this` is correctly bound, fixing an issue where `this.props` was not found.
   render = () => {
     if (this.state.hasError) {
       // Render fallback UI

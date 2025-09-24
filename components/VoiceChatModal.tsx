@@ -95,7 +95,7 @@ const VoiceChatModal: React.FC<VoiceChatModalProps> = ({ isOpen, onClose }) => {
         if (isListening) {
             recognition?.stop();
         } else {
-            // FIX: Implemented logic to start speech recognition.
+// FIX: Implemented logic to start speech recognition.
             if (recognition) {
                 try {
                     recognition.start();

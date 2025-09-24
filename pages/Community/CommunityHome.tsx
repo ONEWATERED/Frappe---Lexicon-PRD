@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { CommunityEvent, CommunityPost, LexiconCategory, lexiconCategoryNames } from '../../types';
+import { CommunityEvent, CommunityPost, LexiconCategory, lexiconCategoryNames, User } from '../../types';
 import { 
     UsersIcon, 
     CalendarDaysIcon, 
@@ -10,8 +10,16 @@ import {
     MapPinIcon, 
     LinkIcon, 
     HeartIcon, 
-    TagIcon 
+    TagIcon,
+    UserPlusIcon,
+    CheckIcon,
+    PaperAirplaneIcon,
+    UserMinusIcon,
+    XIcon,
+    SparklesIcon,
+    UserGroupIcon
 } from '../../components/icons/Icons';
+import { PROFESSIONAL_TIERS } from '../../data';
 
 function getTimeAgo(dateString: string) {
     const date = new Date(dateString);
@@ -97,6 +105,260 @@ const EventCard: React.FC<{ event: CommunityEvent }> = ({ event }) => (
     </div>
 );
 
+const MembersList: React.FC = () => {
+    const { currentUser, getAllUsers } = useAuth();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [mentorshipFilter, setMentorshipFilter] = useState('all');
+    const [onlineFilter, setOnlineFilter] = useState('all');
+
+    const users = getAllUsers();
+
+    const filteredUsers = useMemo(() => {
+        return users.filter(user => {
+            if (user.id === currentUser?.id) return false;
+
+            const matchesSearch = searchTerm === '' || user.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesMentorship = mentorshipFilter === 'all' || user.mentorshipStatus === mentorshipFilter;
+            const matchesOnline = onlineFilter === 'all' || (onlineFilter === 'online' ? user.isOnline : !user.isOnline);
+
+            return matchesSearch && matchesMentorship && matchesOnline;
+        });
+    }, [users, currentUser, searchTerm, mentorshipFilter, onlineFilter]);
+
+    const ConnectionButton: React.FC<{ user: User }> = ({ user }) => {
+        const isConnected = currentUser?.connections?.includes(user.id);
+        const isPendingOutgoing = currentUser?.pendingConnections?.outgoing.includes(user.id);
+        const isPendingIncoming = currentUser?.pendingConnections?.incoming.includes(user.id);
+
+        if (isConnected) {
+            return (
+                 <div className="flex items-center gap-2">
+                    <button className="flex-1 flex items-center justify-center gap-2 bg-slate-600 text-white font-semibold py-2 px-3 rounded-md text-sm hover:bg-slate-500">
+                        <PaperAirplaneIcon className="w-4 h-4" /> Message
+                    </button>
+                     <button className="p-2 bg-slate-600 text-slate-300 rounded-md hover:bg-red-500/50 hover:text-red-300">
+                        <UserMinusIcon className="w-4 h-4" />
+                    </button>
+                 </div>
+            )
+        }
+        if (isPendingOutgoing) {
+            return <button disabled className="w-full bg-slate-700 text-slate-400 font-semibold py-2 px-3 rounded-md text-sm cursor-not-allowed">Pending</button>
+        }
+        if (isPendingIncoming) {
+            return (
+                <div className="flex gap-2">
+                    <button className="flex-1 flex items-center justify-center gap-1 bg-green-500 text-white font-semibold py-2 px-3 rounded-md text-sm hover:bg-green-600">
+                        <CheckIcon className="w-4 h-4" /> Accept
+                    </button>
+                    <button className="p-2 bg-slate-600 text-slate-300 rounded-md hover:bg-slate-500">
+                        <XIcon className="w-4 h-4" />
+                    </button>
+                </div>
+            )
+        }
+        return (
+            <button className="w-full flex items-center justify-center gap-2 bg-blue-500 text-white font-semibold py-2 px-3 rounded-md text-sm hover:bg-blue-600">
+                <UserPlusIcon className="w-4 h-4" /> Connect
+            </button>
+        );
+    };
+
+    return (
+        <div>
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+                <input
+                    type="search"
+                    placeholder="Search by name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="md:col-span-1 bg-slate-700/50 border border-slate-600 rounded-lg p-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+                 <select value={mentorshipFilter} onChange={e => setMentorshipFilter(e.target.value)} className="bg-slate-700/50 border border-slate-600 rounded-lg p-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option value="all">All Mentorship</option>
+                    <option value="offering">Offering Mentorship</option>
+                    <option value="seeking">Seeking Mentorship</option>
+                 </select>
+                 <select value={onlineFilter} onChange={e => setOnlineFilter(e.target.value)} className="bg-slate-700/50 border border-slate-600 rounded-lg p-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option value="all">All Members</option>
+                    <option value="online">Online Now</option>
+                    <option value="offline">Offline</option>
+                 </select>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredUsers.map(user => (
+                    <div key={user.id} className="glass-card p-4 flex flex-col items-center text-center">
+                        <div className="relative">
+                            <img src={user.avatarUrl} alt={user.name} className="w-24 h-24 rounded-full border-2 border-slate-600" />
+                            <span className={`absolute bottom-1 right-1 block h-4 w-4 rounded-full border-2 border-slate-800 ${user.isOnline ? 'bg-green-400' : 'bg-slate-500'}`}></span>
+                        </div>
+                        <Link to={`/profile/${user.id}`} className="font-bold text-lg text-white mt-3 hover:text-blue-400">{user.name}</Link>
+                        <p className="text-sm text-slate-400">{PROFESSIONAL_TIERS.find(t => t.id === user.tierId)?.name}</p>
+                        {user.mentorshipStatus !== 'none' && (
+                             <div className={`mt-2 text-xs font-semibold px-2 py-1 rounded-full border ${
+                                user.mentorshipStatus === 'offering' ? 'bg-purple-500/10 text-purple-300 border-purple-500/30' : 'bg-sky-500/10 text-sky-300 border-sky-500/30'
+                            }`}>
+                                {user.mentorshipStatus === 'offering' ? 'Offering Mentorship' : 'Seeking Mentorship'}
+                            </div>
+                        )}
+                        <div className="mt-4 w-full pt-3 border-t border-slate-700">
+                            {currentUser && <ConnectionButton user={user} />}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+const MyNetworkWidget: React.FC = () => {
+    const { currentUser, getUserById } = useAuth();
+    if (!currentUser) return null;
+
+    const incomingRequests = currentUser.pendingConnections?.incoming.map(id => getUserById(id)).filter(Boolean) as User[];
+
+    return (
+        <div className="glass-card p-4">
+            <h3 className="font-bold text-white mb-3">My Network</h3>
+            {incomingRequests.length > 0 && (
+                <div className="space-y-3 mb-3">
+                    <p className="text-xs font-semibold text-slate-300">Pending Invitations</p>
+                    {incomingRequests.map(user => (
+                        <div key={user.id} className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <img src={user.avatarUrl} alt={user.name} className="w-8 h-8 rounded-full" />
+                                <span className="text-sm font-semibold text-slate-200">{user.name}</span>
+                            </div>
+                            <div className="flex gap-1.5">
+                                <button className="p-1.5 bg-green-500/20 text-green-300 rounded-full hover:bg-green-500/40"><CheckIcon className="w-4 h-4" /></button>
+                                <button className="p-1.5 bg-slate-600 text-slate-300 rounded-full hover:bg-slate-500"><XIcon className="w-4 h-4" /></button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+             <Link to={`/profile/${currentUser.id}`} className="block w-full text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors">
+                View My Connections ({currentUser.connections?.length || 0})
+            </Link>
+        </div>
+    );
+}
+
+const FindMentorWidget: React.FC = () => {
+    const { getAllUsers, currentUser } = useAuth();
+    const mentors = useMemo(() => {
+        return getAllUsers()
+            .filter(u => u.mentorshipStatus === 'offering' && u.id !== currentUser?.id)
+            .slice(0, 4);
+    }, [getAllUsers, currentUser]);
+
+    return (
+        <div className="glass-card p-4 space-y-3">
+             <h3 className="font-bold text-white">Find a Mentor</h3>
+             {mentors.map(mentor => (
+                 <Link to={`/profile/${mentor.id}`} key={mentor.id} className="flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-slate-700/50">
+                     <img src={mentor.avatarUrl} alt={mentor.name} className="w-10 h-10 rounded-full" />
+                     <div>
+                        <p className="font-semibold text-slate-200 text-sm">{mentor.name}</p>
+                        <p className="text-xs text-slate-400">{PROFESSIONAL_TIERS.find(t => t.id === mentor.tierId)?.name}</p>
+                     </div>
+                 </Link>
+             ))}
+        </div>
+    );
+};
+
+const CommunityHome: React.FC = () => {
+    const { communityPosts, communityEvents } = useAuth();
+    const [activeView, setActiveView] = useState<string>('members');
+    
+    const combinedFeed = useMemo(() => {
+        const postsAsFeed = communityPosts.map(p => ({ ...p, feedType: 'post' as const, date: p.timestamp }));
+        const eventsAsFeed = communityEvents.map(e => ({ ...e, feedType: 'event' as const, date: e.timestamp }));
+        
+        if (activeView === 'events') {
+             return eventsAsFeed.sort((a,b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
+        }
+
+        let filtered = postsAsFeed;
+        if (activeView !== 'feed') {
+            filtered = postsAsFeed.filter(item => item.channel === activeView);
+        }
+
+        return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }, [communityPosts, communityEvents, activeView]);
+
+    const NavButton: React.FC<{ viewId: string, icon: React.ReactNode, label: string }> = ({ viewId, icon, label }) => (
+        <button onClick={() => setActiveView(viewId)} className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-semibold transition-colors ${activeView === viewId ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700/50'}`}>
+            {icon}
+            {label}
+        </button>
+    );
+
+    return (
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+                <UserGroupIcon className="w-16 h-16 text-blue-500 mx-auto" />
+                <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mt-4">Community Hub</h1>
+                <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400">
+                    Connect with peers, share knowledge, and discover events across the water industry.
+                </p>
+            </div>
+            
+            <div className="grid lg:grid-cols-12 gap-8">
+                <aside className="lg:col-span-3 space-y-4">
+                    <div className="glass-card p-3 space-y-1">
+                        <NavButton viewId="feed" icon={<UsersIcon className="w-5 h-5"/>} label="Community Feed" />
+                        <NavButton viewId="members" icon={<UserGroupIcon className="w-5 h-5"/>} label="Members" />
+                        <NavButton viewId="events" icon={<CalendarDaysIcon className="w-5 h-5"/>} label="Events" />
+                    </div>
+                    <div className="glass-card p-3 space-y-1">
+                        <p className="px-3 pt-2 pb-1 text-xs font-bold uppercase text-slate-400">Discussion Channels</p>
+                        {Object.entries(lexiconCategoryNames).map(([key, name]) => (
+                            <NavButton key={key} viewId={key as LexiconCategory} icon={<TagIcon className="w-5 h-5"/>} label={name} />
+                        ))}
+                    </div>
+                </aside>
+
+                <main className="lg:col-span-6">
+                    {activeView === 'feed' && <CreatePost />}
+                    
+                    {activeView === 'members' ? (
+                        <MembersList />
+                    ) : (combinedFeed.length > 0 ? (
+                        <div className="space-y-6">
+                            {combinedFeed.map(item => {
+                                if ('feedType' in item && item.feedType === 'post') {
+                                    return <PostCard key={item.id} post={item as CommunityPost} />;
+                                }
+                                if ('feedType' in item && item.feedType === 'event') {
+                                    return <EventCard key={item.id} event={item as CommunityEvent} />;
+                                }
+                                // Handle cases where item is just a post without feedType
+                                if ('author' in item) {
+                                     return <PostCard key={item.id} post={item as CommunityPost} />;
+                                }
+                                return null;
+                            })}
+                        </div>
+                        ) : (
+                        <div className="text-center py-20 glass-card">
+                            <h3 className="text-xl font-semibold text-slate-300">No activity yet</h3>
+                            <p className="text-slate-500 mt-2">Be the first to post in this channel!</p>
+                        </div>
+                    ))}
+                </main>
+
+                <aside className="lg:col-span-3 space-y-6">
+                    <MyNetworkWidget />
+                    <FindMentorWidget />
+                    <UpcomingEventsWidget />
+                </aside>
+            </div>
+        </div>
+    );
+};
+
 const UpcomingEventsWidget: React.FC = () => {
     const { communityEvents } = useAuth();
     const upcoming = useMemo(() => {
@@ -115,116 +377,12 @@ const UpcomingEventsWidget: React.FC = () => {
                     <p className="font-semibold text-slate-200 leading-tight">{event.title}</p>
                 </div>
             ))}
+             <button className="w-full text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg text-sm transition-colors mt-2">
+                View All Events
+            </button>
         </div>
     );
 };
 
-const TrendingTopicsWidget: React.FC = () => {
-    const { communityPosts } = useAuth();
-    const topics = useMemo(() => {
-        const tagCounts = communityPosts.flatMap(p => p.tags).reduce((acc, tag) => {
-            acc[tag] = (acc[tag] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>);
-        return Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
-    }, [communityPosts]);
-
-    return (
-        <div className="glass-card p-4">
-            <h3 className="font-bold text-white mb-3">Trending Topics</h3>
-            <div className="flex flex-wrap gap-2">
-                {topics.map(([tag]) => (
-                     <button key={tag} className="text-sm bg-slate-700 text-slate-300 px-3 py-1 rounded-full hover:bg-slate-600">#{tag}</button>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-const CommunityHome: React.FC = () => {
-    const { communityPosts, communityEvents } = useAuth();
-    const [activeView, setActiveView] = useState<'feed' | 'events' | LexiconCategory>('feed');
-    
-    const combinedFeed = useMemo(() => {
-        const postsAsFeed = communityPosts.map(p => ({ ...p, feedType: 'post' as const, date: p.timestamp }));
-        const eventsAsFeed = communityEvents.map(e => ({ ...e, feedType: 'event' as const, date: e.timestamp }));
-        
-        let filtered = [...postsAsFeed, ...eventsAsFeed];
-
-        if (activeView !== 'feed' && activeView !== 'events') {
-            filtered = postsAsFeed.filter(item => item.channel === activeView);
-        } else if (activeView === 'events') {
-            filtered = eventsAsFeed.sort((a,b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
-        }
-
-        if (activeView !== 'events') {
-            filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        }
-
-        return filtered;
-    }, [communityPosts, communityEvents, activeView]);
-
-    const NavButton: React.FC<{ viewId: typeof activeView, icon: React.ReactNode, label: string }> = ({ viewId, icon, label }) => (
-        <button onClick={() => setActiveView(viewId)} className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-semibold transition-colors ${activeView === viewId ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-700/50'}`}>
-            {icon}
-            {label}
-        </button>
-    );
-
-    return (
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-                <UsersIcon className="w-16 h-16 text-blue-500 mx-auto" />
-                <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl mt-4">Community Hub</h1>
-                <p className="mt-4 max-w-3xl mx-auto text-lg text-slate-400">
-                    Connect with peers, share knowledge, and discover events across the water industry.
-                </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-12 gap-8">
-                <aside className="lg:col-span-3 space-y-4">
-                    <button className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                        <PlusIcon className="w-5 h-5" /> Add Event
-                    </button>
-                    <div className="glass-card p-3 space-y-1">
-                        <NavButton viewId="feed" icon={<UsersIcon className="w-5 h-5"/>} label="Community Feed" />
-                        <NavButton viewId="events" icon={<CalendarDaysIcon className="w-5 h-5"/>} label="Events" />
-                    </div>
-                    <div className="glass-card p-3 space-y-1">
-                        <p className="px-3 pt-2 pb-1 text-xs font-bold uppercase text-slate-400">Discussion Channels</p>
-                        {Object.entries(lexiconCategoryNames).map(([key, name]) => (
-                            <NavButton key={key} viewId={key as LexiconCategory} icon={<TagIcon className="w-5 h-5"/>} label={name} />
-                        ))}
-                    </div>
-                </aside>
-
-                <main className="lg:col-span-6 space-y-6">
-                    {activeView === 'feed' && <CreatePost />}
-                    {combinedFeed.length > 0 ? (
-                        combinedFeed.map(item => {
-                            if (item.feedType === 'post') {
-                                return <PostCard key={item.id} post={item} />;
-                            }
-                            if (item.feedType === 'event') {
-                                return <EventCard key={item.id} event={item} />;
-                            }
-                            return null;
-                        })
-                    ) : (
-                        <div className="text-center py-20 glass-card">
-                            <h3 className="text-xl font-semibold text-slate-300">No activity yet</h3>
-                            <p className="text-slate-500 mt-2">Be the first to post in this channel!</p>
-                        </div>
-                    )}
-                </main>
-
-                <aside className="lg:col-span-3 space-y-6">
-                    <UpcomingEventsWidget />
-                    <TrendingTopicsWidget />
-                </aside>
-            </div>
-        </div>
-    );
-};
 
 export default CommunityHome;

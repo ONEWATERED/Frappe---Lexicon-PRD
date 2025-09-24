@@ -36,8 +36,8 @@ const AICoachModal: React.FC<AICoachModalProps> = ({ card, onClose }) => {
     setIsLoading(true);
 
     try {
-      // FIX: The user message was being added to state again here, causing duplicates.
-      // I've removed it from the state updates within the try/catch block.
+// FIX: The user message was being added to state again here, causing duplicates.
+// I've removed it from the state updates within the try/catch block.
       const aiResponse = await getAICoachResponse(card.front.content, card.back.content, currentInput);
       const aiMessage: Message = { sender: 'ai', text: aiResponse };
       setMessages(prev => [...prev, aiMessage]);

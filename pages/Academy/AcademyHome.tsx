@@ -1,9 +1,4 @@
 
-
-
-
-
-
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -45,7 +40,7 @@ const AcademyHome: React.FC = () => {
   const oneWaterMinuteDeck = flashcardDecks.find(d => d.id === oneWaterMinute.deckId);
 
   const decksByCategory = useMemo(() => {
-    // FIX: Provided a generic type to `reduce` to ensure the accumulator `acc` is correctly typed as Record<string, FlashcardDeck[]>. This resolves the error where `decks.map` was called on an `unknown` type.
+// FIX: Provided a generic type to `reduce` to ensure the accumulator `acc` is correctly typed as Record<string, FlashcardDeck[]>. This resolves the error where `decks.map` was called on an `unknown` type.
     return flashcardDecks.reduce<Record<string, FlashcardDeck[]>>((acc, deck) => {
         const categoryName = lexiconCategoryNames[deck.category_id] || 'General';
         if (!acc[categoryName]) {

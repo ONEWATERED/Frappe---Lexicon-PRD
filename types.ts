@@ -22,6 +22,15 @@ export type User = {
   myLibrary?: LibraryCollection[];
   learningTranscript?: LearningActivity[];
   knowledgeMap?: KnowledgeMapData;
+  isOnline?: boolean;
+  lastSeen?: string; // ISO Date
+  connections?: string[]; // Array of user IDs
+  pendingConnections?: {
+    incoming: string[];
+    outgoing: string[];
+  };
+  mentorshipStatus?: 'seeking' | 'offering' | 'none';
+  mentorshipTopics?: LexiconCategory[];
 };
 
 export type IconName = 'AcademicCapIcon' | 'StarIcon' | 'ShieldCheckIcon' | 'SparklesIcon' | 'TrophyIcon';
@@ -489,6 +498,21 @@ export type CommunityEvent = {
   attendeeIds: string[];
 };
 
+export type DirectMessage = {
+  id: string;
+  fromUserId: string;
+  content: string;
+  timestamp: string; // ISO Date
+  isRead: boolean;
+};
+
+export type Conversation = {
+  id: string;
+  participantIds: string[]; // array of 2 user IDs
+  messages: DirectMessage[];
+};
+
+
 // --- RESEARCH & INNOVATION HUB TYPES ---
 export type Publication = {
   id: string;
@@ -624,4 +648,5 @@ export interface AuthContextType {
   blogPosts: BlogPost[];
   careerPathways: CareerPathway[];
   careerGoals: CareerGoal[];
+  conversations: Conversation[];
 }

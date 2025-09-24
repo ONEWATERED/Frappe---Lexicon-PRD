@@ -1,9 +1,4 @@
 
-
-
-
-
-
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -26,7 +21,7 @@ const DroobiTVHome: React.FC = () => {
   const featuredVideo = droobiVideos[0];
   
   const videosByCategory = useMemo(() => {
-    // FIX: Provided a generic type to `reduce` to ensure the accumulator `acc` is correctly typed as Record<string, DroobiVideo[]>. This resolves the error where `videos.map` was called on an `unknown` type.
+// FIX: Provided a generic type to `reduce` to ensure the accumulator `acc` is correctly typed as Record<string, DroobiVideo[]>. This resolves the error where `videos.map` was called on an `unknown` type.
     return droobiVideos.reduce<Record<string, DroobiVideo[]>>((acc, video) => {
       const category = video.category || 'Uncategorized';
       if (!acc[category]) {
