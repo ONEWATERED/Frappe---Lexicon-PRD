@@ -2,6 +2,7 @@
 
 
 
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));

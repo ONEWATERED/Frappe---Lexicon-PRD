@@ -25,7 +25,82 @@ import {
   BlogAuthor,
   BlogPost,
   UserCredential,
+  CareerGoal,
+  CareerPathway,
+  ProjectPortfolioItem,
+  UserSkill,
+  ResumeDocument,
 } from './types';
+
+// --- CAREER GOALS DATA ---
+export const careerGoals: CareerGoal[] = [
+  { id: 'goal-001', title: 'Utility Manager', description: 'Oversee operations, finance, and strategic planning for a water or wastewater utility.' },
+  { id: 'goal-002', title: 'Water Reuse Specialist', description: 'Design and implement advanced water recycling and reuse projects for municipal or industrial clients.' },
+  { id: 'goal-003', title: 'Digital Water Expert', description: 'Lead digital transformation initiatives using technologies like Digital Twins, AI, and advanced analytics.' }
+];
+
+// --- CAREER PATHWAYS DATA ---
+export const careerPathways: CareerPathway[] = [
+  {
+    id: 'path-001',
+    goalId: 'goal-001', // Utility Manager
+    steps: [
+      { type: 'deck', title: 'Master Utility Management Concepts', description: 'Build a foundational understanding of utility governance and finance.', targetId: 'd-cat-utility_management', completed: true },
+      { type: 'deck', title: 'Deepen Asset Management Expertise', description: 'Learn the principles of managing physical infrastructure assets effectively.', targetId: 'd001', completed: true },
+      { type: 'video', title: 'Learn from Industry Leaders', description: 'Watch the "Asset Management Masterclass" to understand capital improvement prioritization.', targetId: 'vid004', completed: false },
+      { type: 'article', title: 'Understand Digital Transformation', description: 'Read how Digital Twins are revolutionizing utility operations.', targetId: 'post-1', completed: false },
+      { type: 'connection', title: 'Connect with a Mentor', description: 'Find a Sector Leader or Infrastructure Maverick to guide your career.', targetId: 'user-456', completed: false },
+    ]
+  },
+  {
+    id: 'path-002',
+    goalId: 'goal-002',
+    steps: []
+  },
+  {
+    id: 'path-003',
+    goalId: 'goal-003',
+    steps: []
+  }
+];
+
+const projectPortfolio_Alex: ProjectPortfolioItem[] = [
+  {
+    id: 'proj-alex-1',
+    title: 'City of Springfield AMI Network Deployment',
+    role: 'Project Engineer',
+    summary: 'Led the technical deployment of a 50,000-node AMI network, including network design, hardware installation oversight, and data integration with the utility\'s billing system.',
+    outcome: 'Reduced non-revenue water by 8% in the first year and improved billing accuracy by 99.8%. Enabled the launch of a customer water-use portal.',
+    imageUrl: 'https://picsum.photos/seed/project-ami/800/600',
+    taggedPartnerIds: ['v001', 'v002'],
+    startDate: '2021-03-01T00:00:00Z',
+    endDate: '2023-06-30T00:00:00Z',
+  },
+  {
+    id: 'proj-alex-2',
+    title: 'Wastewater Treatment Plant SCADA Upgrade',
+    role: 'Controls Integration Specialist',
+    summary: 'Managed the upgrade of the main wastewater plant\'s SCADA system, improving process automation and developing new HMI screens for operators.',
+    outcome: 'Increased operational efficiency by 15% and provided real-time data for better process control, resulting in consistent permit compliance.',
+    videoUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    taggedPartnerIds: ['v005'],
+    startDate: '2019-01-10T00:00:00Z',
+    endDate: '2020-11-15T00:00:00Z',
+  }
+];
+
+const skills_Alex: UserSkill[] = [
+  { id: 'skill-01', name: 'Hydraulic Modeling', endorsements: [{ userId: 'user-456', timestamp: '2024-01-01T00:00:00Z' }] },
+  { id: 'skill-02', name: 'Asset Management', endorsements: [{ userId: 'user-456', timestamp: '2024-01-01T00:00:00Z' }, { userId: 'user-789', timestamp: '2024-02-01T00:00:00Z' }] },
+  { id: 'skill-03', name: 'SCADA & Controls', endorsements: [] },
+  { id: 'skill-04', name: 'Project Management', endorsements: [{ userId: 'user-456', timestamp: '2024-01-01T00:00:00Z' }] },
+  { id: 'skill-05', name: 'Non-Revenue Water', endorsements: [] },
+];
+
+const resumeVault_Alex: ResumeDocument[] = [
+  { id: 'res-01', fileName: 'AlexJohnson_Resume_2024.pdf', versionName: 'Standard Resume', fileUrl: '#', uploadedAt: '2024-05-15T00:00:00Z', isPrimary: true },
+  { id: 'res-02', fileName: 'AJ_Federal_CV.pdf', versionName: 'Federal Application CV', fileUrl: '#', uploadedAt: '2024-03-02T00:00:00Z', isPrimary: false },
+];
 
 const userCredentials_Alex: UserCredential[] = [
   {
@@ -84,8 +159,13 @@ export const users: User[] = [
     tierId: 'T3',
     xp: 7250,
     stats: { commentsPosted: 42, documentsUploaded: 5, insightfulMarks: 15 },
-    badges: ['B01', 'B02', 'B04'],
+    badges: ['B01', 'B02', 'B04', 'B05', 'B06'],
     credentials: userCredentials_Alex,
+    careerGoals: careerGoals,
+    activePathwayId: 'path-001',
+    projectPortfolio: projectPortfolio_Alex,
+    skills: skills_Alex,
+    resumeVault: resumeVault_Alex,
   },
   {
     id: 'user-456',

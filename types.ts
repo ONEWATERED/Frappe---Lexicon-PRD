@@ -14,6 +14,11 @@ export type User = {
   };
   badges: string[];
   credentials?: UserCredential[];
+  careerGoals?: CareerGoal[];
+  activePathwayId?: string;
+  projectPortfolio?: ProjectPortfolioItem[];
+  skills?: UserSkill[];
+  resumeVault?: ResumeDocument[];
 };
 
 export type IconName = 'AcademicCapIcon' | 'StarIcon' | 'ShieldCheckIcon' | 'SparklesIcon' | 'TrophyIcon';
@@ -30,6 +35,64 @@ export type UserProgress = {
   weeklyChallenges: { current: number, goal: number };
   currentStreak: number;
 };
+
+// --- CAREER PATHWAY TYPES ---
+export type CareerPathwayStep = {
+  type: 'deck' | 'video' | 'article' | 'manual' | 'connection';
+  title: string;
+  description: string;
+  targetId: string; // ID of deck, video, blog post, user, etc.
+  completed: boolean;
+};
+
+export type CareerPathway = {
+  id: string;
+  goalId: string;
+  steps: CareerPathwayStep[];
+};
+
+export type CareerGoal = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+// --- PROJECT PORTFOLIO TYPES ---
+export type ProjectPortfolioItem = {
+  id: string;
+  title: string;
+  role: string;
+  summary: string;
+  outcome: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  taggedPartnerIds?: string[];
+  startDate: string; // ISO Date
+  endDate: string;   // ISO Date
+};
+
+// --- SKILLS & ENDORSEMENTS TYPES ---
+export type SkillEndorsement = {
+  userId: string; // ID of user who endorsed
+  timestamp: string;
+};
+
+export type UserSkill = {
+  id: string;
+  name: string;
+  endorsements: SkillEndorsement[];
+};
+
+// --- RESUME VAULT TYPES ---
+export type ResumeDocument = {
+  id: string;
+  fileName: string;
+  versionName: string;
+  fileUrl: string;
+  uploadedAt: string; // ISO Date
+  isPrimary: boolean;
+};
+
 
 // --- CREDENTIALS TYPES ---
 export type CEUProgress = {
@@ -510,4 +573,6 @@ export interface AuthContextType {
   topicSuggestions: TopicSuggestion[];
   blogAuthors: BlogAuthor[];
   blogPosts: BlogPost[];
+  careerPathways: CareerPathway[];
+  careerGoals: CareerGoal[];
 }
