@@ -122,7 +122,14 @@ const PIPHome: React.FC = () => {
                                 <ArrowUpTrayIcon className="w-5 h-5"/>
                                 Contribute a Document
                             </button>
-                            <a href="#learn-more" className="text-sm font-semibold leading-6 text-slate-300 hover:text-white">Learn more <span aria-hidden="true">→</span></a>
+                            <a 
+                                href="https://infra-knowledge-nexus.lovable.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-md bg-white/10 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/20"
+                            >
+                                Learn more <span aria-hidden="true">→</span>
+                            </a>
                         </div>
                     </div>
                 </div>
