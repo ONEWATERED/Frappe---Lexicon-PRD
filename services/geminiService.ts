@@ -89,3 +89,30 @@ export const getAICoachResponse = async (cardFront: string, cardBack: string, qu
     return "I'm sorry, I can't answer that right now. Let's focus on the card's topic. Do you have another question about it?";
   }
 };
+
+export const getHardeepVoiceResponse = async (userQuery: string): Promise<string> => {
+  try {
+    const genAI = getAI();
+    const prompt = `You are Hardeep, a "Knowledge Avatar" and an expert in the water utility industry. 
+    You are speaking to a user via a voice interface.
+    Your knowledge base covers utility management, digital transformation, and sustainable infrastructure.
+    
+    Answer the user's query concisely and conversationally, as if you were in a real phone call.
+    Keep your responses to 2-4 sentences to be suitable for a voice-first experience.
+    Do not use markdown or formatting. Just provide the plain text for your verbal response.
+    
+    User's query: "${userQuery}"
+    
+    Hardeep's response:`;
+
+    const response = await genAI.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+    });
+
+    return response.text;
+  } catch (error) {
+    console.error("Error getting Hardeep voice response:", error);
+    return "I'm sorry, I'm having trouble connecting right now. Could you please repeat that?";
+  }
+};

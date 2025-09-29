@@ -2,9 +2,10 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DroobiVideo } from '../../types';
+import VideoPlayer from '../../components/VideoPlayer';
 
 const VideoCard: React.FC<{ video: DroobiVideo }> = ({ video }) => (
-  <Link to={`/video/${video.id}`} className="flex-shrink-0 w-80 group">
+  <Link to={`/video/${video.id}`} className="flex-shrink-0 w-72 sm:w-80 group">
     <div className="aspect-video bg-slate-800 rounded-lg overflow-hidden">
       <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
     </div>
@@ -19,11 +20,9 @@ const DroobiTVHome: React.FC = () => {
   const { droobiVideos } = useAuth();
   const featuredVideo = droobiVideos[0];
   
-  const videosByCategory = useMemo(() => {
-    // FIX: Explicitly typing the accumulator ('acc') in the reduce function ensures
-    // TypeScript correctly infers the return type, resolving an error where the 'videos'
-    // array was 'unknown' and its 'map' property was inaccessible.
-    return droobiVideos.reduce((acc: Record<string, DroobiVideo[]>, video) => {
+  // FIX: Added explicit type annotation to resolve "Property 'map' does not exist on type 'unknown'" error.
+  const videosByCategory: Record<string, DroobiVideo[]> = useMemo(() => {
+    return droobiVideos.reduce<Record<string, DroobiVideo[]>>((acc, video) => {
       const category = video.category || 'Uncategorized';
       if (!acc[category]) {
         acc[category] = [];
@@ -53,7 +52,7 @@ const DroobiTVHome: React.FC = () => {
         {Object.entries(videosByCategory).map(([category, videos]) => (
           <div key={category}>
             <h2 className="text-2xl font-bold text-white mb-4">{category}</h2>
-            <div className="flex overflow-x-auto space-x-6 pb-4 -mx-4 px-4">
+            <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 -mx-4 px-4">
               {videos.map(video => <VideoCard key={video.id} video={video} />)}
             </div>
           </div>

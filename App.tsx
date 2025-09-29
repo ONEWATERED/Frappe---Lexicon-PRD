@@ -14,6 +14,16 @@ import ManualsHome from './pages/Manuals/ManualsHome';
 import EcosystemHome from './pages/Ecosystem/EcosystemHome';
 import EntityProfile from './pages/Ecosystem/EntityProfile';
 import ComingSoon from './pages/ComingSoon';
+import AIAgentsPage from './pages/AIAgents/AIAgentsPage';
+import CommunityHome from './pages/Community/CommunityHome';
+import ResearchHubHome from './pages/Research/ResearchHubHome';
+import ResearcherProfilePage from './pages/Research/ResearcherProfilePage';
+import BlogHome from './pages/Insights/BlogHome';
+import BlogPostDetail from './pages/Insights/BlogPostDetail';
+import CreateBlogPost from './pages/Insights/CreateBlogPost';
+import CommunityMessages from './pages/Community/CommunityMessages';
+import JobBoardHome from './pages/Jobs/JobBoardHome';
+import PIPHome from './pages/PIP/PIPHome';
 
 
 const MainLayout: React.FC = () => (
@@ -42,8 +52,19 @@ const App: React.FC = () => {
             <Route path="/manual/:manualId" element={<ComingSoon title="Manual Viewer" />} />
             <Route path="/academy" element={<AcademyHome />} />
             <Route path="/academy/pathway/:pathwayId" element={<ComingSoon title="Learning Pathway" />} />
+            <Route path="/community" element={<CommunityHome />} />
+            <Route path="/community/messages" element={<CommunityMessages />} />
+            <Route path="/community/messages/:userId" element={<CommunityMessages />} />
+            <Route path="/insights" element={<BlogHome />} />
+            <Route path="/insights/new" element={<CreateBlogPost />} />
+            <Route path="/insights/:postId" element={<BlogPostDetail />} />
+            <Route path="/research" element={<ResearchHubHome />} />
+            <Route path="/research/researcher/:researcherId" element={<ResearcherProfilePage />} />
             <Route path="/ecosystem" element={<EcosystemHome />} />
             <Route path="/ecosystem/:entityId" element={<EntityProfile />} />
+            <Route path="/jobs" element={<JobBoardHome />} />
+            <Route path="/pip" element={<PIPHome />} />
+            <Route path="/ai-agents" element={<AIAgentsPage />} />
           </Route>
           {/* Fullscreen route without main layout */}
           <Route path="/academy/deck/:deckId" element={<FlashcardPlayer />} />

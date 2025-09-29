@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 
 const App = React.lazy(() => import('./App'));
@@ -8,15 +9,14 @@ interface ErrorBoundaryState {
   errorInfo?: React.ErrorInfo;
 }
 
-// FIX: Refactored the ErrorBoundary to use a class property for state initialization.
-// This resolves errors where 'this.state' was not found.
+// FIX: Refactored ErrorBoundary to use a property initializer for state, a more modern syntax that resolves issues with properties like 'state' and 'props' not being recognized.
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
   state: ErrorBoundaryState = { hasError: false };
 
-  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Update state so the next render will show the fallback UI.
     return { hasError: true, error };
   }
@@ -65,7 +65,7 @@ const BootScreen: React.FC<{ message: string }> = ({ message }) => (
 const SafeApp: React.FC = () => {
   return (
     <ErrorBoundary>
-      <BootScreen message="oraKLES is booting..." />
+      <BootScreen message="ORAKLES is booting..." />
       <Suspense fallback={<div className="h-screen w-screen bg-slate-900 flex items-center justify-center text-white text-xl">Loading...</div>}>
         <App />
       </Suspense>
